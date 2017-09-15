@@ -1,0 +1,26 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl _Wood_Lumber_ButtJoined_1
+Ka 0.000000 0.000000 0.000000
+Kd 0.549020 0.443137 0.305882
+Ks 0.330000 0.330000 0.330000
+map_Kd arbor/_Wood_Lumber_ButtJoined_1.jpg
+
+newmtl ____44
+Ka 0.000000 0.000000 0.000000
+Kd 0.286275 0.286275 0.286275
+Ks 0.330000 0.330000 0.330000
+map_Kd arbor/____44.jpg
+
+newmtl FrontColor
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.330000 0.330000 0.330000
+
+newmtl Color_000
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.330000 0.330000 0.330000
+

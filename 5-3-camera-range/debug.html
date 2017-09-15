@@ -1,0 +1,45 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.3 Camera range </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:100000,
+            lat:22.53672047469201,
+            lng:113.93920875334851 },
+          flyTo: { alt:1020.0739295752213,
+            lat:22.53672047469201,
+            lng:113.93920875334851,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // add limit to camera tilt angle, and distance to ground
+      sandbox.camera.range = {
+        tilt: {max: 50, min:40}, // when max equals min, the tilt angle is fixed
+        alt: {max:250, min:150} // similarly, when max equals min, the camera altitude is fixed
+      }
+
+    </script>
+  </body>
+</html>

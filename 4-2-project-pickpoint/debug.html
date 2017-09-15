@@ -1,0 +1,69 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 4.2 Project pickpoint </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 },
+          flyTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      document.addEventListener('click', handler)
+      document.addEventListener('touchstart', handler)
+
+      function handler (event) {
+        console.log(event)
+        let pt = sandbox.pickOnProjects(event)
+
+        if (!pt) {
+          return
+        }
+        console.log('onclick point coordinate', pt)
+        // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
+
+        new altizure.TagMarker({
+          // img url
+          imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+          // icon position
+          position: {
+            "lng": pt.lng,
+            "lat": pt.lat,
+            "alt": pt.alt
+          },
+          // scene
+          sandbox: sandbox,
+          scale: 1 // icon size
+        })
+      }
+
+    </script>
+  </body>
+</html>

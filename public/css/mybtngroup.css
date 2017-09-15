@@ -1,0 +1,21 @@
+.btn-group {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.btn {
+  background-color: #2a2b2d;
+  color: #fff;
+  font-size: 12px;
+  outline: none;
+}
+
+.btn:hover {
+  color: #fff;
+  background-color: #464646;
+}
+
+.btn:focus {
+  outline: none;
+  color: #fff;
+}

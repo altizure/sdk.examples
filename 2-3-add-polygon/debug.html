@@ -1,0 +1,117 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 2.3 Add polygon </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+  <div id="page-content"></div>
+  <script type="text/javascript" src="../build/altizure.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078 },
+        flyTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      },
+      control:{
+        doubleTap: false // disable double tap/click to zoom
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+
+    // polygon 1
+    let volume1 = {
+      color: 0xf18100,
+      opacity: 0.3,
+      points: [
+          [113.93925941184116, 22.536038196392003],
+          [113.93939916032888, 22.53604334346038],
+          [113.93949169260934, 22.535989287779092],
+          [113.93968369699786, 22.536004548701953],
+          [113.93980670120246, 22.536189580024878],
+          [113.93979655362506, 22.536343017899227],
+          [113.93966951962702, 22.536531935218072],
+          [113.93941344618156, 22.536525930027356],
+          [113.93929820633633, 22.536458412171328],
+          [113.93936482152544, 22.53637169479775],
+          [113.93929172179965, 22.53637475960443],
+          [113.9393084139167, 22.53630775602314],
+          [113.93925819093029, 22.53630539546885],
+          [113.93925941184116, 22.536038196392003]
+      ].map((lnglat) => {
+        return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+      }),
+      top: 40,
+      bottom: 0,
+    }
+    let poly1 = new altizure.PolygonMarker({
+      volume: volume1,
+      sandbox: sandbox,
+      name: 'polygon1',
+      interactable: true
+    })
+    poly1.on('mouseenter', function (event) {
+      poly1.opacity = 0.1
+    })
+    poly1.on('mouseleave', function (event) {
+      poly1.opacity = 0.3
+    })
+    poly1.on('click', function (event) {
+      poly1.color = Math.random()*0xffffff
+    })
+
+    let volume2 = {
+      "color": 0x24d2f3,
+      "opacity": 0.3,
+      "points": [
+        [113.93868723125762, 22.536830165346906],
+        [113.93867780368912, 22.53715382208763],
+        [113.93945433925597, 22.53718272790738],
+        [113.93945744949984, 22.536853133662152],
+        [113.93868723125762, 22.536830165346906]
+      ].map((lnglat) => {
+        return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+      }),
+      "top": 39,
+      "bottom": 28
+    }
+    let poly2 = new altizure.PolygonMarker({
+      volume: volume2,
+      sandbox: sandbox,
+      name: 'polygon2',
+      interactable: true
+    })
+    poly2.on('mouseenter', function (event) {
+      poly2.opacity = 0.1
+    })
+    poly2.on('mouseleave', function (event) {
+      poly2.opacity = 0.3
+    })
+    poly2.on('click', function (event) {
+      poly2.color = Math.random()*0xffffff
+    })
+
+  </script>
+</body>
+
+</html>

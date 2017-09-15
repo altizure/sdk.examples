@@ -1,0 +1,160 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Altizure Examples</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <style>
+          #content {
+            position: absolute;
+            top: 0px;
+            left: 200px;
+            width: calc(100% - 200px);
+            height: 100%;
+          }
+          #content iframe {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+          }
+          #table_of_contents {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            width: 200px;
+            overflow-y: auto;
+            border-right-style: solid;
+            border-right-width: 1px;
+            border-right-color: black;
+          }
+          #table_of_contents ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 200px;
+            background-color: #f1f1f1;
+          }
+          #table_of_contents ul li a {
+            display: block;
+            color: #000;
+            padding: 8px 0 8px 16px;
+            text-decoration: none;
+          }
+          #table_of_contents ul li a:hover:not(.active) {
+            background-color: #555;
+            color:white;
+          }
+          #table_of_contents ul a.active {
+            background-color: #4CAF50;
+            color:white;
+          }
+        </style>
+    </head>
+    <body>
+      <div id='table_of_contents'></div>
+      <div id='content'></div>
+
+      <script type="text/javascript">
+        function loadWebPage (path) {
+          // alert(path)
+          let contentdiv = document.getElementById("content")
+          for (let i = 0; i < contentdiv.children.length; ++i) {
+            contentdiv.removeChild(contentdiv.children[i])
+          }
+          frame = document.createElement("iframe")
+          frame.src = path
+          contentdiv.appendChild(frame)
+        }
+      </script>
+      <script type="text/javascript">
+        function createExampleLink (info) {
+          let example = document.createElement("li")
+          let link = document.createElement("a")
+          
+          link.onclick = function () {
+            loadWebPage(info.path)
+          }
+          link.innerText = info.name
+          link.href = 'javascript:void(0);'
+          example.appendChild(link)
+          return example
+        }
+
+        let tabel_of_contents = document.getElementById('table_of_contents')
+        function addExamples (infos) {
+          let list = document.createElement("ul")
+          infos.map((info) => {
+            list.appendChild(createExampleLink(info))
+          })
+          tabel_of_contents.appendChild(list)
+        }
+      </script>
+      <script type="text/javascript">
+        let examples = [
+          {
+            name: '1.1 Altizure Earth',
+            path: './1-1-altizure-earth/index.html'
+          },
+          {
+            name: '1.2 Openning',
+            path: './1-2-open-animation/index.html'
+          },
+          {
+            name: '1.3 Render items',
+            path: './1-3-render-items/index.html'
+          },
+          {
+            name: '2.1 Altizure project',
+            path: './2-1-add-project/index.html'
+          },
+          {
+            name: '2.1.1 Project\'s water',
+            path: './2-1-add-project-water/index.html'
+          },
+          {
+            name: '2.2 Tag',
+            path: './2-2-add-tag/index.html'
+          },
+          {
+            name: '2.3 Polygon',
+            path: './2-3-add-polygon/index.html'
+          },
+          {
+            name: '2.4 Polyline',
+            path: './2-4-add-polyline/index.html'
+          },
+          {
+            name: '2.5 Obj Model',
+            path: './2-5-add-obj-model/index.html'
+          },
+          {
+            name: '3.1 Mouse Events',
+            path: './3-1-mouse-events/index.html'
+          },
+          {
+            name: '4.1 Pickpoint on Earth',
+            path: './4-1-earth-pickpoint/index.html'
+          },
+          {
+            name: '4.2 Pickpoint on project',
+            path: './4-2-project-pickpoint/index.html'
+          },
+          {
+            name: '5.1 Camera pose',
+            path: './5-1-camera-pose/index.html'
+          },
+          {
+            name: '5.2 Camera flight',
+            path: './5-2-camera-fly/index.html'
+          },
+          {
+            name: '5.3 Camera range',
+            path: './5-3-camera-range/index.html'
+          }
+        ]
+        addExamples(examples)
+      </script>
+    </body>
+</html>

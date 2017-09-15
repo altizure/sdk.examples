@@ -1,0 +1,59 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.1 Add project </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        // camera 
+        camera: {
+          // camera start position
+          poseTo: {
+            lat: 30.947870295755546,
+            lng: 120.88925225766249,
+            alt: 200,
+            north: 0,
+            tilt: 60
+          },
+          // camera target position
+          flyTo: {
+            alt: 46.98889281431989,
+            lat: 30.94754849570419,
+            lng: 120.8896025897193,
+            north: -132.2586604541772,
+            tilt: 72.39667031677064
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      // import altizure project's water
+      // Note: the water surface must be created on Altizure by the project's owner
+      sandbox.add('AltizureProjectMarker', {pid: '5993d8e65cbfaf1d4eba995d'})
+        .then(function (marker) {
+          // import water from altizure
+          return marker.water.import()
+        })
+        .then(function (marker) {
+          // over-write a few water properties set on altizure
+          marker.water.color = 0x05c592
+          marker.water.wave = 0.5
+          marker.water.speed = 0.5
+        })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+.my-select select {
+  background: #1a1a1a;
+  width: 220px;
+  padding: 5px;
+  font-size: 16px;
+  line-height: 1;
+  border: 0;
+  border-radius: 0;
+  height: 34px;
+  color: white;
+  -webkit-appearance: none;
+}
+
+.my-select select > option {
+  background: #1a1a1a;
+  font-size: 14px;
+}

@@ -1,0 +1,95 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 2.4 Add polyline </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+  <div id="page-content"></div>
+  <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078 },
+        flyTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+
+    // endpoints (longitude, latitude, altitude)
+    let pts1 = [
+      [113.93834209426927, 22.536084688323886, 8.461150482780916],
+      [113.93851613266197, 22.536088502225557, 8.348457394521445],
+      [113.9384919149267, 22.536730475456427, 7.72568611917734],
+      [113.93867773729961, 22.536714170702645, 7.7477876550475],
+      [113.93953118282849, 22.536759090893902, 8.255721520829152],
+      [113.93952084758165, 22.537225748645717, 8.006473519889875],
+      [113.93988007740502, 22.537234146256576, 9.469526442609505]
+    ].map((lnglatalt) => {
+      return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
+    })
+    let pl1 = new altizure.PolyLineMarker({
+      name: 'pl1',
+      sandbox: sandbox,
+      points: pts1,
+      color: 0xb73026, // line color
+      fenceHeight: 5 // line height (for visualization)
+    })
+
+    let pts2 = [
+      [113.93832449874549, 22.53610406245406, 8.426873391081612],
+      [113.93848826229001, 22.53611480048765, 8.43784681316338],
+      [113.93845330361665, 22.537226275970312, 7.353449881118547],
+      [113.93916733429155, 22.53725230512713, 8.165762920905182]]
+      .map((lnglatalt) => {
+        return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
+      })
+    let pl2 = new altizure.PolyLineMarker({
+      name: 'pl2',
+      sandbox: sandbox,
+      points: pts2,
+      color: 0x2654b7,
+      fenceHeight: 5
+    })
+
+    let pts3 = [[113.94004434545403, 22.536430666836896, 8.529936080552108],
+      [113.93989197826778, 22.53642506074514, 8.37267703295911],
+      [113.93992379693061, 22.536772011456577, 14.698098228363094],
+      [113.93948096227913, 22.536774790964845, 8.07877871224377],
+      [113.93946847564925, 22.537257065188992, 7.9259919311032805],
+      [113.93937849508251, 22.537250183225215, 9.203476070513277]]
+      .map((lnglatalt) => {
+        return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
+      })
+    let pl3 = new altizure.PolyLineMarker({
+      name: 'pl3',
+      sandbox: sandbox,
+      points: pts3,
+      color: 0x26b74f,
+      fenceHeight: 10
+    })
+
+  </script>
+</body>
+
+</html>

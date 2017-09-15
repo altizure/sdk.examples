@@ -1,0 +1,60 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.2 Camera flight </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:100000,
+            lat:22.538388886344876,
+            lng:113.94255600866971 },
+          flyTo: { alt:1020.0739295752213,
+            lat:22.538388886344876,
+            lng:113.94255600866971,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+      
+      let camPoses = [
+        {lng: 113.93896355539998, lat: 22.53636773396518, alt: 239.80559688295705, north: 75.24963034992078, tilt: 65.55794365893665},
+        {lng: 113.9379351650922, lat: 22.536336856801327, alt: 184.9856514715036, north: 75.24963034992078, tilt: 68.87760857113925},
+        {lng: 113.93884290778922, lat: 22.53668315556844, alt: 89.33026010506228, north: 31.64977621454054, tilt: 64.99648207392408},
+        {lng: 113.9390343453961, lat: 22.53733631426411, alt: 118.87041665632097, north: 56.32015483737934, tilt: 56.64193017518985},
+        {lng: 113.93907062312265, lat: 22.536493319615786, alt: 151.51751837783573, north: 141.23709431539717, tilt: 63.98881221670874},
+        {lng: 113.9390706231229, lat: 22.536493319615673, alt: 151.51751857115124, north: -117.17574343543143, tilt: 51.805007068354215},
+        {lng: 113.93916935518872, lat: 22.536323031415066, alt: 117.92431136329019, north: -52.0601693949569, tilt: 55.71087957549345}
+      ]
+
+      let cnt = 0
+      setTimeout(cameraLoop, 8000)
+
+      function cameraLoop () {
+        // camera.flyTo is a smooth transition from one pose to another
+        // as a comparision, camera.pose is more like jumpping
+        sandbox.camera.flyTo(camPoses[cnt % camPoses.length])
+        // sandbox.camera.pose = {north: 90 * (cnt % 4 - 2), tilt: (cnt % 6) * 10 + 20}
+        cnt++
+        setTimeout(cameraLoop, 3000)
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.2 Add tag </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078 },
+          flyTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // ============ add tags ============
+
+      // write styled text to an image, and use the image as a tag
+      let tag1 = new altizure.TagMarker({
+        imgUrl: '../public/assets/img/meta_description.png',
+        // icon position
+        position: {lng: 113.9390549031058, lat: 22.53601411862488, alt: 59.03098709697936},
+        // scene
+        sandbox: sandbox,
+        scale: 1 // icon size
+      })
+      // set tag to be interactable, then it can respond to mouse events (refer to 3-1-mouse-events for more details)
+      tag1.interactable = true
+      tag1.on('mouseenter', (e) => { tag1.scale = 2 })
+      tag1.on('mouseleave', (e) => { tag1.scale = 1 })
+
+      // use an icon in the tag
+      let tag2 = new altizure.TagMarker({
+        imgUrl: '../public/assets/img/tag/select/tagDemo.png',
+        position: {lng: 113.93950141699821, lat: 22.53621371233552, alt: 34.54685193233231},
+        sandbox: sandbox,
+        scale: 1 // reduce the size of the tag
+      })
+      // when the tag is clicked, it switches between two images.
+      tag2.interactable = true
+      tag2.on('click', function (event) {
+        if (tag2.imgUrl === '../public/assets/img/tag/normal/tagDemo.png') { tag2.texture = '../public/assets/img/tag/select/tagDemo.png' } else { tag2.texture = '../public/assets/img/tag/normal/tagDemo.png' }
+      })
+
+      // use Altizure logo in the tag
+      let tag3 = new altizure.TagMarker({
+        imgUrl: '../public/assets/img/logo-1024.png',
+        position: {lng: 113.93931213827575, lat: 22.536964263366052, alt: 35.8978480932066},
+        sandbox: sandbox,
+        scale: 2
+      })
+      tag3.interactable = true
+      tag3.on('mouseenter', (e) => { tag3.scale = 3 })
+      tag3.on('mouseleave', (e) => { tag3.scale = 2 })
+
+    </script>
+  </body>
+</html>

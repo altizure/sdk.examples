@@ -1,0 +1,54 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.5 Add obj model </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078 },
+          flyTo: { alt: 65.46593309861089,
+            lat: 22.536404929677502,
+            lng: 113.93893497410293,
+            north: 38.78433523618137,
+            tilt: 51.345004320016116 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // add obj models
+      let obj = new altizure.OBJMarker({
+        position: {
+          lng: 113.93916035952945,
+          lat: 22.536167496052556,
+          alt: 28.976462667429363
+        },
+        sandbox: sandbox,
+        name: 'arbor',
+        shape: 'CUSTOMIZE',
+        objUrl: '../public/assets/object/arbor/arbor.obj',
+        mtlUrl: '../public/assets/object/arbor/arbor.mtl',
+        upDir: {x: 0,y: 1,z: 0},
+        "scale": 1
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 1.2 Open animation </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        // camera position for the openning animation
+        // more details refer to 5-1, 5-2
+        camera: {
+          // camera start position: latitude, longitude (in degree), altitude (in meter), north (in degree), tilt (in degree)
+          // refer to 5-1 to get the camera pose of your current view
+          poseTo: {
+            lat: 22.335836,
+            lng: 114.263885,
+            alt: 50000000,
+            north: 0,
+            tilt: 0
+          },
+          // camera target position. set poseTo and flyTo the same to skip the animation.
+          flyTo: {
+            lat: 22.335836,
+            lng: 114.263885,
+            alt: 600,
+            north: 180,
+            tilt: 60
+          }
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+    </script>
+  </body>
+</html>
