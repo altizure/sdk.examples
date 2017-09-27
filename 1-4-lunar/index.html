@@ -1,0 +1,26 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 1.4 Lunar </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        // render items
+        renderItems: {
+          planet: 'lunar',
+          featureInView: false, // altizure featured projects
+          orbitRing: false // orbit ring
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+    </script>
+  </body>
+</html>
