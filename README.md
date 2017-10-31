@@ -11,13 +11,8 @@ Examples for Altizure SDK. Check this page for a list of examples [altizure.gith
 ### How do I get set up? ###
 
 1. git clone
-    1. Github
     ```bash
       git clone https://github.com/altizure/sdk.examples.git
-    ```
-    2. Or, using Bitbucket
-    ```bash
-      git clone https://altizure@bitbucket.org/altizure/altizure.bitbucket.io.git
     ```
 2. setup a server
     ```bash
@@ -40,6 +35,14 @@ In the example html file (e.g. `./1-1-altizure-earth/index.html`), replace the k
 
 with your own key.
 
+### What are the available versions? ###
+
+Three versions are provided:
+
+* beta: https://beta.altizure.com/sdk
+* stable: https://www.altizure.com/sdk
+* China: https://www.altizure.cn/sdk
+
 ### Bug report and Questions ###
 
 Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
@@ -47,4 +50,4 @@ Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
 ### Who do I talk to? ###
 
 * [Altizure team](mailto:developers@altizure.com)
-* [Dr. Jingbo Liu](mailto:jingbo@connect.ust.hk)
+* [Dr. Jingbo Liu](mailto:jingbo@altizure.com)
