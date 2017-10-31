@@ -26,9 +26,9 @@
         },
         renderItems: {
           earth: true,
-          earthUseTexture: true,
+          earthUseTexture: false,
           featureInView: false,
-          orbitRing: true
+          orbitRing: false
         }
       }
 
@@ -36,11 +36,54 @@
 
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
 
+      let textTag = new altizure.TextTagMarker({
+        // text string
+        text: '深圳珠峰科技',
+        // text style
+        textStyle: {
+          fillStyle: 'rgb(255, 255, 255)',
+          font: 'normal 500 24px Arial',
+          outlineWidth: 2,
+          outlineStyle: 'rgb(0, 0, 0)'
+        },
+
+        // icon position
+        position: {
+          "lng": 113.939190,
+          "lat": 22.5369807,
+          "alt": 33.31495
+        },
+        // scene
+        sandbox: sandbox,
+        scale: 1.5 // icon size
+      })
+
+      let textTag2 = new altizure.TextTagMarker({
+        // text string
+        text: '香港科技大学深圳研究中心',
+        // text style
+        textStyle: {
+          fillStyle: 'rgb(155, 155, 255)',
+          font: 'normal 500 24px Arial',
+          outlineWidth: 2,
+          outlineStyle: 'rgb(0, 0, 0)'
+        },
+
+        // icon position
+        position: {
+          "lng": 113.939420,
+          "lat": 22.5362742,
+          "alt": 32.40720
+        },
+        // scene
+        sandbox: sandbox,
+        scale: 1 // icon size
+      })
+
       document.addEventListener('click', handler)
       document.addEventListener('touchstart', handler)
 
       function handler (event) {
-        console.log(event)
         let pt = sandbox.pickOnProjects(event)
 
         if (!pt) {
@@ -50,7 +93,6 @@
         if (!pt) {
           return
         }
-        console.log('onclick point coordinate', pt)
         // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
 
         let tt = new altizure.TextTagMarker({
@@ -74,7 +116,6 @@
           sandbox: sandbox,
           scale: 1 // icon size
         })
-        console.log(tt)
       }
 
     </script>

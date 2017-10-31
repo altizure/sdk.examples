@@ -1,0 +1,75 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 4.3 Window to LngLatAlt </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 },
+          flyTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // create a list of tag markers
+      let markers = []
+      for (let mi = 0; mi< 9; mi++) {
+        let t = new altizure.TagMarker({
+          imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+          position: { "lng": 0, "lat": 0, "alt": 0}, // a temporary position
+          sandbox: sandbox,
+          scale: 1
+        })
+        markers.push(t)
+      }
+
+      // window size
+      let clientHeight = document.getElementById('page-content').clientHeight
+      let clientWidth = document.getElementById('page-content').clientWidth
+      let hGap = Math.floor(clientHeight / 5)
+      let wGap = Math.floor(clientWidth / 5)
+
+      // listen on camera changes
+      sandbox.on('cameraChange', updatePosition)
+
+      // re-position the markers when camera changes, so the markers will form a grid in screen-sapce
+      function updatePosition() {
+        for (let hi = 0; hi < 3 ; hi++) {
+          for (let vi = 0; vi < 3 ; vi++) {
+            // This transforms a screen-space point {x, y} to the earth space {lng, lat, alt}
+            // This consumes a lot of computation power, use it with caution.
+            let position = sandbox.window.toLngLatAlt({x: wGap*(hi+1), y: hGap*(vi+1)})
+            if (position) {
+              markers[hi * 3 + vi].setPose(position)
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

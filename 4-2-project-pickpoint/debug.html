@@ -62,6 +62,28 @@
           sandbox: sandbox,
           scale: 1 // icon size
         })
+
+        let tt = new altizure.TextTagMarker({
+          // text string
+          text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
+          // text style
+          textStyle: {
+            fillStyle: 'rgb(255, 255, 255)',
+            font: 'normal 500 24px Arial',
+            outlineWidth: 2,
+            outlineStyle: 'rgb(0, 0, 0)'
+          },
+
+          // icon position
+          position: {
+            "lng": pt.lng,
+            "lat": pt.lat,
+            "alt": pt.alt
+          },
+          // scene
+          sandbox: sandbox,
+          scale: 1 // icon size
+        })
       }
 
     </script>

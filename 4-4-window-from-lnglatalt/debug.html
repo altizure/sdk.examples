@@ -1,0 +1,70 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 4.4 Window from LngLatAlt </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 },
+          flyTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: false
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // [Notice] cons: div element is less efficient than TagMarker or TextTagMarker. There will be a performance issue when you have a lot of them.
+      // pros: with a div, you have much more freedom in customizing the style, than with a TagMarker/TextTagMarker.
+
+      // create a div
+      let pinDiv = document.createElement("div");
+      pinDiv.style.width = "140px";
+      pinDiv.style.height = "30px";
+      pinDiv.style.background = "white";
+      pinDiv.style.color = "blue";
+      pinDiv.innerHTML = "This is a div element.";
+      pinDiv.style.position = "absolute";
+      pinDiv.style.left = 100+'px';
+      pinDiv.style.top = 100+'px';
+      document.body.appendChild(pinDiv);
+
+      // earth-space point where the div will be positioned
+      let position = new altizure.LngLatAlt(113.939420, 22.5362742, 32.40720)
+
+      // listen on camera changes
+      sandbox.on('cameraChange', updatePosition)
+
+      // re-position the div, so it sticks to the earth-space position
+      function updatePosition() {
+        // transforms from earth-space position {lng, lat, alt} to screen-space {x, y}
+        let screenPosition = sandbox.window.fromLngLatAlt(position)
+        if (screenPosition) {
+          pinDiv.style.left = screenPosition.x + 'px'
+          pinDiv.style.top = screenPosition.y + 'px'
+        }
+      }
+    </script>
+  </body>
+</html>
