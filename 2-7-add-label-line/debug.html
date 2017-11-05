@@ -1,0 +1,98 @@
+<html lang="en">
+  
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.6 Add labelline </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 306.54643337533054,
+            lat: 22.536324019321754,
+            lng: 113.93950148408207,
+            north: 31.548454838878552,
+            tilt: 41.21495327102802 },
+          flyTo: { alt: 111.40449861660926,
+            lat: 22.536953149894146,
+            lng: 113.93899995431988,
+            north: 2.9350337546468355,
+            tilt: 0 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+  
+      sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+
+      var lnglats = [
+        {lng: 113.9384996805424, lat: 22.53673077502494, alt: 7.715646460973316},
+        {lng: 113.93847261876799, lat: 22.53722750437539, alt: 7.450298207771984},
+        {lng: 113.93951382530325, lat: 22.537270589510833, alt: 8.11264493800224},
+        {lng: 113.93953415560303, lat: 22.536770559733345, alt: 8.220334384973535},
+        {lng: 113.93849974135665, lat: 22.53673426847008, alt: 7.717826424438288},
+        {lng: 113.93854847950789, lat: 22.535798226438313, alt: 9.24988878371421},
+        {lng: 113.93883230792783, lat: 22.535613184079555, alt: 7.491092759428956},
+        {lng: 113.93946842973708, lat: 22.535776233551406, alt: 7.539745796596494},
+        {lng: 113.94020373617754, lat: 22.535838620153562, alt: 7.9881305755257745},
+        {lng: 113.94044412379573, lat: 22.53585841631515, alt: 8.437984960393573},
+        {lng: 113.9405260512342, lat: 22.536084800037806, alt: 8.490871998788412},
+        {lng: 113.94055299292776, lat: 22.536585609956727, alt: 8.836583467250309},
+        {lng: 113.94054344985459, lat: 22.53678724960981, alt: 8.442712371255638},
+        {lng: 113.94008302383618, lat: 22.53676321723278, alt: 8.224010424537205},
+        {lng: 113.93966724961462, lat: 22.536738004201695, alt: 8.149216227643219},
+        {lng: 113.93953799838187, lat: 22.53677042341269, alt: 8.187253301797654}
+      ];
+      let pts = lnglats.map((lnglat) => {
+        return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, lnglat.alt)
+      })
+
+      // default options used
+      let textOptions = {
+        margin: 0,
+        lineHeight: 0.1,
+        align: 'center',
+        fillStyle: 'black',
+        font: 'bold 102.4px Arial',
+        outlineWidth: 2,
+        outlineStyle: 'black',
+        resetCursorY: true,
+        trimText: true
+      }
+      textOptions = Object.assign(textOptions, 
+        {
+          fillStyle: 'red',
+          font: 'bold 60px Times New Roman'
+        }
+      )
+
+      let pl = new altizure.PolyLabelLineMarker({
+        name: 'pl',
+        sandbox: sandbox,
+        interactable: false,
+        visible: true,
+        // for base Marker
+        fenceHeight: 5,
+        points: pts,
+        color: 0xff111,
+        textOptions: textOptions,
+        labelsVisible: true,
+      })
+
+    </script>
+  </body>
+  
+  </html>
