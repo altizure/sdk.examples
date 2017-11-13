@@ -1,0 +1,119 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 4.5 LngLat To Alt </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 319.02169601663104,
+            lat: 35.65218777804628,
+            lng: 107.30425719131709,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 },
+          flyTo: { alt: 319.02169601663104,
+            lat: 35.65218777804628,
+            lng: 107.30425719131709,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: false
+        }
+      }
+
+      let altmarker
+      let init_success = false
+      let maxlat, minlat, maxlng, minlng, positionArray
+      let targetmarker = undefined
+      let marker_sequence_number = 0      
+
+      // use .then(
+      //   (marker) => { 
+      //     execute other functions here 
+      //   }
+      // ) to execute function after the marker is added to scene
+      let sandbox = new altizure.Sandbox('page-content', options)
+      sandbox.add('AltizureProjectMarker', 
+        {
+          pid: '5a07f43f5d1dfe17d0c66bb7'
+        }
+      ).then((marker) => {
+        // get the altizure project marker
+        altmarker = marker
+        // initialze
+        init()
+        // move the target tagmarker every 0.1 seconds
+        setTimeout(moveTargetMarker, 100)
+      })
+
+      // move the target marker into the marker_sequence_number th position
+      function moveTargetMarker () {
+        marker_sequence_number += 1
+        marker_sequence_number = marker_sequence_number % positionArray.length
+        setTargetMarkersAlt(marker_sequence_number)
+        setTimeout(moveTargetMarker, 100)
+      }
+
+      function init () {
+        let geoInfo = altmarker._apiInfo.geoInfo
+        maxlat = geoInfo.maxLat
+        maxlng = geoInfo.maxLong
+        minlat = geoInfo.minLat
+        minlng = geoInfo.minLong
+        generateLngLatArray()
+        initMarkers()
+      }
+      function generateLngLatArray () {
+        let NUM_MARKER = 1000 // how many position for target marker to move
+        let PI = 3.1415926
+        positionArray = []
+        for (let i = - NUM_MARKER / 2; i < NUM_MARKER / 2; ++i) {
+          let lng = (maxlng + minlng) / 2 + i / NUM_MARKER * (maxlng - minlng)
+          let lat = (maxlat + minlat) / 2 + Math.sin(2 * PI * i / NUM_MARKER) * (maxlat - minlat) / 2
+          positionArray.push({lng: lng, lat: lat, alt: 0})
+        }
+      }
+      function initMarkers () {
+        if (targetmarker) return
+        let position = positionArray[0]
+        targetmarker = new altizure.TagMarker({
+          sandbox: sandbox,
+          position: position,
+          scale: 3,
+          imgUrl: '../public/assets/img/tag/select/tagDemo.png'
+        })
+        // marker = new altizure.OBJMarker({
+        //   position: position,
+        //   sandbox: sandbox,
+        //   name: 'optimus',
+        //   shape: 'CUSTOMIZE',
+        //   objUrl: '../public/assets/object/optimus/optimus.obj',
+        //   mtlUrl: '../public/assets/object/optimus/optimus.obj.mtl',
+        //   upDir: {x: 0,y: 1,z: 0},
+        //   scale: 3
+        // })
+      }
+      function pickAlt (index) {
+        let altArray = altmarker.pickDepthMap([positionArray[index]])
+        positionArray[index].alt = altArray[0]
+      }
+      // pick the depth of the marker_sequence_number th LngLat and get the alt
+      function setTargetMarkersAlt (marker_sequence_number) {
+        pickAlt(marker_sequence_number)
+        targetmarker.setPose(positionArray[marker_sequence_number], undefined, undefined)
+      }   
+
+    </script>
+  </body>
+</html>
