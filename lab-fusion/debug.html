@@ -1,0 +1,77 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Fusion </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {
+            alt: 846.67280297181,
+            lat: 22.67860532430025,
+            lng: 114.33857024357965,
+            north: -64.63273698329787,
+            tilt: 47.24391377460331 },
+          flyTo: {
+            alt: 846.67280297181,
+            lat: 22.67860532430025,
+            lng: 114.33857024357965,
+            north: -64.63273698329787,
+            tilt: 47.24391377460331 },
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let model = null
+      let snap = null
+      sandbox.add('AltizureProjectMarker', {pid: '59140cf3e3f8483d35bf8971'})
+      .then((marker) => {
+        console.log('marker', marker)
+        model = marker
+
+        marker.importPhotos({
+          url: {
+            cameraFile: '../public/assets/fusion/cp/camera/0_0_0.json',
+            // photoBase: 'https://www.altizure.com/user_drive2/59140cf3e3f8483d35bf8971/'
+            photoBase: '../public/assets/fusion/59140cf3e3f8483d35bf8971/'
+          }
+        })
+        snap = model.photos.snap
+      })
+      
+
+      window.addEventListener('mouseup', () => {
+        if (model) {
+          let photos = model.photos
+          if (photos) {
+            photos.snap( {
+                dist: 50,
+                orient: 15, // in degree
+                alpha: 0.1
+              }, 2000)
+          }
+        }
+      })
+
+      window.addEventListener('mousedown', () => {
+        if (model) {
+          model.disposeCurrentDisplay()
+        }
+      })
+
+    </script>
+  </body>
+</html>
