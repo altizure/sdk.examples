@@ -1,0 +1,81 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.9 Add Canvas Tag </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        // camera
+        camera: {
+          poseTo: {
+            alt: 279.3103368830081,
+            lat: 31.21562155498409,
+            lng: 121.62215079760131,
+            north: 6.133679168500534,
+            tilt: 55.7607197136412
+          },
+          flyTo: {
+            alt: 279.3103368830081,
+            lat: 31.21562155498409,
+            lng: 121.62215079760131,
+            north: 6.133679168500534,
+            tilt: 55.7607197136412
+          }
+        },
+        // camera looking at
+        altlonglat:  {longitude: 121.62215079760068, latitude: 31.21562155498418, altitude: 200},
+        orientation: {northing: 6.6, tilt: 60},
+        // render items
+        renderItems: {featureInView: false, earth: true},
+        // show mouse tip
+        develop: true,
+        // altizure api: contact altizure to get your developer key
+        altizureApi:{
+          apiUrl: 'https://api.altizure.com/graphql',
+          key: 'sItAxJfeEOLaRM41uoMcw1IDZWgvqwCoMGLwwm1',
+          altitoken: '4Gvd4sAYDKDZGVFhVr6E29nWnD9YlWVTrlRT2AejjPXYa68PflbeI8fMpAgKMvQ3fy1FDmkevIJKa03H8tlhmCt8zzD1ChFVrMgHKBLBtBnAxRL7cGtp0lIpodFc'
+        },
+        // authenticated HOST by altizure, if you intend to setup a server
+        HOST: 'U2FsdGVkX1+n07murXikKiUHXBPpRhB8Cit810eAEqI6MTqRG7T9HxJv44I/24nX'
+      }
+
+      let earth = new altizure.Solution('page-content', options)
+      let sandbox = earth
+      // add project at the default GPS position
+      earth.add('AltizureProjectMarker', {pid: '5969e005fce736590e33edd2'})
+
+      // create a tag marker
+      let canvasTag = new altizure.CanvasTagMarker({
+        pinLength: 30,
+        // icon position
+        position: {
+          "lng": 121.62208470158923,
+          "lat": 31.215517133199054,
+          "alt": 32.71817765998837
+        },
+        // scene
+        earth: earth,
+        scale: 0.5 // icon size
+      })
+
+      function drawRect () {
+        let ctx = canvasTag.context
+        let size = canvasTag.size
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, size.width, size.height)
+        ctx.fillStyle = 'red'
+        ctx.fillRect(0, 0, size.width / 2, size.height / 2)
+        canvasTag.takeEffects()
+      }
+
+      document.addEventListener('click', (event) => {
+        console.log('click: rectangle drawn!')
+        drawRect()
+      })
+    </script>
+  </body>
+</html>
