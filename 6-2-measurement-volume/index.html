@@ -1,0 +1,187 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure ??? Measurement </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        // camera 
+        camera: {
+          poseTo: {
+            alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078
+          },
+          flyTo: {
+            alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624
+          }
+        },
+        // render items
+        renderItems: { featureInView: false, earth: true },
+        // show mouse tip
+        develop: true,
+        // altizure api: contact altizure to get your developer key
+        altizureApi: {
+          apiUrl: 'https://api.altizure.com/graphql',
+          key: 'sItAxJfeEOLaRM41uoMcw1IDZWgvqwCoMGLwwm1',
+          altitoken: '4Gvd4sAYDKDZGVFhVr6E29nWnD9YlWVTrlRT2AejjPXYa68PflbeI8fMpAgKMvQ3fy1FDmkevIJKa03H8tlhmCt8zzD1ChFVrMgHKBLBtBnAxRL7cGtp0lIpodFc'
+        },
+        // authenticated HOST by altizure, if you intend to setup a server
+        HOST: 'U2FsdGVkX1+n07murXikKiUHXBPpRhB8Cit810eAEqI6MTqRG7T9HxJv44I/24nX'
+      }
+
+      let sandbox = new altizure.Solution('page-content', options)
+      let altmarker
+      // add project at the default GPS position
+      // sandbox.add('AltizureProjectMarker', {pid: '5969e005fce736590e33edd2'})
+      // sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // add project at the default GPS position
+      sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+        .then((res) => {
+          altmarker = res   
+          setUpUI(altmarker)               
+        })
+
+      let volume1 = {
+        color: 0xff0000,
+        opacity: 0.3,
+        points: [
+          {"lng":113.93923668794143,"lat":22.535981923709723},
+          {"lng":113.93951192242902,"lat":22.535966222981827},
+          {"lng":113.93994572337847,"lat":22.536157046480884},
+          {"lng":113.93961571275284,"lat":22.536765348464183},
+          {"lng":113.9393509121602,"lat":22.536634426946975},
+          {"lng":113.93923668794143,"lat":22.535981923709723}
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
+        }),
+        top: 64,
+        bottom: 0,
+      }
+      let poly1 = new altizure.PolygonMarker({
+        volume: volume1,
+        sandbox: sandbox,
+        name: 'polygon1',
+        interactable: true
+      })
+
+      let volume2 = {
+        "color": 0x00ff00,
+        "opacity": 0.3,
+        "points": [
+          {"lng":113.93844052328217,"lat":22.536780745628516},
+          {"lng":113.93964436503683,"lat":22.536783420409286},
+          {"lng":113.93948969206619,"lat":22.53732804292064},
+          {"lng":113.93860336474235,"lat":22.537254593497487},
+          {"lng":113.93848414173625,"lat":22.53705811041408},
+          {"lng":113.93844052328217,"lat":22.536780745628516}
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
+        }),
+        "top": 39,
+        "bottom": 0
+      }
+      let poly2 = new altizure.PolygonMarker({
+        volume: volume2,
+        sandbox: sandbox,
+        name: 'polygon2',
+        interactable: true
+      })
+
+
+      let volume3 = {
+        "color": 0x0000ff,
+        "opacity": 0.3,
+        "points": [
+        {"lng":113.93965356765712,"lat":22.5372732687386,"alt":8.02424010408132},{"lng":113.93986953063916,"lat":22.536770354892223,"alt":8.246402629145914},{"lng":113.94014148838244,"lat":22.53678847128858,"alt":8.248300447748443},{"lng":113.94005866248791,"lat":22.537655983396963,"alt":22.305403515210177},{"lng":113.93965356765712,"lat":22.5372732687386,"alt":8.02424010408132}
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
+        }),
+        "top": 39,
+        "bottom": 0
+      }
+      let poly3 = new altizure.PolygonMarker({
+        volume: volume3,
+        sandbox: sandbox,
+        name: 'polygon3',
+        interactable: true
+      })
+
+      function testGetRegionVolume() {
+        console.log('poly1', altmarker.getRegionVolume(poly1))
+        console.log('poly2', altmarker.getRegionVolume(poly2))
+        console.log('poly3', altmarker.getRegionVolume(poly3))
+      }
+
+      function getMeasurement (index) {
+        console.log('getMeasurement', index)
+        let info = document.getElementById('poly'+index+'measurement')
+        if (!info) return
+        if (altmarker) {
+          let poly
+          if (index === 1) poly = poly1
+          else if (index === 2) poly = poly2
+          else if (index === 3) poly = poly3
+          let measureInfo = altmarker.getRegionVolume(poly)
+          info.textContent = JSON.stringify(measureInfo)
+        } else {
+          info.textContent = 'AltizureMarker loading... Please try again later'
+        }
+      }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+    <script>
+      function setUpUI (altmarker) {
+        var PolyMeasureText = function(altmarker, polygon) {
+          this.polygon = polygon
+          this.polygonTop = 0    
+          this.excavation = 0
+          this.fill = 0
+          this.area = 0
+          this.refAltitude = 0
+          this.TopAsRef = false
+          this.Recompute = () => {
+            this.polygonTop = this.polygon.top
+            let ref = undefined
+            if (this.TopAsRef) ref = this.polygonTop
+            let measureInfo = altmarker.getRegionVolume(this.polygon, ref)
+            this.excavation = measureInfo.excavation
+            this.fill = measureInfo.fill
+            this.area = measureInfo.area
+            this.refAltitude = measureInfo.refAltitude
+          }
+        }
+        var gui = new dat.GUI()
+        addPolyFolder('Polygon 1 (red)', poly1, true)
+        addPolyFolder('Polygon 2 (green)', poly2)
+        addPolyFolder('Polygon 3 (blue)', poly3)        
+
+        function addPolyFolder (name, poly, open) {
+          var polyFolder = gui.addFolder(name)
+          var text = new PolyMeasureText(altmarker, poly)
+          let topController = polyFolder.add(text, 'polygonTop', 0.1, 64.0)
+          topController.onChange(function (value) {
+            poly.top = value
+          })
+          topController.listen()
+          polyFolder.add(text, 'excavation').listen()
+          polyFolder.add(text, 'fill').listen()
+          polyFolder.add(text, 'area').listen()
+          polyFolder.add(text, 'refAltitude').listen()
+          polyFolder.add(text, 'TopAsRef')        
+          polyFolder.add(text, 'Recompute')
+          if (open) polyFolder.open()
+        }     
+      }
+    </script>
+  </body>
+</html>
