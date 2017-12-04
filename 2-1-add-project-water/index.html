@@ -17,18 +17,19 @@
         camera: {
           // camera start position
           poseTo: {
-            lng: 121.90948173730985,
-            lat: 28.4475,
-            alt: 250,
+            lat: 30.947870295755546,
+            lng: 120.88925225766249,
+            alt: 200,
             north: 0,
-            tilt: 40
+            tilt: 60
           },
+          // camera target position
           flyTo: {
-            lng: 121.90948173730985,
-            lat: 28.4475,
-            alt: 250,
-            north: 0,
-            tilt: 40
+            alt: 46.98889281431989,
+            lat: 30.94754849570419,
+            lng: 120.8896025897193,
+            north: -132.2586604541772,
+            tilt: 72.39667031677064
           }
         },
         renderItems: {
@@ -43,9 +44,7 @@
 
       // import altizure project's water
       // Note: the water surface must be created on Altizure by the project's owner
-      // sandbox.add('AltizureProjectMarker', {pid: '5993d8e65cbfaf1d4eba995d'})
-      sandbox.add('AltizureProjectMarker', {pid: '59b73203d5e441395a6898f6'})
-      
+      sandbox.add('AltizureProjectMarker', {pid: '5993d8e65cbfaf1d4eba995d'})
         .then(function (marker) {
           // import water from altizure
           return marker.water.import()
