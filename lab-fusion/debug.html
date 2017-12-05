@@ -36,7 +36,6 @@
       let sandbox = new altizure.Sandbox('page-content', options)
 
       let model = null
-      let snap = null
       sandbox.add('AltizureProjectMarker', {pid: '59140cf3e3f8483d35bf8971'})
       .then((marker) => {
         console.log('marker', marker)
@@ -49,116 +48,85 @@
             photoBase: '../public/assets/fusion/59140cf3e3f8483d35bf8971/'
           }
         })
-        snap = model.photos.snap
       })
 
-      //  {lng: 114.33791528127928, lat: 22.678992152138612, alt: 152.5334995052571}
-      //  {lng: 114.33699889751146, lat: 22.679007510289996, alt: 151.80666306858524}
-      //  {lng: 114.33702151121001, lat: 22.67818083083041, alt: 152.5651249669719}
-      //  {lng: 114.3379466937555, lat: 22.678169772488175, alt: 154.58566959692158}
-
-      // polygon 1
-      let volume1 = {
-        color: 0xf18100,
-        opacity: 0.3,
-        points: [
-            [114.33791528127928, 22.678992152138612],
-            [114.33699889751146, 22.679007510289996],
-            [114.33702151121001, 22.67818083083041],
-            [114.3379466937555, 22.678169772488175],
-            [114.33791528127928, 22.678992152138612]
-        ].map((lnglat) => {
-          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
-        }),
-        top: 200,
-        bottom: 140,
-      }
-      let poly1 = new altizure.PolygonMarker({
-        volume: volume1,
-        sandbox: sandbox,
-        name: 'polygon1',
-        interactable: true
-      })
-      poly1.on('mouseenter', function (event) {
-        poly1.opacity = 0.1
-      })
-      poly1.on('mouseleave', function (event) {
-        poly1.opacity = 0.3
-      })
-      poly1.on('click', function (event) {
-        poly1.color = Math.random()*0xffffff
-      })
-      
-
+      let isSnapped = false
+      let currentDisplay = null
+      let cameraPose = null
+      let initAlt = null
       window.addEventListener('mouseup', () => {
+        turnOffPhotoMode()
         if (model) {
           let photos = model.photos
           if (photos) {
             photos.snap( {
-                dist: 50,
-                orient: 15, // in degree
-                alpha: 0.1
-              }, 2000)
+                dist: 50, // distance to camera (in meter)
+                orient: 15, // angle different to camera (in degree)
+                alpha: 0.1 // weighting
+              }, 2000) // fly time
+              .then(res => {
+                turnOnPhotoMode(res)
+              })
+              .catch(err => {
+                turnOffPhotoMode()
+                if (err.message === 'No nearby photo.') {
+                } else {
+                  console.error(err)
+                }
+              })
           }
         }
       })
 
       window.addEventListener('mousedown', () => {
+        turnOffPhotoMode()
+        fadeOutDisplay()
+      })
+
+      function turnOnPhotoMode (res) {
+        // console.log('trun on')
+        currentDisplay = res.photoDisplay
+        isSnapped = true
+        sandbox.enableDolly = false
+        cameraPose = sandbox.camera.pose
+        initAlt = cameraPose.alt
+      }
+
+      function turnOffPhotoMode () {
+        // console.log('turn off')
+        currentDisplay = null
+        isSnapped = false
+        sandbox.enableDolly = true
+      }
+
+      function fadeOutDisplay () {
         if (model) {
           model.disposeCurrentDisplay()
         }
-      })
-
-      // document.addEventListener('click', handler)
-      // document.addEventListener('touchstart', handler)
-
-      function handler (event) {
-        console.log(event)
-        let pt = sandbox.pickOnProjects(event)
-
-        if (!pt) {
-          return
-        }
-        console.log('onclick point coordinate', pt)
-        // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
-
-        new altizure.TagMarker({
-          // img url
-          imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
-          // icon position
-          position: {
-            "lng": pt.lng,
-            "lat": pt.lat,
-            "alt": pt.alt
-          },
-          // scene
-          sandbox: sandbox,
-          scale: 1 // icon size
-        })
-
-        let tt = new altizure.TextTagMarker({
-          // text string
-          text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
-          // text style
-          textStyle: {
-            fillStyle: 'rgb(255, 255, 255)',
-            font: 'normal 500 24px Arial',
-            outlineWidth: 2,
-            outlineStyle: 'rgb(0, 0, 0)'
-          },
-
-          // icon position
-          position: {
-            "lng": pt.lng,
-            "lat": pt.lat,
-            "alt": pt.alt
-          },
-          // scene
-          sandbox: sandbox,
-          scale: 1 // icon size
-        })
       }
 
+      sandbox.control.domElement.addEventListener("mousewheel", onMouseWheel, false)
+		  // sandbox.control.domElement.addEventListener("DOMMouseScroll", onMouseWheel, false)
+
+      function onMouseWheel(e) {
+        // console.log('1', event)
+        if (!isSnapped) return // only respond when photo is being displayed
+        // console.log(event)
+        if (e.wheelDelta > 0) {
+          cameraPose.alt -= 0.2
+        } else if (e.wheelDelta < 0) {
+          cameraPose.alt += 0.2
+        }
+
+        let limit = 6
+        if (cameraPose.alt > initAlt + limit) {
+          cameraPose.alt = initAlt + limit
+        } else if (cameraPose.alt < initAlt - limit) {
+          cameraPose.alt = initAlt - limit
+        } else {}
+         
+        sandbox.camera.pose = cameraPose
+      }
     </script>
   </body>
 </html>
