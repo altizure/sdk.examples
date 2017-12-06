@@ -1,13 +1,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Fusion </title>
+    <title> Fusion PS8-2 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="../build/altizure.js"></script>
-    <!--<script type="text/javascript" src="https://unpkg.com/altizure-earth-apis"></script>-->
+    <!--<script type="text/javascript" src="../build/altizure.js"></script>-->
+    <script type="text/javascript" src="https://unpkg.com/altizure-earth-apis"></script>
     <script>
       let options = {
         altizureApi:{
@@ -36,22 +36,112 @@
       }
       let sandbox = new altizure.Sandbox('page-content', options)
 
+      let info = {
+        "id": "5a2684c670ba69dfd11c3035",
+        "name": "坪山8-2",
+        "views": 1000,
+        "date": "2017-05-13T11:25:16.043Z",
+        "versionControl": "ee7dc509facbed1da282e3db4eccb79f",
+        "cloudPath": [
+          {
+            "key": "local",
+            "dataUrl": "https://ps.altizure.info/data2/5a2684c670ba69dfd11c3035/"
+          }
+        ],
+        "geoInfo": {
+          "mercatorTransform": [
+            1,
+            0,
+            0,
+            226442.85816090152,
+            0,
+            1,
+            0,
+            2510339.655562049,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          "transformed": true,
+          "manualAligned": false,
+          "autoAligned": true,
+          "minLat": 22.67560144464581,
+          "minLong": 114.3360983986375,
+          "maxLat": 22.680558148377497,
+          "maxLong": 114.33930670301136,
+          "centerLat": 22.678115580424876,
+          "centerLong": 114.33761935873478
+        },
+        "modelTransform": {
+          "origin": [
+            817.395, 
+            -105.405, 
+            83.5156
+          ],
+          "xDir": [
+            1,
+            0,
+            0
+          ],
+          "yDir": [
+            0,
+            1,
+            0
+          ],
+          "zDir": [
+            0,
+            0,
+            1
+          ],
+          "maxBound": [
+            1457.26, 
+            1457.46, 
+            114.593
+          ],
+          "minBound": [
+            -1457.26, 
+            -1457.46, 
+            -114.593
+          ],
+          "xTiles": 256,
+          "yTiles": 256,
+          "zTiles": 1,
+          "floorHeight": 0,
+          "onLoadTrans": [
+            1.5,
+            0,
+            0
+          ],
+          "lengthUnitToMeter": 1
+        }
+      }
+
       let model = null
-      sandbox.add('AltizureProjectMarker', {pid: '59140cf3e3f8483d35bf8971'})
+      sandbox.add('AltizureProjectInfo', {
+        info: info,
+        data: {}
+      })
       .then((marker) => {
         console.log('marker', marker)
         model = marker
+        marker.dim() // hide the fence
 
         marker.importPhotos({
           url: {
-            cameraFile: '../public/assets/fusion/cp/camera/0_0_0.json',
+            cameraFile: '../public/assets/fusion/pingshan81/0_0_0.json',
             // photoBase: 'https://www.altizure.com/user_drive2/59140cf3e3f8483d35bf8971/'
-            photoBase: '../public/assets/fusion/59140cf3e3f8483d35bf8971/'
-          }
+            photoBase: '../public/assets/fusion/pingshan81/8_2/'
+          },
+          showCameras: false // set to true to visualize all camera poses
         })
       })
 
-      let isSnapped = false
+     let isSnapped = false
       let currentDisplay = null
       let initFov = null
       window.addEventListener('mouseup', () => {
