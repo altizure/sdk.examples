@@ -6,8 +6,8 @@
   </head>
   <body>
     <div id="page-content"></div>
-    <!--<script type="text/javascript" src="../build/altizure.js"></script>-->
-    <script type="text/javascript" src="https://unpkg.com/altizure-earth-apis"></script>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/altizure-earth-apis"></script> -->
     <script>
       let options = {
         altizureApi:{
@@ -141,7 +141,7 @@
         })
       })
 
-     let isSnapped = false
+      let isSnapped = false
       let currentDisplay = null
       let initFov = null
       window.addEventListener('mouseup', () => {
@@ -150,7 +150,7 @@
           let photos = model.photos
           if (photos) {
             photos.snap( {
-                dist: 80, // distance to camera (in meter)
+                dist: 500, // distance to camera (in meter)
                 orient: 30, // angle different to camera (in degree)
                 alpha: 0.5 // weighting
               }, 2000) // fly time
