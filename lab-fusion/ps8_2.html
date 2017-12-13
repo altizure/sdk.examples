@@ -9,6 +9,8 @@
     <script type="text/javascript" src="../build/altizure.js"></script>
     <!-- <script type="text/javascript" src="https://unpkg.com/altizure-earth-apis"></script> -->
     <script>
+      let clat = 22.67860532430025
+      let clng = 114.33857024357965
       let options = {
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
@@ -16,14 +18,14 @@
         camera: {
           poseTo: {
             alt: 846.67280297181,
-            lat: 22.67860532430025,
-            lng: 114.33857024357965,
+            lat: clat, // 22.67860532430025,
+            lng: clnt, // 114.33857024357965,
             north: -64.63273698329787,
             tilt: 47.24391377460331 },
           flyTo: {
             alt: 846.67280297181,
-            lat: 22.67860532430025,
-            lng: 114.33857024357965,
+            lat: clat, // 22.67860532430025,
+            lng: clng, // 114.33857024357965,
             north: -64.63273698329787,
             tilt: 47.24391377460331 },
         },
@@ -74,8 +76,8 @@
           "minLong": 114.3360983986375,
           "maxLat": 22.680558148377497,
           "maxLong": 114.33930670301136,
-          "centerLat": 22.678115580424876,
-          "centerLong": 114.33761935873478
+          "centerLat": clat, // 22.678115580424876,
+          "centerLong": clng, // 114.33761935873478
         },
         "modelTransform": {
           "origin": [
@@ -121,6 +123,7 @@
         }
       }
 
+      sandbox.control.enableDamping = false
       let model = null
       sandbox.add('AltizureProjectInfo', {
         info: info,
@@ -141,42 +144,163 @@
         })
       })
 
+      // class FrustumPanControl {
+
+      // }
+
       let isSnapped = false
+      let isPanning = false // a sub situation within isSnapped
+      
       let currentDisplay = null
       let initFov = null
-      window.addEventListener('mouseup', () => {
-        turnOffPhotoMode()
-        if (model) {
-          let photos = model.photos
-          if (photos) {
-            photos.snap( {
-                dist: 500, // distance to camera (in meter)
-                orient: 30, // angle different to camera (in degree)
-                alpha: 0.5 // weighting
-              }, 2000) // fly time
-              .then(res => {
-                turnOnPhotoMode(res)
-              })
-              .catch(err => {
-                turnOffPhotoMode()
-                if (err.message === 'No nearby photo.') {
-                } else {
-                  console.error(err)
-                }
-              })
+      document.addEventListener('mouseup', (e) => {
+        if (e.button === 0) {
+          photoControl.enablePan = false
+        }
+        if (isSnapped && isPanning) {
+          // isPanning = false
+        } else {
+          turnOffPhotoMode()
+          if (model) {
+            let photos = model.photos
+            if (photos) {
+              photos.snap( {
+                  orient: 30, // angle different to camera (in degree)
+                  dist: 2, // distance ratio
+                  alpha: 0.5 // weighting
+                }, 2000) // fly time
+                .then(res => {
+                  turnOnPhotoMode(res)
+                  if(sandbox.viewerCamera.fov > 35){
+                    sandbox.viewerCamera.fov = 35;
+                  }
+                })
+                .catch(err => {
+                  turnOffPhotoMode()
+                  if (err.message === 'No nearby photo.') {
+                  } else {
+                    console.error(err)
+                  }
+                })
+            }
           }
         }
       })
 
-      window.addEventListener('mousedown', () => {
-        turnOffPhotoMode()
-        fadeOutDisplay()
+      document.addEventListener('mousedown', (e) => {
+        // console.log(e)
+        if (e.button === 0) {
+          photoControl.enablePan = true
+        }
+        if (isSnapped && isPanning) {
+        } else {
+          turnOffPhotoMode()
+          fadeOutDisplay()
+        }
+      })
+
+      // let scope = this
+      class PhotoControl {
+        constructor ({sandbox}) {
+          // this.camera = camera
+          this.sandbox = sandbox
+          this.prevX = 0,
+          this.prevY = 0,
+
+          this._enablePan = false
+
+          this.camera.setViewOffset(this.fullWidth, this.fullHeight, 0,0, this.fullWidth, this.fullHeight)
+        }
+        /*
+          fullWidth:1206
+          fullHeight:965
+          offsetX:86
+          offsetY:-8
+          width:1206
+          height:965
+          */
+        get camera () { return this.sandbox.viewerCamera }
+        get view () { return this.camera.view }
+        get fullWidth () { return this.sandbox.width }
+        get fullHeight () { return this.sandbox.height }
+        set enablePan (b) {
+          this._enablePan = b
+          this.prevX = 0
+          this.prevY = 0
+        }
+        pan (x, y) {
+          if (!this._enablePan) return
+          let moveX = (this.prevX) ? x - this.prevX : 0
+          let moveY = (this.prevY) ? y - this.prevY : 0
+          if (moveX !== 0 || moveY !== 0) {
+            let x = this.view.offsetX - moveX
+            let y = this.view.offsetY - moveY
+            let fw = this.fullWidth
+            let fh = this.fullHeight
+            // pan limit
+            // x = Math.max(0, Math.min(x, fw * 0.5))
+            // y = Math.max(0, Math.min(y, fh * 0.5))
+
+            this.camera.setViewOffset(fw, fh, x, y, this.view.width, this.view.height)
+          }
+          this.prevX = x
+          this.prevY = y
+
+          // deviate from the center as a ratio of degree?
+          let diffX = Math.abs((this.view.offsetX + this.view.width / 2) - this.view.fullWidth / 2)
+          let diffY = Math.abs((this.view.offsetY + this.view.height / 2) - this.view.fullHeight / 2)
+
+          let fov = this.camera.fov
+
+          let xRatio = diffX / this.view.fullWidth * fov
+          let yRatio = diffY / this.view.fullHeight * fov
+          
+          return Math.max(xRatio, yRatio)
+        }
+
+        zoom (ratio = 1.1) {
+          let centX = this.view.width / 2 + this.view.offsetX
+          let centY = this.view.height / 2 + this.view.offsetY
+
+          let width = this.view.width * ratio
+          let height = this.view.height * ratio
+
+          let fw = this.fullWidth
+          let fh = this.fullHeight
+
+          width = Math.max(fw / 2, Math.min(width, fw * 2))
+          height = Math.max(fh / 2, Math.min(height, fh * 2))
+
+          let x = Math.floor(centX - width / 2)
+          let y = Math.floor(centY - height / 2)
+
+          
+          this.camera.setViewOffset(fw, fh, x, y, width, height)
+        }
+
+        restore () {
+          let fw = this.fullWidth
+          let fh = this.fullHeight
+          this.camera.setViewOffset(fw, fh, x, y, fw, fh)
+        }
+        
+      }
+      let photoControl = new PhotoControl({sandbox: sandbox})
+     
+      document.addEventListener('mousemove', (e) => {
+        if (isSnapped && isPanning) {
+          // console.log(sandbox.viewerCamera.view)
+          photoControl.pan(e.clientX, e.clientY)
+        }
       })
 
       function turnOnPhotoMode (res) {
         // console.log('trun on')
         currentDisplay = res.photoDisplay
+        console.log('res', res)
         isSnapped = true
+        // sandbox.freeze()
+        // sandbox.control.enableRotate = false
         sandbox.enableDolly = false
         initFov = sandbox.viewerCamera.fov
       }
@@ -184,7 +308,9 @@
       function turnOffPhotoMode () {
         // console.log('turn off')
         currentDisplay = null
+        // sandbox.unfreeze()
         isSnapped = false
+        // sandbox.control.enableRotate = true
         sandbox.enableDolly = true
       }
 
@@ -199,13 +325,59 @@
 
       function onMouseWheel(e) {
         if (!isSnapped) return // only respond when photo is being displayed
+        // console.log(e)
         if (e.wheelDelta > 0) {
-          sandbox.viewerCamera.fov += 1
+          if (sandbox.viewerCamera.fov > 10) {
+            sandbox.viewerCamera.fov -= 1
+            // photoControl.zoom(1.05)
+          }
         } else if (e.wheelDelta < 0) {
-          sandbox.viewerCamera.fov -= 1
+          if (sandbox.viewerCamera.fov < 35) {
+            sandbox.viewerCamera.fov += 1
+            // photoControl.zoom(0.95)
+          }
         }
         sandbox.updateVisibility()
       }
+
+      document.onkeydown = function (e) {
+        // console.log('key down', e)
+        // if ( !e.metaKey ) {
+        //   e.preventDefault();
+        // }
+        // 16 : "shift",
+        // 17 : "ctrl",
+        // 18 : "alt",
+        if (e.key === 'Shift') {
+          // console.log('key down', e)
+          isPanning = true
+          if (isSnapped && isPanning) {
+            turnOnPanning()
+          }
+        }
+      }
+
+      document.onkeyup = function (e) {
+        // console.log('key up', e)
+        // if ( !e.metaKey ) {
+        //   e.preventDefault();
+        // }
+        if (e.key === 'Shift') {
+          // console.log('key up', e)
+          isPanning = false
+          turnOffPanning()
+        }
+      }
+
+      function turnOnPanning () {
+        sandbox.freeze()
+      }
+
+      function turnOffPanning () {
+        sandbox.unfreeze()
+      }
+
+
     </script>
   </body>
 </html>
