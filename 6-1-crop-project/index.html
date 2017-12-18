@@ -125,13 +125,16 @@
       // altizure project initialized
       m.crop(boundary) // crop by boundary defined above
       m.crop(boundary2) // crop by boundary2
-      return Promise.resolve()
+      return Promise.resolve(m)
+    })
+    .then(m => {
+      m.uncrop(boundary) // cancel cropping
+      return Promise.resolve(m)
     })
     .catch((err) => {
       console.error(err)
       return err
     })
-
     </script>
   </body>
 </html>
