@@ -30,12 +30,8 @@
         develop: true,
         // altizure api: contact altizure to get your developer key
         altizureApi: {
-          apiUrl: 'https://api.altizure.com/graphql',
-          key: 'sItAxJfeEOLaRM41uoMcw1IDZWgvqwCoMGLwwm1',
-          altitoken: '4Gvd4sAYDKDZGVFhVr6E29nWnD9YlWVTrlRT2AejjPXYa68PflbeI8fMpAgKMvQ3fy1FDmkevIJKa03H8tlhmCt8zzD1ChFVrMgHKBLBtBnAxRL7cGtp0lIpodFc'
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
-        // authenticated HOST by altizure, if you intend to setup a server
-        HOST: 'U2FsdGVkX1+n07murXikKiUHXBPpRhB8Cit810eAEqI6MTqRG7T9HxJv44I/24nX'
       }
 
       let sandbox = new altizure.Solution('page-content', options)
@@ -148,7 +144,7 @@
           this.fill = 0
           this.area = 0
           this.refAltitude = 0
-          this.TopAsRef = false
+          this.TopAsRef = true
           this.Recompute = () => {
             this.polygonTop = this.polygon.top
             let ref = undefined
