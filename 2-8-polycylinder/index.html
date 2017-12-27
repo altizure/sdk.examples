@@ -87,6 +87,66 @@
         lineWidth: 4
       })
 
+      let pl1color = pl1.color
+      pl1.interactable = true
+      pl1.on('mouseenter', (event) => {
+        pl1.color = 0xffffff
+      })
+      pl1.on('mouseleave', (event) => {
+        pl1.color = pl1color
+      })
+  
+      let pl2color = pl2.color
+      pl2.interactable = true
+      pl2.on('mouseenter', (event) => {
+        pl2.color = 0xffffff
+      })
+      pl2.on('mouseleave', (event) => {
+        pl2.color = pl2color
+      })
+  
+      let pl3color = pl3.color
+      pl3.interactable = true
+      pl3.on('mouseenter', (event) => {
+        pl3.color = 0xffffff
+      })
+      pl3.on('mouseleave', (event) => {
+        pl3.color = pl3color
+      })
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
+    <script>
+      setUpUI()
+      function setUpUI () {
+        var LineMarkerProperty = function(linemarker) {
+          this.linemarker = linemarker
+          this.lineWidth = linemarker.lineWidth
+          this.opacity = linemarker.opacity
+        } 
+        var gui = new dat.GUI()
+        addFolder('red', pl1, true)
+        addFolder('purple', pl2)
+        addFolder('green', pl3)      
+
+        function addFolder (name, marker, open) {
+          var folder = gui.addFolder(name)
+          var text = new LineMarkerProperty(marker)
+          let lineWidthController = folder.add(text, 'lineWidth', 0.001, 10.0)
+          lineWidthController.onChange(function (value) {
+            marker.lineWidth = value
+          })
+          lineWidthController.listen()
+
+          let opacityController = folder.add(text, 'opacity', 0.0, 1.0, 0.01)
+          opacityController.onChange(function (value) {
+            marker.opacity = value
+          })
+          opacityController.listen()
+
+          if (open) folder.open()
+        }     
+      }
     </script>
   </body>
 </html>
