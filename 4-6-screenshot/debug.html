@@ -1,0 +1,197 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 4.6 Screenshot </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <!-- css file for Modal -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+</head>
+<body>
+  <div id="page-content" />
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="getScreenshot()">
+    Take screenshot
+  </button>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Screenshot</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <canvas id="targetrgb" width="460" height="230" />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="saveAsImage()">Open whole screenshot in New Tab</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Set up altizure scene -->
+  <script type="text/javascript" src="../build/altizure.js"></script>
+  <script>
+    let options = {
+      altizureApi:{
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        // camera start position
+        poseTo: {
+          alt: 1033.4643130921495,
+          lat: 45.01958527703056,
+          lng: 127.545111368605,
+          north: 5.472011886977992,
+          tilt: 49.74556260889083
+        },
+        // camera target position
+        flyTo: {
+          alt: 1033.4643130921495,
+          lat: 45.01958527703056,
+          lng: 127.545111368605,
+          north: 5.472011886977992,
+          tilt: 49.74556260889083
+        }
+      },
+      renderItems: { featureInView: false, earthUseTexture: false },
+      control:{
+        doubleTap: false // disable double tap/click to zoom
+      }
+    }
+
+    var sandbox = new altizure.Sandbox('page-content', options)
+    
+    var position = {lng: 127.54178921643462, lat: 45.018521817167525}
+
+    var positions = []
+    for (let i = 0; i < 10; ++i) {
+      for (let j = 0; j < 10; ++j) {
+        positions.push({
+          lng: position.lng + 0.0005 * j,
+          lat: position.lat + 0.0005 * i,
+          alt: 0
+        })
+      }
+    }
+
+    var objects = []
+    var tags = []
+    positions.forEach((pos) => {
+      objects.push(new altizure.OBJMarker({
+        position: pos,
+        sandbox: sandbox,
+        name: 'XXX',
+        shape: 'CUSTOMIZE',
+        objUrl: '../public/assets/object/optimus/optimus.obj',
+        mtlUrl: '',
+        upDir: {x: 0, y: 1, z: 0},
+        scale: 5
+      }))
+      tags.push(new altizure.TagMarker({
+        // img url
+        imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+        // icon position
+        position: {
+          "lng": pos.lng + 0.005,
+          "lat": pos.lat,
+          "alt": 25
+        },
+        // scene
+        sandbox: sandbox,
+        scale: 0.5 // icon size
+      }))
+    })
+
+    sandbox.add('AltizureProjectMarker', {
+      pid: '5849104597b73e0b090c01e8',
+      pose: {
+        position: {lng: 127.54678921643462, lat: 45.023521817167525, alt: 0}
+      }
+    })
+
+    var lnglats = [
+      [127.54478921643462, 45.025521817167525],
+      [127.53478921643462, 45.025521817167525],
+      [127.53478921643462, 45.020521817167525],
+      [127.54478921643462, 45.020521817167525],
+      [127.54478921643462, 45.025521817167525]
+    ]
+    let pts = lnglats.map((lnglat) => {
+      return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+    })
+    let volume = {
+      points: pts,
+      top: 40,
+      bottom: 20,
+      color: 0xf18100,
+      opacity: 0.2
+    }
+    let poly = new altizure.PolygonMarker({
+      volume: volume,
+      sandbox: sandbox,
+      name: 'polygon',
+      interactable: true
+    })
+
+  </script>
+  <!-- js file for Modal -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+  <script>
+  
+    var rgbresult
+    var img = new Image()
+    var downloadcanvas = document.createElement('canvas')
+    var downloadcanvasDataURL
+
+    function getScreenshot () {
+      downloadcanvasDataURL = null
+      rgbresult = null
+      // take screenshot
+      // {data: Uint8Array with length 4 * width * height, width: width of the screenshot, height: height of the screenshot}
+      rgbresult = sandbox.window.screenshot()
+
+      // parse data
+      var ctx = downloadcanvas.getContext('2d')
+      ctx.clearRect(0, 0, downloadcanvas.width, downloadcanvas.height)
+      downloadcanvas.width = rgbresult.width
+      downloadcanvas.height = rgbresult.height
+      var rgbimdata = ctx.createImageData(rgbresult.width, rgbresult.height)
+      for (let i = 0; i < rgbimdata.data.length; ++i) {
+        rgbimdata.data[i] = rgbresult.data[i]
+      }
+      ctx.putImageData(rgbimdata, 0, 0)
+      downloadcanvasDataURL = downloadcanvas.toDataURL("image/png")
+
+      // show screenshot
+      var showcanvas = document.getElementById('targetrgb')
+      var showctx = showcanvas.getContext('2d')
+      img.src = null
+      img.src = downloadcanvasDataURL
+      img.onload = () => {
+        showctx.drawImage(img, 0, 0, showcanvas.width, showcanvas.height)
+      }
+    }
+    function saveAsImage () {
+      var w = window.open("", "_blank")
+      w.document.write("<p>Right Click to Save screenshot As image</p><img src='"+downloadcanvasDataURL+"'/>")
+      // it seems that using a.href cannot download image size > 2mb in chrome
+      // var a = document.createElement('a')
+      // a.href = downloadcanvasDataURL
+      // a.download = 'screenshot.png'
+
+      // document.body.appendChild(a)
+      // a.click()
+      // document.body.removeChild(a)
+    }
+
+  </script>
+</body>
+</html>
