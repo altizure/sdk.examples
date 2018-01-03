@@ -28,7 +28,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="saveAsImage()">Open whole screenshot in New Tab</button>
+          <button type="button" class="btn btn-primary" onclick="saveAsImage()">Download screenshot</button>
         </div>
       </div>
     </div>
@@ -150,6 +150,7 @@
     var img = new Image()
     var downloadcanvas = document.createElement('canvas')
     var downloadcanvasDataURL
+    var blob
 
     function getScreenshot () {
       downloadcanvasDataURL = null
@@ -158,7 +159,7 @@
       // {data: Uint8Array with length 4 * width * height, width: width of the screenshot, height: height of the screenshot}
       rgbresult = sandbox.window.screenshot()
 
-      // parse data
+      // parse data to canvas and data url
       var ctx = downloadcanvas.getContext('2d')
       ctx.clearRect(0, 0, downloadcanvas.width, downloadcanvas.height)
       downloadcanvas.width = rgbresult.width
@@ -178,18 +179,28 @@
       img.onload = () => {
         showctx.drawImage(img, 0, 0, showcanvas.width, showcanvas.height)
       }
+
+      // create blob
+      blob = dataURItoBlob(downloadcanvasDataURL)
     }
     function saveAsImage () {
-      var w = window.open("", "_blank")
-      w.document.write("<p>Right Click to Save screenshot As image</p><img src='"+downloadcanvasDataURL+"'/>")
-      // it seems that using a.href cannot download image size > 2mb in chrome
-      // var a = document.createElement('a')
-      // a.href = downloadcanvasDataURL
-      // a.download = 'screenshot.png'
+      var a = document.createElement('a')
+      a.href = URL.createObjectURL(blob)
+      a.download = 'screenshot.png'
 
-      // document.body.appendChild(a)
-      // a.click()
-      // document.body.removeChild(a)
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    }
+
+    function dataURItoBlob(dataURI) {
+      var byteString = atob(dataURI.split(',')[1]);
+      var ab = new ArrayBuffer(byteString.length);
+      var ia = new Uint8Array(ab);
+      for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+      }
+      return new Blob([ab], {type: 'image/jpeg'});
     }
 
   </script>
