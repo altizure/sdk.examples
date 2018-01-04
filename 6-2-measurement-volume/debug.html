@@ -51,12 +51,30 @@
         color: 0xff0000,
         opacity: 0.3,
         points: [
-          {"lng":113.93923668794143,"lat":22.535981923709723},
-          {"lng":113.93951192242902,"lat":22.535966222981827},
-          {"lng":113.93994572337847,"lat":22.536157046480884},
-          {"lng":113.93961571275284,"lat":22.536765348464183},
-          {"lng":113.9393509121602,"lat":22.536634426946975},
-          {"lng":113.93923668794143,"lat":22.535981923709723}
+          {"lng":113.93934905932814,"lat":22.536453027243834,"alt":10.651991354552662},
+          {"lng":113.93939170314853,"lat":22.536358426714003,"alt":23.3014581772986},
+          {"lng":113.93932438950021,"lat":22.53636827155144,"alt":10.811800886920617},
+          {"lng":113.93931885585089,"lat":22.53631869516655,"alt":12.430553387452617},
+          {"lng":113.93925031693101,"lat":22.5363114272394,"alt":20.563278255865843},
+          {"lng":113.93926484230147,"lat":22.536083745806177,"alt":18.98635764147163},
+          {"lng":113.93930399955407,"lat":22.53602094362564,"alt":11.35579337729583},
+          {"lng":113.93940845423577,"lat":22.53603093771579,"alt":11.27765884941022},
+          {"lng":113.93947321277872,"lat":22.53599193993198,"alt":12.171693822557723},
+          {"lng":113.93958171792053,"lat":22.535964933640898,"alt":10.872377837703267},
+          {"lng":113.939665326007,"lat":22.536009070617993,"alt":21.01046493744909},
+          {"lng":113.93974932584011,"lat":22.536043291457943,"alt":14.531203685696934},
+          {"lng":113.93980497538881,"lat":22.536103614190683,"alt":13.125630706691457},
+          {"lng":113.93980820475667,"lat":22.53617743550801,"alt":18.229949404075207},
+          {"lng":113.93980376094972,"lat":22.536250842904664,"alt":21.592196979510817},
+          {"lng":113.93979141379278,"lat":22.536332843762494,"alt":19.50222528181615},
+          {"lng":113.9397545606703,"lat":22.5363868061661,"alt":20.253304803874485},
+          {"lng":113.93972994104982,"lat":22.536455223229154,"alt":9.3922631480306},
+          {"lng":113.93966689443133,"lat":22.536500322686734,"alt":6.367906019223409},
+          {"lng":113.93957112427057,"lat":22.53651882548558,"alt":5.278983699841428},
+          {"lng":113.93948982206284,"lat":22.536511724476746,"alt":11.0658509805701},
+          {"lng":113.93942737784649,"lat":22.53651686154076,"alt":9.514778250040766},
+          {"lng":113.93936907663237,"lat":22.536481244484463,"alt":10.517884341906576},
+          {"lng":113.93934905932814,"lat":22.536453027243834,"alt":10.651991354552662}
         ].map((lnglat) => {
           return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
         }),
@@ -74,12 +92,11 @@
         "color": 0x00ff00,
         "opacity": 0.3,
         "points": [
-          {"lng":113.93844052328217,"lat":22.536780745628516},
-          {"lng":113.93964436503683,"lat":22.536783420409286},
-          {"lng":113.93948969206619,"lat":22.53732804292064},
-          {"lng":113.93860336474235,"lat":22.537254593497487},
-          {"lng":113.93848414173625,"lat":22.53705811041408},
-          {"lng":113.93844052328217,"lat":22.536780745628516}
+          {"lng":113.93866222615023,"lat":22.537138392991075,"alt":7.909390417182902},
+          {"lng":113.9394636450248,"lat":22.53718971332801,"alt":7.584013394482465},
+          {"lng":113.93945176046242,"lat":22.536855591284745,"alt":8.028126358218916},
+          {"lng":113.9386848766892,"lat":22.53683648818326,"alt":9.349154154423246},
+          {"lng":113.93866222615023,"lat":22.537138392991075,"alt":7.909390417182902}
         ].map((lnglat) => {
           return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
         }),
@@ -98,7 +115,13 @@
         "color": 0x0000ff,
         "opacity": 0.3,
         "points": [
-        {"lng":113.93965356765712,"lat":22.5372732687386,"alt":8.02424010408132},{"lng":113.93986953063916,"lat":22.536770354892223,"alt":8.246402629145914},{"lng":113.94014148838244,"lat":22.53678847128858,"alt":8.248300447748443},{"lng":113.94005866248791,"lat":22.537655983396963,"alt":22.305403515210177},{"lng":113.93965356765712,"lat":22.5372732687386,"alt":8.02424010408132}
+          {"lng":113.94044806888913,"lat":22.537657700703136,"alt":13.508704893658477},
+          {"lng":113.94046483874774,"lat":22.536842764131123,"alt":8.647088930212444},
+          {"lng":113.93992220510911,"lat":22.536831675573527,"alt":16.05564397586623},
+          {"lng":113.93982564888094,"lat":22.537281301149346,"alt":8.307290983358879},
+          {"lng":113.93969138018679,"lat":22.537303020911885,"alt":12.727811733920012},
+          {"lng":113.93964304227006,"lat":22.537659912793334,"alt":7.27202130371452},
+          {"lng":113.94044806888913,"lat":22.537657700703136,"alt":13.508704893658477}
         ].map((lnglat) => {
           return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
         }),
@@ -139,21 +162,21 @@
       function setUpUI (altmarker) {
         var PolyMeasureText = function(altmarker, polygon) {
           this.polygon = polygon
-          this.polygonTop = 0    
-          this.excavation = 0
+          this.refPlane = 64
+          this.cut = 0
           this.fill = 0
           this.area = 0
-          this.refAltitude = 0
-          this.TopAsRef = true
+          this.highest = 0
+          this.lowest = 0
           this.Recompute = () => {
-            this.polygonTop = this.polygon.top
-            let ref = undefined
-            if (this.TopAsRef) ref = this.polygonTop
+            this.refPlane = this.polygon.top
+            let ref = this.refPlane
             let measureInfo = altmarker.getRegionVolume(this.polygon, ref)
-            this.excavation = measureInfo.excavation
+            this.cut = measureInfo.cut
             this.fill = measureInfo.fill
             this.area = measureInfo.area
-            this.refAltitude = measureInfo.refAltitude
+            this.highest = measureInfo.highest
+            this.lowest = measureInfo.lowest
           }
         }
         var gui = new dat.GUI()
@@ -164,16 +187,18 @@
         function addPolyFolder (name, poly, open) {
           var polyFolder = gui.addFolder(name)
           var text = new PolyMeasureText(altmarker, poly)
-          let topController = polyFolder.add(text, 'polygonTop', 0.1, 64.0)
+          let topController = polyFolder.add(text, 'refPlane', -100.0, 100.0, 1.0)
+          topController.name('Ref Plane (m)')
           topController.onChange(function (value) {
             poly.top = value
+            text.Recompute()
           })
           topController.listen()
-          polyFolder.add(text, 'excavation').listen()
-          polyFolder.add(text, 'fill').listen()
-          polyFolder.add(text, 'area').listen()
-          polyFolder.add(text, 'refAltitude').listen()
-          polyFolder.add(text, 'TopAsRef')        
+          polyFolder.add(text, 'cut').name('Cut (m^3)').listen()
+          polyFolder.add(text, 'fill').name('Fill (m^3)').listen()
+          polyFolder.add(text, 'area').name('Area (m^2)').listen()
+          polyFolder.add(text, 'highest').name('Highest (m)').listen()
+          polyFolder.add(text, 'lowest').name('Lowest (m)').listen()
           polyFolder.add(text, 'Recompute')
           if (open) polyFolder.open()
         }     
