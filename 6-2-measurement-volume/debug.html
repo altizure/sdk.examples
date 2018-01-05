@@ -166,6 +166,7 @@
           this.cut = 0
           this.fill = 0
           this.area = 0
+          this.surface = 0
           this.highest = 0
           this.lowest = 0
           this.Recompute = () => {
@@ -175,6 +176,7 @@
             this.cut = measureInfo.cut
             this.fill = measureInfo.fill
             this.area = measureInfo.area
+            this.surface = measureInfo.surface
             this.highest = measureInfo.highest
             this.lowest = measureInfo.lowest
           }
@@ -197,6 +199,7 @@
           polyFolder.add(text, 'cut').name('Cut (m^3)').listen()
           polyFolder.add(text, 'fill').name('Fill (m^3)').listen()
           polyFolder.add(text, 'area').name('Area (m^2)').listen()
+          polyFolder.add(text, 'surface').name('Surface (m^2)').listen()
           polyFolder.add(text, 'highest').name('Highest (m)').listen()
           polyFolder.add(text, 'lowest').name('Lowest (m)').listen()
           polyFolder.add(text, 'Recompute')
