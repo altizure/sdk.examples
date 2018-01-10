@@ -1,12 +1,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 6.2 Measurement </title>
+    <title> Altizure 4.7 Auto-adjust Polygon </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
     <script>
       let options = {
         // camera 
@@ -81,12 +81,12 @@
         top: 64,
         bottom: 0,
       }
-      let poly1 = new altizure.PolygonMarker({
+      let poly1markerOptions = {
         volume: volume1,
         sandbox: sandbox,
         name: 'polygon1',
         interactable: true
-      })
+      }
 
       let volume2 = {
         "color": 0x00ff00,
@@ -103,13 +103,12 @@
         "top": 39,
         "bottom": 0
       }
-      let poly2 = new altizure.PolygonMarker({
+      let poly2markerOptions = {
         volume: volume2,
         sandbox: sandbox,
         name: 'polygon2',
         interactable: true
-      })
-
+      }
 
       let volume3 = {
         "color": 0x0000ff,
@@ -125,84 +124,57 @@
         ].map((lnglat) => {
           return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
         }),
-        "top": 39,
+        "top": 30,
         "bottom": 0
       }
-      let poly3 = new altizure.PolygonMarker({
+      let poly3markerOptions = {
         volume: volume3,
         sandbox: sandbox,
         name: 'polygon3',
         interactable: true
-      })
-
-      function testGetRegionVolume() {
-        console.log('poly1', altmarker.getRegionVolume(poly1))
-        console.log('poly2', altmarker.getRegionVolume(poly2))
-        console.log('poly3', altmarker.getRegionVolume(poly3))
       }
 
-      function getMeasurement (index) {
-        console.log('getMeasurement', index)
-        let info = document.getElementById('poly'+index+'measurement')
-        if (!info) return
-        if (altmarker) {
-          let poly
-          if (index === 1) poly = poly1
-          else if (index === 2) poly = poly2
-          else if (index === 3) poly = poly3
-          let measureInfo = altmarker.getRegionVolume(poly)
-          info.textContent = JSON.stringify(measureInfo)
-        } else {
-          info.textContent = 'AltizureMarker loading... Please try again later'
-        }
-      }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5/dat.gui.min.js"></script>
     <script>
       function setUpUI (altmarker) {
-        var PolyMeasureText = function(altmarker, polygon) {
-          this.polygon = polygon
-          this.refPlane = 64
-          this.cut = 0
-          this.fill = 0
-          this.area = 0
-          this.surface = 0
-          this.highest = 0
-          this.lowest = 0
-          this.Recompute = () => {
-            this.refPlane = this.polygon.top
-            let ref = this.refPlane
-            let measureInfo = altmarker.getRegionVolume(this.polygon, ref)
-            this.cut = measureInfo.cut
-            this.fill = measureInfo.fill
-            this.area = measureInfo.area
-            this.surface = measureInfo.surface
-            this.highest = measureInfo.highest
-            this.lowest = measureInfo.lowest
+        var PolyMeasureText = function(altmarker, polygonOptions) {
+          this.polygonOptions = polygonOptions
+          this.polygon = new altizure.PolygonMarker(this.polygonOptions)
+          this.polygonTop = polygonOptions.volume.top
+          this.polygonBottom = polygonOptions.volume.bottom
+          this.autoAdjust = () => {
+            // reset top and bottom
+            this.polygonTop = polygonOptions.volume.top
+            this.polygonBottom = polygonOptions.volume.bottom
+            // reconstruct polygon marker
+            if (this.polygon) {
+              this.polygon.destruct()
+              this.polygon = undefined
+            }
+            this.polygon = new altizure.PolygonMarker(this.polygonOptions)
+            // measure the highest and lowest altitude in the area
+            // we use measureByPolygon here because the polygon marker is just constructed, it may not be completely ready
+            altmarker.measureByPolygon(this.polygon, 0)
+            .then((measureInfo) => {
+              this.polygon.top = measureInfo.highest
+              this.polygon.bottom = measureInfo.lowest
+              this.polygonTop = measureInfo.highest
+              this.polygonBottom = measureInfo.lowest
+            })
           }
         }
         var gui = new dat.GUI()
-        addPolyFolder('Polygon 1 (red)', poly1, true)
-        addPolyFolder('Polygon 2 (green)', poly2)
-        addPolyFolder('Polygon 3 (blue)', poly3)        
+        addPolyFolder('Polygon 1 (red)', poly1markerOptions, true)
+        addPolyFolder('Polygon 2 (green)', poly2markerOptions)
+        addPolyFolder('Polygon 3 (blue)', poly3markerOptions)        
 
-        function addPolyFolder (name, poly, open) {
+        function addPolyFolder (name, polymarkerOptions, open) {
           var polyFolder = gui.addFolder(name)
-          var text = new PolyMeasureText(altmarker, poly)
-          let topController = polyFolder.add(text, 'refPlane', -100.0, 100.0, 1.0)
-          topController.name('Ref Plane (m)')
-          topController.onChange(function (value) {
-            poly.top = value
-            text.Recompute()
-          })
-          topController.listen()
-          polyFolder.add(text, 'cut').name('Cut (m^3)').listen()
-          polyFolder.add(text, 'fill').name('Fill (m^3)').listen()
-          polyFolder.add(text, 'area').name('Area (m^2)').listen()
-          polyFolder.add(text, 'surface').name('Surface (m^2)').listen()
-          polyFolder.add(text, 'highest').name('Highest (m)').listen()
-          polyFolder.add(text, 'lowest').name('Lowest (m)').listen()
-          polyFolder.add(text, 'Recompute')
+          var text = new PolyMeasureText(altmarker, polymarkerOptions)
+          polyFolder.add(text, 'polygonTop').name('Top (m)').listen()
+          polyFolder.add(text, 'polygonBottom').name('Bottom (m)').listen()
+          polyFolder.add(text, 'autoAdjust').name('Auto Adjust')
           if (open) polyFolder.open()
         }     
       }
