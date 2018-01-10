@@ -1,0 +1,67 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.6 Camera Visualize </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:100000,
+            lat:22.538388886344876,
+            lng:113.94255600866971 },
+          flyTo: { alt:1020.0739295752213,
+            lat:22.538388886344876,
+            lng:113.94255600866971,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let marker = null
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+      .then(m => {
+        marker = m
+      })
+      let mat = [-0.535932653063318,
+      0.5881866857828244,
+      -0.6056505709138977,
+      0,
+      0.7755944099289309,
+      0.6263964491584093,
+      -0.07797948299860585,
+      0,
+      0.33351087338722085,
+      -0.5115309483790333,
+      -0.7919006163546913,
+      0,
+      0.843089175455926,
+      0.38308644057956814,
+      -0.3743131116463798,
+      1]
+
+      let cm = new altizure.CameraMarker({
+        sandbox: sandbox,
+        markerToEarth: mat,
+        showXYZ: 0.001
+      })
+
+
+      
+    </script>
+  </body>
+</html>
