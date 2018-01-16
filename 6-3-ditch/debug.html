@@ -71,7 +71,10 @@
       // crop must happend after the altizure project is initialized
       let marker = null
       sandbox.add('AltizureProjectMarker', { 
-        pid: '5849104597b73e0b090c01e8'        
+        pid: '5849104597b73e0b090c01e8',
+        pose: {
+          position: {lng: 113.93920875334851, lat: 22.53672047469201, alt: 100.01}
+        }
       })
       .then((m) => {
         // altizure project created, m is the marker
