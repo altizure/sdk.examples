@@ -111,6 +111,98 @@
       poly2.color = Math.random()*0xffffff
     })
 
+    let poly3 = new altizure.RegularPolygonMarker({
+      position: {"lng":113.9401049920407,"lat":22.537278527214045,"alt":0},
+      radius: 50,
+      sided: 8,
+      top: 40,
+      bottom: 1,
+      color: 0x0000ff,
+      opacity: 0.3,
+      sandbox: sandbox
+    })
+    poly3.interactable = true
+    poly3.on('mouseenter', function (event) {
+      poly3.opacity = 0.1
+    })
+    poly3.on('mouseleave', function (event) {
+      poly3.opacity = 0.3
+    })
+    poly3.on('click', function (event) {
+      poly3.color = Math.random()*0xffffff
+    })
+
+    let poly4 = new altizure.CylinderVolumeMarker({
+      position: {"lng":113.94015751878244,"lat":22.536330320372386,"alt":0},
+      radius: 40,
+      top: 24,
+      bottom: 1,
+      color: 0xff0000,
+      opacity: 0.3,
+      sandbox: sandbox
+    })
+    poly4.interactable = true
+    poly4.on('mouseenter', function (event) {
+      poly4.opacity = 0.1
+    })
+    poly4.on('mouseleave', function (event) {
+      poly4.opacity = 0.3
+    })
+    poly4.on('click', function (event) {
+      poly4.color = Math.random()*0xffffff
+    })
+
+  </script>
+  <script src="../third_party/dat.gui.js"></script>
+  <script>
+    var PolygonProperty = function (polygon, regular) {
+      this.polygon = polygon
+      this.top = polygon.top
+      this.bottom = polygon.bottom
+      if (regular) {
+        this.radius = polygon.radius
+        this.sided = polygon.sided
+      }
+    }
+
+    var gui = new dat.GUI()
+    addFolder('Polygon 1 (green)', poly1, false, false)
+    addFolder('Polygon 2 (white)', poly2, false, false)
+    addFolder('Polygon 3 (blue)', poly3, true, true)
+    addFolder('Polygon 4 (red)', poly4, true, false)
+
+    function addFolder (name, polygon, regular, open) {
+      var folder = gui.addFolder(name)
+      var property = new PolygonProperty(polygon, regular)
+      var topController = folder.add(property, 'top', -100.0, 100.0, 1.0)
+      topController.name('Top (m)')
+      topController.onChange(function (value) {
+        property.top = value
+        polygon.top = value
+      })
+      var bottomController = folder.add(property, 'bottom', -100.0, 100.0, 1.0)
+      bottomController.name('Bottom (m)')
+      bottomController.onChange(function (value) {
+        property.bottom = value
+        polygon.bottom = value
+      })
+      if (regular) {
+        var radiusController = folder.add(property, 'radius', 1.0, 200.0, 1.0)
+        radiusController.name('Radius (m)')
+        radiusController.onChange(function (value) {
+          property.radius = value
+          polygon.radius = value
+        })
+        var sidedController = folder.add(property, 'sided', 3.0, 128.0, 1.0)
+        sidedController.name('Sided')
+        sidedController.onChange(function (value) {
+          property.sided = value
+          polygon.sided = value
+        })
+      }
+      if (open) folder.open()
+    }
+
   </script>
 </body>
 
