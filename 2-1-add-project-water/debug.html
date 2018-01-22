@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 2.1 Add project </title>
+    <title> Altizure 2.1.1 Add project Water </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
@@ -53,7 +53,33 @@
           marker.water.color = 0x05c592
           marker.water.wave = 0.5
           marker.water.speed = 0.5
+          marker.water.level = marker.water.level
+          setupGUI(marker.water)
+          console.log('level', marker.water.level)
         })
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      function setupGUI (w) {
+        var gui = new dat.GUI()
+        var waterFolder = gui.addFolder('Water')
+        waterFolder.open()
+    
+        var WaterProperty = function (water) {
+          this.water = water
+          this.speed = water.speed
+          this.wave = water.wave
+          this.color = water.color
+          this.level = water.level
+        }
+    
+        var property1 = new WaterProperty(w)
+    
+        waterFolder.add(property1, 'level', -10, 10).onChange((value) => { property1.water.level = value })
+        waterFolder.add(property1, 'speed', 0, 5).onChange((value) => { property1.water.speed = value })
+        waterFolder.addColor(property1, 'color').onChange((value) => { property1.water.color = value })
+        waterFolder.add(property1, 'wave', 0, 5).onChange((value) => { property1.water.wave = value })
+      }
     </script>
   </body>
 </html>
