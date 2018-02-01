@@ -43,8 +43,10 @@
 
       // import altizure project's water
       // Note: the water surface must be created on Altizure by the project's owner
+      let m
       sandbox.add('AltizureProjectMarker', {pid: '5993d8e65cbfaf1d4eba995d'})
         .then(function (marker) {
+          m = marker
           // import water from altizure
           return marker.water.import()
         })
@@ -75,7 +77,7 @@
     
         var property1 = new WaterProperty(w)
     
-        waterFolder.add(property1, 'level', -10, 10).onChange((value) => { property1.water.level = value })
+        waterFolder.add(property1, 'level', -100, 100).onChange((value) => { property1.water.level = value })
         waterFolder.add(property1, 'speed', 0, 5).onChange((value) => { property1.water.speed = value })
         waterFolder.addColor(property1, 'color').onChange((value) => { property1.water.color = value })
         waterFolder.add(property1, 'wave', 0, 5).onChange((value) => { property1.water.wave = value })
