@@ -35,6 +35,10 @@ In the example html file (e.g. `./1-1-altizure-earth/index.html`), replace the k
 
 with your own key.
 
+* Read [Documentation](https://altizure.github.io/dev-docs-site/zh-hans/docs/user_docs/web/).
+* Check [FAQ](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-faq.html).
+* Learn from [Applications](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-demo.html).
+
 ### What are the available versions? ###
 
 Three versions are provided:
