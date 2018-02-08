@@ -54,13 +54,7 @@ Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
 
 Date | Ver | Changes
 --- | --- | ---
-0208 | 0.1.62 | + Vibibility analysis [demo 5.8]()
-
-|   |   |   |   |              |
-|---|---|---|---|--------------|
-|   |   |   |   | haha  |
-|   |   |   |   | haha  |
-|   |   |   |   | ho    |
+0208 | 0.1.62 | + Vibibility analysis [demo 5.8](https://altizure.github.io/sdk.examples/5-8-visibility-analysis/index.html)
 
 ### Who do I talk to? ###
 
