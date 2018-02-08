@@ -6,7 +6,7 @@
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script type="text/javascript" src="../build/altizure.js"></script>
     <script>
       let options = {
         altizureApi: {
@@ -58,9 +58,17 @@
       let selectedCamera = null
       let cameraMarkers = ms.map((mat, index) => {
         let marker = new altizure.CameraMarker({
-          sandbox: sandbox, camToEarth: mat, showFar: false, showNear: true, color: 0xff0000
+          sandbox: sandbox,
+          camToEarth: mat,
+          showFar: false,
+          showNear: true,
+          color: 0xff0000, // the color of the camera
+          fov: 45,
+          visColor: 0x00ff00, // the color of the casting light
+          visIntensity: 50,
+          visPenumbra: 0,
+          visDecay: 0.1
         })
-        marker.visIntensity = 50 // for brighter green
         marker.interactable = true
         marker.on('mouseenter', (event) => {marker.color = 0x00ff00})
         marker.on('mouseleave', (event) => {
@@ -92,7 +100,7 @@
         visIntensity: 1,
         farInMeter: 1,
         fov: 45,
-        visPenumbra:0.05,
+        visPenumbra: 0,
         visDecay: 0.1
       }
 
