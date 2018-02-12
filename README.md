@@ -50,11 +50,11 @@ Three versions are provided:
 
 Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
 
-### Updates ###
+### Changelog ###
 
-Date | Ver | Changes
---- | --- | ---
-0208 | 0.1.62 | + Vibibility analysis [demo 5.8](https://altizure.github.io/sdk.examples/5-8-visibility-analysis/index.html)
+* [English](changelog-en.md)
+* [中文](changelog-zh-hans.md)
+
 
 ### Who do I talk to? ###
 
