@@ -50,4 +50,3 @@ Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
 ### Who do I talk to? ###
 
 * [Altizure team](mailto:developers@altizure.com)
-* [Dr. Jingbo Liu](mailto:jingbo@altizure.com)
