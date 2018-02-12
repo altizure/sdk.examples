@@ -1,0 +1,113 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.6 Camera Visualize </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:100000,
+            lat:22.538388886344876,
+            lng:113.94255600866971 },
+          flyTo: { alt:1020.0739295752213,
+            lat:22.538388886344876,
+            lng:113.94255600866971,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let marker = null
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+      .then(m => {
+        marker = m
+        return m.initialized
+      })
+      .then((m) => {
+        cameraMarkers.map((marker) => {
+          marker.fov = sandbox.earthView.camera.fov
+          marker.aspect = sandbox.earthView.camera.aspect
+          marker.near = marker.near * 2 / 3
+        })
+      })
+
+      // this can be obtained by using: sandbox.camera.mat
+      let ms = [
+        [-0.06275835503639593,0.7649967940136936,0.6409690273499146,0,0.9718982451244642,0.19284429450863955,-0.1349995525898201,0,-0.22688144480567865,0.6144843230093303,-0.7556016323292666,0,0.8430508839622491,0.3831657154430671,-0.3743447899092847,0.9999999999999998],
+        [0.4107669305858413,-0.013303597013728023,0.9116433200784083,0,0.34442074952437307,-0.9235400327063576,-0.16866580947485843,0,0.8441829636009932,0.38327121245305723,-0.3747776696530998,0,0.8431382104531757,0.38313456138131463,-0.37429905714006834,1],
+        [-0.49854955722720257,0.8182620352214891,-0.2861740391855056,0,0.8357835938141792,0.5413304449904305,0.09179942068181739,0,0.2300307007762563,-0.1934130063921479,-0.9537700381427046,0,0.8430817599156811,0.38309794221686083,-0.3743054190516474,1],
+        [-0.5225915702053823,0.7441182017049662,-0.41615640406179094,0,0.8031132080189126,0.5934920007246722,0.05269174680532946,0,0.28619438473849246,-0.30668444200381817,-0.90776507267958,0,0.8430810904304501,0.3830997554250148,-0.3742858407157429,1],
+        [0.5153896888842155,-0.3880905442270564,0.7640413588761924,0,0.8235082392690707,-0.022364273540496513,-0.5668633160868332,0,0.23708152278865283,0.9213498622947487,0.3080694447712407,0,0.8430805181310366,0.3831299840873831,-0.37425461349065575,1],
+        [0.0064516780157386445,-0.7063573140682357,-0.7078260525814861,0,0.3479433464177138,0.6651955577699518,-0.6606438508052315,0,0.9374933618615247,-0.24202110400836999,0.25006395517976143,0,0.8430953845907726,0.3830971534949193,-0.37426473976251834,0.9999999999999996]
+      ]
+      let invisibleMarker = null
+      let cameraMarkers = ms.map((mat, index) => {
+        let marker = new altizure.CameraMarker({
+          sandbox: sandbox, camToEarth: mat, showFar: false, showNear: true, color: 0xff0000
+        })
+        marker.interactable = true
+        marker.on('mouseenter', (event) => {marker.color = 0xffffff})
+        marker.on('mouseleave', (event) => {marker.color = 0xff0000})
+        marker.on('click', (event) => {
+          marker.visible = false
+          if (invisibleMarker) {
+            invisibleMarker.visible = true
+          }
+          invisibleMarker = marker
+          sandbox.camera.flyToCamToEarth(marker.camToEarth)
+        })
+        return marker
+      })
+
+      function visualizeCurrentCamera () {
+        let marker = new altizure.CameraMarker({
+          sandbox: sandbox, camToEarth: sandbox.camera.mat
+        })
+        marker.interactable = true
+        marker.on('mouseenter', (event) => {marker.color = 0xffffff})
+        marker.on('mouseleave', (event) => {marker.color = 0xff0000})
+        marker.on('click', (event) => {
+          marker.visible = false
+          if (invisibleMarker) {
+            invisibleMarker.visible = true
+          }
+          invisibleMarker = marker
+          sandbox.camera.flyToCamToEarth(marker.camToEarth)
+        })
+        updateCameraMarker(marker)
+        cameraMarkers.push(marker)
+      }
+      function updateCameraMarker (marker) {
+        marker.fov = sandbox.earthView.camera.fov
+        marker.aspect = sandbox.earthView.camera.aspect
+        marker.near = sandbox.earthView.camera.near * 500
+        marker.far = sandbox.earthView.camera.far
+      }
+
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      var Operations = function() {
+        this.visualize = () => {visualizeCurrentCamera()}
+      }
+      var gui = new dat.GUI()
+      var op = new Operations()
+      gui.add(op, 'visualize').name('Add Camera')
+    </script>
+  </body>
+</html>

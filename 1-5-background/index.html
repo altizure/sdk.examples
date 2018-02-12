@@ -1,0 +1,31 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 1.5 Background </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        // render items
+        renderItems: {
+          earth: true, // earth globe
+          featureInView: false, // altizure featured projects
+          orbitRing: true, // earth orbit ring
+          background: {
+            transparent: true,
+            opacity: 0.5,
+            image: 'url("https://www.w3schools.com/images/driveicon_32.png")'
+          }
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+    </script>
+  </body>
+</html>

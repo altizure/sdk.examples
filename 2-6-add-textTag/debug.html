@@ -42,8 +42,8 @@
         // text style
         textStyle: {
           fillStyle: 'rgb(255, 255, 255)',
-          font: 'normal 500 24px Arial',
-          outlineWidth: 2,
+          font: '500 24px Arial',
+          outlineWidth: 0.1,
           outlineStyle: 'rgb(0, 0, 0)'
         },
 
@@ -80,42 +80,69 @@
         scale: 1 // icon size
       })
 
-      document.addEventListener('click', handler)
-      document.addEventListener('touchstart', handler)
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script src="https://www.lalit.org/wordpress/wp-content/uploads/2008/05/fontdetect.js?ver=0.3"></script>
+    <script>
+      var fontDetector = new Detector()
+      var gui = new dat.GUI()    
+      setUpUI(textTag, textTag.text, '#ffffff', '#000000', 0.1, '24px Arial', true)
+      function setUpUI (textTagMarker, name, textColor, outlineColor, outlineWidth, font, open) {
+        var textTagProperty = function(textTagMarker) {
+          this.textTagMarker = textTagMarker
 
-      function handler (event) {
-        let pt = sandbox.pickOnProjects(event)
-
-        if (!pt) {
-          pt = sandbox.pick(event)
+          this.text = textTagMarker.text
+          this.textColor = textColor
+          this.outlineColor = outlineColor
+          this.outlineWidth = outlineWidth
+          this.font = font
         }
+        var property = new textTagProperty(textTagMarker)
 
-        if (!pt) {
-          return
-        }
-        // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
+        var folder = gui.addFolder(name)
 
-        let tt = new altizure.TextTagMarker({
-          // text string
-          text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
-          // text style
-          textStyle: {
-            fillStyle: 'rgb(255, 255, 255)',
-            font: 'normal 500 24px Arial',
-            outlineWidth: 2,
-            outlineStyle: 'rgb(0, 0, 0)'
-          },
-
-          // icon position
-          position: {
-            "lng": pt.lng,
-            "lat": pt.lat,
-            "alt": pt.alt
-          },
-          // scene
-          sandbox: sandbox,
-          scale: 1 // icon size
+        var textController = folder.add(property, 'text').onChange((value) => {
+          property.textTagMarker.text = value // TextTagMarker change text: marker.text = newText
+          property.text = value
         })
+
+        var textColorController = folder.addColor(property, 'textColor').onChange((value) => {
+          property.textTagMarker.textStyle = {fillStyle: value} // TextTagMarker change fillStyle: marker.textStyle = {fillStyle: newStyle}
+          property.textColor = value
+        })
+
+        var outlineColorController = folder.addColor(property, 'outlineColor').onChange((value) => {
+          property.textTagMarker.textStyle = {outlineStyle: value} // TextTagMarker change outlineStyle: marker.textStyle = {outlineStyle: newStyle}
+          property.outlineColor = value
+        })
+
+        var outlineWidthController = folder.add(property, 'outlineWidth', 0, 4, 0.01).onChange((value) => {
+          property.outlineWidth = value
+          property.textTagMarker.textStyle = {outlineWidth: value} // TextTagMarker change outlineWidth: marker.textStyle = {outlineWidth: newStyle}
+        })
+
+        // get supported font
+        var fontValue = {}
+        var fontList = [
+          'Arial', 'Wawati SC', 'STXingKai', 'SimSun', 'KaiTi', 'LiSung Light', 'STHupo',
+          'SimHei', 'Microsoft Yahei', 'PingFang SC', 'STLiti', 'Hannotate SC', 'HanzipenSC',
+          'New Times Roman',  'FangSong', 'STXinwei'
+        ]
+        fontList.map((font) => {
+          let supported = fontDetector.detect(font)
+          if (supported) {
+            let f = '24px ' + font
+            fontValue[f] = f
+          } else {
+            console.warn('font ' + font + ' not supported!')
+          }
+        })
+
+        var fontController = folder.add(property, 'font', fontValue).onChange((value) => {
+          property.font = value
+          property.textTagMarker.textStyle = {font: value} // TextTagMarker change font: marker.textStyle = {font: newFont}
+        })
+        if (open) folder.open()
       }
 
     </script>

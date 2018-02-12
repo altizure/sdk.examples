@@ -1,0 +1,102 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 2.6 Add Text Tag </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+  <div id="page-content"></div>
+  <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: {
+          alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624
+        },
+        flyTo: {
+          alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624
+        }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: false
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    sandbox.add('AltizureProjectMarker', {
+      pid: '5849104597b73e0b090c01e8'
+    })
+
+    let beam1 = new altizure.LightBeamMarker({
+      position: {
+        alt: 10,
+        lat: 22.5364271949327,
+        lng: 113.93977612840078
+      },
+      sandbox: sandbox,
+      radius: 5,
+      height: 50,
+      color: 0xffaa00
+    })
+
+    var fixBeamPose = false
+
+    window.addEventListener('mousemove', (e) => {
+      if (fixBeamPose) return
+      let pt = sandbox.window.toLngLatAlt({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2
+      })
+      beam1.setPose(pt)
+    }, false)
+  </script>
+  <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+  <script src="https://www.lalit.org/wordpress/wp-content/uploads/2008/05/fontdetect.js?ver=0.3"></script>
+  <script>
+    var gui = new dat.GUI()
+    var lightBeamFolder1 = gui.addFolder('light beam 1')
+    lightBeamFolder1.open()
+
+    var LightBeamProperty = function (beam) {
+      this.beam = beam
+      this.radius = beam.radius
+      this.height = beam.height
+      this.color = beam.color.getHex()
+      this.fixed = fixBeamPose
+    }
+
+    var property1 = new LightBeamProperty(beam1)
+
+    lightBeamFolder1.add(property1, 'radius', 0.1, 30).onChange((value) => {
+      property1.beam.radius = value // TextTagMarker change text: marker.text = newText
+    })
+    lightBeamFolder1.add(property1, 'height', 1, 100).onChange((value) => {
+      property1.beam.height = value // TextTagMarker change text: marker.text = newText
+    })
+    lightBeamFolder1.addColor(property1, 'color').onChange((value) => {
+      property1.beam.color = value // TextTagMarker change text: marker.text = newText
+    })
+    lightBeamFolder1.add(property1, 'fixed').onChange((value) => {
+      fixBeamPose = value
+    })
+  </script>
+</body>
+
+</html>

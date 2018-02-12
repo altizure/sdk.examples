@@ -1,123 +1,150 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title> Altizure 2.2 Add tag </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  </head>
-  <body>
-    <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
-    <script>
-      let options = {
-        altizureApi:{
-          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
-        },
-        camera: {
-          poseTo: { alt: 319.02169601663104,
-            lat: 22.5364271949327,
-            lng: 113.93977612840078,
-            north: 56.82289356559219,
-            tilt: 56.19205822511624 },
-          flyTo: { alt: 319.02169601663104,
-            lat: 22.5364271949327,
-            lng: 113.93977612840078,
-            north: 56.82289356559219,
-            tilt: 56.19205822511624 }
-        },
-        renderItems: {
-          earth: true,
-          earthUseTexture: false,
-          featureInView: false,
-          orbitRing: false
+    <head>
+      <meta charset="utf-8">
+      <title> Altizure 2.6 Add Text Tag </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    </head>
+    <body>
+      <div id="page-content"></div>
+      <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+      <script>
+        let options = {
+          altizureApi:{
+            key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+          },
+          camera: {
+            poseTo: { alt: 319.02169601663104,
+              lat: 22.5364271949327,
+              lng: 113.93977612840078,
+              north: 56.82289356559219,
+              tilt: 56.19205822511624 },
+            flyTo: { alt: 319.02169601663104,
+              lat: 22.5364271949327,
+              lng: 113.93977612840078,
+              north: 56.82289356559219,
+              tilt: 56.19205822511624 }
+          },
+          renderItems: {
+            earth: true,
+            earthUseTexture: false,
+            featureInView: false,
+            orbitRing: false
+          }
         }
-      }
-
-      let sandbox = new altizure.Sandbox('page-content', options)
-
-      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
-
-      let textTag = new altizure.TextTagMarker({
-        // text string
-        text: '深圳珠峰科技',
-        // text style
-        textStyle: {
-          fillStyle: 'rgb(255, 255, 255)',
-          font: 'normal 500 24px Arial',
-          outlineWidth: 2,
-          outlineStyle: 'rgb(0, 0, 0)'
-        },
-
-        // icon position
-        position: {
-          "lng": 113.939190,
-          "lat": 22.5369807,
-          "alt": 33.31495
-        },
-        // scene
-        sandbox: sandbox,
-        scale: 1.5 // icon size
-      })
-
-      let textTag2 = new altizure.TextTagMarker({
-        // text string
-        text: '香港科技大学深圳研究中心',
-        // text style
-        textStyle: {
-          fillStyle: 'rgb(155, 155, 255)',
-          font: 'normal 500 24px Arial',
-          outlineWidth: 2,
-          outlineStyle: 'rgb(0, 0, 0)'
-        },
-
-        // icon position
-        position: {
-          "lng": 113.939420,
-          "lat": 22.5362742,
-          "alt": 32.40720
-        },
-        // scene
-        sandbox: sandbox,
-        scale: 1 // icon size
-      })
-
-      document.addEventListener('click', handler)
-      document.addEventListener('touchstart', handler)
-
-      function handler (event) {
-        let pt = sandbox.pickOnProjects(event)
-
-        if (!pt) {
-          pt = sandbox.pick(event)
-        }
-
-        if (!pt) {
-          return
-        }
-        // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
-
-        let tt = new altizure.TextTagMarker({
+  
+        let sandbox = new altizure.Sandbox('page-content', options)
+  
+        sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+  
+        let textTag = new altizure.TextTagMarker({
           // text string
-          text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
+          text: '深圳珠峰科技',
           // text style
           textStyle: {
             fillStyle: 'rgb(255, 255, 255)',
+            font: '500 24px Arial',
+            outlineWidth: 0.1,
+            outlineStyle: 'rgb(0, 0, 0)'
+          },
+  
+          // icon position
+          position: {
+            "lng": 113.939190,
+            "lat": 22.5369807,
+            "alt": 33.31495
+          },
+          // scene
+          sandbox: sandbox,
+          scale: 1.5 // icon size
+        })
+  
+        let textTag2 = new altizure.TextTagMarker({
+          // text string
+          text: '香港科技大学深圳研究中心',
+          // text style
+          textStyle: {
+            fillStyle: 'rgb(155, 155, 255)',
             font: 'normal 500 24px Arial',
             outlineWidth: 2,
             outlineStyle: 'rgb(0, 0, 0)'
           },
-
+  
           // icon position
           position: {
-            "lng": pt.lng,
-            "lat": pt.lat,
-            "alt": pt.alt
+            "lng": 113.939420,
+            "lat": 22.5362742,
+            "alt": 32.40720
           },
           // scene
           sandbox: sandbox,
           scale: 1 // icon size
         })
-      }
-
-    </script>
-  </body>
-</html>
+  
+      </script>
+      <script src="../third_party/dat.gui.js"></script>
+      <script src="https://www.lalit.org/wordpress/wp-content/uploads/2008/05/fontdetect.js?ver=0.3"></script>
+      <script>
+        var fontDetector = new Detector()
+        var gui = new dat.GUI()    
+        setUpUI(textTag, textTag.text, '#ffffff', '#000000', 0.1, '24px Arial', true)
+        function setUpUI (textTagMarker, name, textColor, outlineColor, outlineWidth, font, open) {
+          var textTagProperty = function(textTagMarker) {
+            this.textTagMarker = textTagMarker
+  
+            this.text = textTagMarker.text
+            this.textColor = textColor
+            this.outlineColor = outlineColor
+            this.outlineWidth = outlineWidth
+            this.font = font
+          }
+          var property = new textTagProperty(textTagMarker)
+  
+          var folder = gui.addFolder(name)
+  
+          var textController = folder.add(property, 'text').onChange((value) => {
+            property.textTagMarker.text = value // TextTagMarker change text: marker.text = newText
+            property.text = value
+          })
+  
+          var textColorController = folder.addColor(property, 'textColor').onChange((value) => {
+            property.textTagMarker.textStyle = {fillStyle: value} // TextTagMarker change fillStyle: marker.textStyle = {fillStyle: newStyle}
+            property.textColor = value
+          })
+  
+          var outlineColorController = folder.addColor(property, 'outlineColor').onChange((value) => {
+            property.textTagMarker.textStyle = {outlineStyle: value} // TextTagMarker change outlineStyle: marker.textStyle = {outlineStyle: newStyle}
+            property.outlineColor = value
+          })
+  
+          var outlineWidthController = folder.add(property, 'outlineWidth', 0, 4, 0.01).onChange((value) => {
+            property.outlineWidth = value
+            property.textTagMarker.textStyle = {outlineWidth: value} // TextTagMarker change outlineWidth: marker.textStyle = {outlineWidth: newStyle}
+          })
+  
+          // get supported font
+          var fontValue = {}
+          var fontList = [
+            'Arial', 'Wawati SC', 'STXingKai', 'SimSun', 'KaiTi', 'LiSung Light', 'STHupo',
+            'SimHei', 'Microsoft Yahei', 'PingFang SC', 'STLiti', 'Hannotate SC', 'HanzipenSC',
+            'New Times Roman',  'FangSong', 'STXinwei'
+          ]
+          fontList.map((font) => {
+            let supported = fontDetector.detect(font)
+            if (supported) {
+              let f = '24px ' + font
+              fontValue[f] = f
+            } else {
+              console.warn('font ' + font + ' not supported!')
+            }
+          })
+  
+          var fontController = folder.add(property, 'font', fontValue).onChange((value) => {
+            property.font = value
+            property.textTagMarker.textStyle = {font: value} // TextTagMarker change font: marker.textStyle = {font: newFont}
+          })
+          if (open) folder.open()
+        }
+  
+      </script>
+    </body>
+  </html>

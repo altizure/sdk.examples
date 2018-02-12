@@ -1,0 +1,47 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.7 Camera Poses </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:1020.0739295752213,
+            lat:22.538388886344876,
+            lng:113.94255600866971,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 },
+          flyTo: { alt:1020.0739295752213,
+            lat:22.538388886344876,
+            lng:113.94255600866971,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let marker = null
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+      .then( m => {
+        marker = m
+        marker.importPhotos({
+          showCameras: true // set to true to visualize all camera poses
+        })
+      })
+    </script>
+  </body>
+</html>

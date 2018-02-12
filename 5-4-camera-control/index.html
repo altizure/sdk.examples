@@ -1,0 +1,76 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.4 Camera control </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+    .button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+    </style>
+  </head>
+  <body>
+    <div>
+      <button class="button" onClick="changemode()" id="mode">+</button>
+      <button class="button" onClick="adjustCamera('lng', 1e-3)">lng</button>
+      <button class="button" onClick="adjustCamera('lat', 1e-3)">lat</button>
+      <button class="button" onClick="adjustCamera('alt', 100)">alt</button>
+      <button class="button" onClick="adjustCamera('north', 5)">north</button>
+      <button class="button" onClick="adjustCamera('tilt', 1)">tilt</button>    
+    </div>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:1020.0739295752213,
+            lat:22.53672047469201,
+            lng:113.93920875334851,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 },
+          flyTo: { alt:1020.0739295752213,
+            lat:22.53672047469201,
+            lng:113.93920875334851,
+            north:-27.271585092584015,
+            tilt:74.7023627906978 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      let plusmode = true
+
+      function adjustCamera (property, value) {
+        let extra = plusmode ? 1.0 : -1.0
+        let originpose = sandbox.camera.pose
+        let adjustedpose = Object.assign({}, originpose)
+        adjustedpose[property] = originpose[property] + value * extra
+        sandbox.camera.pose = adjustedpose
+      }
+
+      function changemode () {
+        plusmode = !plusmode
+        document.getElementById("mode").textContent = plusmode ? '+' : '-'
+      }
+
+    </script>
+  </body>
+</html>

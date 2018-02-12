@@ -1,0 +1,211 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 6.2 Measurement </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        // camera 
+        camera: {
+          poseTo: {
+            alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078
+          },
+          flyTo: {
+            alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624
+          }
+        },
+        // render items
+        renderItems: { featureInView: false, earth: true },
+        // show mouse tip
+        develop: true,
+        // altizure api: contact altizure to get your developer key
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+      }
+
+      let sandbox = new altizure.Solution('page-content', options)
+      let altmarker
+      // add project at the default GPS position
+      // sandbox.add('AltizureProjectMarker', {pid: '5969e005fce736590e33edd2'})
+      // sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // add project at the default GPS position
+      sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+        .then((res) => {
+          altmarker = res   
+          setUpUI(altmarker)               
+        })
+
+      let volume1 = {
+        color: 0xff0000,
+        opacity: 0.3,
+        points: [
+          {"lng":113.93934905932814,"lat":22.536453027243834,"alt":10.651991354552662},
+          {"lng":113.93939170314853,"lat":22.536358426714003,"alt":23.3014581772986},
+          {"lng":113.93932438950021,"lat":22.53636827155144,"alt":10.811800886920617},
+          {"lng":113.93931885585089,"lat":22.53631869516655,"alt":12.430553387452617},
+          {"lng":113.93925031693101,"lat":22.5363114272394,"alt":20.563278255865843},
+          {"lng":113.93926484230147,"lat":22.536083745806177,"alt":18.98635764147163},
+          {"lng":113.93930399955407,"lat":22.53602094362564,"alt":11.35579337729583},
+          {"lng":113.93940845423577,"lat":22.53603093771579,"alt":11.27765884941022},
+          {"lng":113.93947321277872,"lat":22.53599193993198,"alt":12.171693822557723},
+          {"lng":113.93958171792053,"lat":22.535964933640898,"alt":10.872377837703267},
+          {"lng":113.939665326007,"lat":22.536009070617993,"alt":21.01046493744909},
+          {"lng":113.93974932584011,"lat":22.536043291457943,"alt":14.531203685696934},
+          {"lng":113.93980497538881,"lat":22.536103614190683,"alt":13.125630706691457},
+          {"lng":113.93980820475667,"lat":22.53617743550801,"alt":18.229949404075207},
+          {"lng":113.93980376094972,"lat":22.536250842904664,"alt":21.592196979510817},
+          {"lng":113.93979141379278,"lat":22.536332843762494,"alt":19.50222528181615},
+          {"lng":113.9397545606703,"lat":22.5363868061661,"alt":20.253304803874485},
+          {"lng":113.93972994104982,"lat":22.536455223229154,"alt":9.3922631480306},
+          {"lng":113.93966689443133,"lat":22.536500322686734,"alt":6.367906019223409},
+          {"lng":113.93957112427057,"lat":22.53651882548558,"alt":5.278983699841428},
+          {"lng":113.93948982206284,"lat":22.536511724476746,"alt":11.0658509805701},
+          {"lng":113.93942737784649,"lat":22.53651686154076,"alt":9.514778250040766},
+          {"lng":113.93936907663237,"lat":22.536481244484463,"alt":10.517884341906576},
+          {"lng":113.93934905932814,"lat":22.536453027243834,"alt":10.651991354552662}
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
+        }),
+        top: 64,
+        bottom: 0,
+      }
+      let poly1 = new altizure.PolygonMarker({
+        volume: volume1,
+        sandbox: sandbox,
+        name: 'polygon1',
+        interactable: true
+      })
+
+      let volume2 = {
+        "color": 0x00ff00,
+        "opacity": 0.3,
+        "points": [
+          {"lng":113.93866222615023,"lat":22.537138392991075,"alt":7.909390417182902},
+          {"lng":113.9394636450248,"lat":22.53718971332801,"alt":7.584013394482465},
+          {"lng":113.93945176046242,"lat":22.536855591284745,"alt":8.028126358218916},
+          {"lng":113.9386848766892,"lat":22.53683648818326,"alt":9.349154154423246},
+          {"lng":113.93866222615023,"lat":22.537138392991075,"alt":7.909390417182902}
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
+        }),
+        "top": 39,
+        "bottom": 0
+      }
+      let poly2 = new altizure.PolygonMarker({
+        volume: volume2,
+        sandbox: sandbox,
+        name: 'polygon2',
+        interactable: true
+      })
+
+
+      let volume3 = {
+        "color": 0x0000ff,
+        "opacity": 0.3,
+        "points": [
+          {"lng":113.94044806888913,"lat":22.537657700703136,"alt":13.508704893658477},
+          {"lng":113.94046483874774,"lat":22.536842764131123,"alt":8.647088930212444},
+          {"lng":113.93992220510911,"lat":22.536831675573527,"alt":16.05564397586623},
+          {"lng":113.93982564888094,"lat":22.537281301149346,"alt":8.307290983358879},
+          {"lng":113.93969138018679,"lat":22.537303020911885,"alt":12.727811733920012},
+          {"lng":113.93964304227006,"lat":22.537659912793334,"alt":7.27202130371452},
+          {"lng":113.94044806888913,"lat":22.537657700703136,"alt":13.508704893658477}
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
+        }),
+        "top": 39,
+        "bottom": 0
+      }
+      let poly3 = new altizure.PolygonMarker({
+        volume: volume3,
+        sandbox: sandbox,
+        name: 'polygon3',
+        interactable: true
+      })
+
+      function testGetRegionVolume() {
+        console.log('poly1', altmarker.getRegionVolume(poly1))
+        console.log('poly2', altmarker.getRegionVolume(poly2))
+        console.log('poly3', altmarker.getRegionVolume(poly3))
+      }
+
+      function getMeasurement (index) {
+        console.log('getMeasurement', index)
+        let info = document.getElementById('poly'+index+'measurement')
+        if (!info) return
+        if (altmarker) {
+          let poly
+          if (index === 1) poly = poly1
+          else if (index === 2) poly = poly2
+          else if (index === 3) poly = poly3
+          let measureInfo = altmarker.getRegionVolume(poly)
+          info.textContent = JSON.stringify(measureInfo)
+        } else {
+          info.textContent = 'AltizureMarker loading... Please try again later'
+        }
+      }
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      function setUpUI (altmarker) {
+        var PolyMeasureText = function(altmarker, polygon) {
+          this.polygon = polygon
+          this.refPlane = 64
+          this.cut = 0
+          this.fill = 0
+          this.area = 0
+          this.surface = 0
+          this.highest = 0
+          this.lowest = 0
+          this.Recompute = () => {
+            this.refPlane = this.polygon.top
+            let ref = this.refPlane
+            let measureInfo = altmarker.getRegionVolume(this.polygon, ref)
+            this.cut = measureInfo.cut
+            this.fill = measureInfo.fill
+            this.area = measureInfo.area
+            this.surface = measureInfo.surface
+            this.highest = measureInfo.highest
+            this.lowest = measureInfo.lowest
+          }
+        }
+        var gui = new dat.GUI()
+        addPolyFolder('Polygon 1 (red)', poly1, true)
+        addPolyFolder('Polygon 2 (green)', poly2)
+        addPolyFolder('Polygon 3 (blue)', poly3)        
+
+        function addPolyFolder (name, poly, open) {
+          var polyFolder = gui.addFolder(name)
+          var text = new PolyMeasureText(altmarker, poly)
+          let topController = polyFolder.add(text, 'refPlane', -100.0, 100.0, 1.0)
+          topController.name('Ref Plane (m)')
+          topController.onChange(function (value) {
+            poly.top = value
+            text.Recompute()
+          })
+          topController.listen()
+          polyFolder.add(text, 'cut').name('Cut (m^3)').listen()
+          polyFolder.add(text, 'fill').name('Fill (m^3)').listen()
+          polyFolder.add(text, 'area').name('Area (m^2)').listen()
+          polyFolder.add(text, 'surface').name('Surface (m^2)').listen()
+          polyFolder.add(text, 'highest').name('Highest (m)').listen()
+          polyFolder.add(text, 'lowest').name('Lowest (m)').listen()
+          polyFolder.add(text, 'Recompute')
+          if (open) polyFolder.open()
+        }     
+      }
+    </script>
+  </body>
+</html>

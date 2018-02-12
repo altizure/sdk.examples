@@ -33,7 +33,10 @@ In the example html file (e.g. `./1-1-altizure-earth/index.html`), replace the k
   }
 ```
 
-with your own key.
+with your own ke
+* Read [Documentation](https://altizure.github.io/dev-docs-site/zh-hans/docs/user_docs/web/).
+* Check [FAQ](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-faq.html).
+* Learn from [Applications](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-demo.html).
 
 ### What are the available versions? ###
 
@@ -46,6 +49,12 @@ Three versions are provided:
 ### Bug report and Questions ###
 
 Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
+
+### Updates ###
+
+Date | Ver | Changes
+--- | --- | ---
+0208 | 0.1.62 | + Vibibility analysis [demo 5.8](https://altizure.github.io/sdk.examples/5-8-visibility-analysis/index.html)
 
 ### Who do I talk to? ###
 

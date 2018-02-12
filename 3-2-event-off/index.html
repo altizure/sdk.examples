@@ -1,0 +1,92 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 3.2 Event off </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:100000,
+            lat:22.538388886344876,
+            lng:113.94255600866971 },
+          flyTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let marker = null
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+        .then(function (m) {
+          marker = m // the created altizure project marker
+          marker.dim() // hide the blue fence around the marker
+
+          // respond to mouse evnets
+          marker.interactable = true // to enable mouse interactions
+          marker.on('mouseenter', onEnter)
+          marker.on('mouseleave', onLeave)
+
+          // GUI
+          setProjectUI(marker)
+        })
+
+      function onEnter () {
+        console.log('light')
+        if (marker) marker.light() // show the blue fence
+      }
+
+      function onLeave () {
+        console.log('dim')
+        if (marker) marker.dim() // hide the blue fence
+      }
+
+    </script>
+
+    <script src="../third_party/dat.gui.js"></script>
+
+    <script>
+      function setProjectUI (marker) {
+        
+        function controller () {
+          this.message = 'high-light on'
+          // turn on high light
+          this.eventOn = function () {
+            this.message = 'high-light on'
+            marker.on('mouseenter', onEnter)
+            marker.on('mouseleave', onLeave)
+          }
+          // turn off high light
+          this.eventOff = function () {
+            this.message = 'high-light off'
+            marker.off('mouseenter', onEnter)
+            marker.off('mouseleave', onLeave)
+          }
+        }
+
+        var c1 = new controller()
+        var gui = new dat.GUI()
+        
+        gui.add(c1, 'eventOn')
+        gui.add(c1, 'eventOff')
+        gui.add(c1, 'message').listen()
+      }
+    </script>
+  </body>
+</html>
