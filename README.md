@@ -2,7 +2,7 @@
 
 `Altizure Javascript SDK` is a web-based 3D graphics engine. You can use it to integrate your interactive 3D contents from [Altizure](https://www.altizure.com) to your business application.
 
-Please check [docs.altizure.com](https://docs.altizure.com/) for more details.
+Please check [altizure.github.io/dev-docs-site](https://altizure.github.io/dev-docs-site/) for more details.
 
 ### What is this repository for? ###
 
