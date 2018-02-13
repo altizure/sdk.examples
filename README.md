@@ -33,7 +33,7 @@ In the example html file (e.g. `./1-1-altizure-earth/index.html`), replace the k
   }
 ```
 
-with your own ke
+with your own key
 * Read [Documentation](https://altizure.github.io/dev-docs-site/zh-hans/docs/user_docs/web/).
 * Check [FAQ](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-faq.html).
 * Learn from [Applications](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-demo.html).
@@ -48,14 +48,9 @@ Three versions are provided:
 
 ### Bug report and Questions ###
 
-Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
+Please write on [issue page](https://github.com/altizure/sdk.examples/issues) or send emails to [Altizure team](mailto:developers@altizure.com).
 
 ### Changelog ###
 
 * [English](changelog-en.md)
 * [中文](changelog-zh-hans.md)
-
-
-### Who do I talk to? ###
-
-* [Altizure team](mailto:developers@altizure.com)
