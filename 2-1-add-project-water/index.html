@@ -4,7 +4,7 @@
     <title> Altizure 2.1.1 Add project Water </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
-  <body>
+  <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
     <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
     <script>
@@ -12,7 +12,7 @@
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
-        // camera 
+        // camera
         camera: {
           // camera start position
           poseTo: {
@@ -43,8 +43,10 @@
 
       // import altizure project's water
       // Note: the water surface must be created on Altizure by the project's owner
+      let m
       sandbox.add('AltizureProjectMarker', {pid: '5993d8e65cbfaf1d4eba995d'})
         .then(function (marker) {
+          m = marker
           // import water from altizure
           return marker.water.import()
         })
@@ -64,7 +66,7 @@
         var gui = new dat.GUI()
         var waterFolder = gui.addFolder('Water')
         waterFolder.open()
-    
+
         var WaterProperty = function (water) {
           this.water = water
           this.speed = water.speed
@@ -72,15 +74,14 @@
           this.color = water.color
           this.level = water.level
         }
-    
+
         var property1 = new WaterProperty(w)
-    
-        waterFolder.add(property1, 'level', -10, 10).onChange((value) => { property1.water.level = value })
+
+        waterFolder.add(property1, 'level', -100, 100).onChange((value) => { property1.water.level = value })
         waterFolder.add(property1, 'speed', 0, 5).onChange((value) => { property1.water.speed = value })
         waterFolder.addColor(property1, 'color').onChange((value) => { property1.water.color = value })
         waterFolder.add(property1, 'wave', 0, 5).onChange((value) => { property1.water.wave = value })
       }
-      
     </script>
   </body>
 </html>

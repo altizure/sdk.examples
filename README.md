@@ -2,7 +2,7 @@
 
 `Altizure Javascript SDK` is a web-based 3D graphics engine. You can use it to integrate your interactive 3D contents from [Altizure](https://www.altizure.com) to your business application.
 
-Please check [docs.altizure.com](https://docs.altizure.com/) for more details.
+Please check [altizure.github.io/dev-docs-site](https://altizure.github.io/dev-docs-site/) for more details.
 
 ### What is this repository for? ###
 
@@ -33,7 +33,10 @@ In the example html file (e.g. `./1-1-altizure-earth/index.html`), replace the k
   }
 ```
 
-with your own key.
+with your own key
+* Read [Documentation](https://altizure.github.io/dev-docs-site/zh-hans/docs/user_docs/web/).
+* Check [FAQ](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-faq.html).
+* Learn from [Applications](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-demo.html).
 
 ### What are the available versions? ###
 
@@ -45,9 +48,9 @@ Three versions are provided:
 
 ### Bug report and Questions ###
 
-Please write on [issue page](https://github.com/altizure/sdk.examples/issues).
+Please write on [issue page](https://github.com/altizure/sdk.examples/issues) or send emails to [Altizure team](mailto:developers@altizure.com).
 
-### Who do I talk to? ###
+### Changelog ###
 
-* [Altizure team](mailto:developers@altizure.com)
-* [Dr. Jingbo Liu](mailto:jingbo@altizure.com)
+* [English](changelog-en.md)
+* [中文](changelog-zh-hans.md)

@@ -1,0 +1,142 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.5.1 Add Promoted obj model </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body  style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt: 800,
+            lat:22.5361,
+            lng: 113.9438,
+            north: 100,
+            tilt: 60
+          },
+          flyTo: { alt: 800,
+            lat:22.5361,
+            lng: 113.9438,
+            north: 100,
+            tilt: 60
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      // add project: https://www.altizure.com/project/5a78bbc2c4eb6a6fd9b2575f/model
+      // at the default GPS position
+      // Note: your developer key must have access to the project, and the project must have valid GPS information.
+      sandbox.add('AltizureProjectMarker', {
+        pid: '5a78bbc2c4eb6a6fd9b2575f',
+        pose: {
+          position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 0}
+        }
+      })
+
+      // add a CAD model (which has been promoted to an altizure project) with an arbitrary position (longitude, latitude, altitude)
+      let m
+      sandbox.add('AltizureProjectMarker', {
+        pid: '5a804535db11da54dd6197bd',
+        pose: {
+          position: {lng: 113.9438, lat: 22.5361, alt: 32}
+        }
+      })
+      .then((res) => {
+        m = res // reference to the marker
+        m.scale = 0.001 // change the scale
+        m.euler = {x: -Math.PI/2} // change the up direction
+        return m.initialized // resolves when initialization is done
+      })
+      .then((res) => {
+        m.dim() // hide the blue square around the marker
+        sandbox.render(m, 'phong') // [essential] choose rendering mode for the marker
+        sandbox.lights.ambient.intensity = 0.01 // ambient light intensity
+        return sandbox.camera.flyTo({north: 0, alt: 400}, 5000) // fly animation after the model is initialized
+      })
+      .then(() => {
+        buildGui(sandbox, m) // create the GUI
+      })
+    </script>
+
+  <script src="../third_party/dat.gui.js"></script>
+  <script>
+    var params = {
+      visible: true,
+      'render mode': 'phong',
+      'ambient light': 0xffffff,
+      'ambient intensity': 0.01,
+      'point light': 0xffffff,
+      'point intensity': 1,
+      lng: 113.9438,
+      lat: 22.5361,
+      alt: 32,
+      'euler x': -Math.PI/2,
+      'euler y': 0,
+      'euler z': 0,
+      scale: -3,
+    }
+
+    function buildGui(sandbox, marker) {
+      gui = new dat.GUI();
+      gui.add(params, 'visible').onChange(function (val) {
+        marker.visible = val
+      });
+
+      let lights = gui.addFolder('Lights');
+      lights.addColor( params, 'ambient light' ).onChange( function ( val ) {
+        sandbox.lights.ambient.color.setHex(val)
+      });
+      lights.add( params, 'ambient intensity', 0, 1 ).onChange( function ( val ) {
+        sandbox.lights.ambient.intensity = val
+      });
+      lights.addColor( params, 'point light' ).onChange( function ( val ) {
+        sandbox.lights.point.color.setHex(val)
+      });
+      lights.add( params, 'point intensity', 0, 1 ).onChange( function ( val ) {
+        sandbox.lights.point.intensity = val
+      });
+      lights.add( params, 'render mode', {Phong: 'phong', Flat: 'flat', Wireframe: 'wireframe'} ).onChange( function ( val ) {
+        sandbox.render(m, val)
+      });
+
+      let pose = gui.addFolder('Pose');
+      pose.add( params, 'lng', 113.94, 113.95 ).onChange( function ( val ) {
+        marker.position = {lng: val}
+      });
+      pose.add( params, 'lat', 22.53, 22.54 ).onChange( function ( val ) {
+        marker.position = {lat: val}
+      });
+      pose.add( params, 'alt', 0, 50 ).onChange( function ( val ) {
+        marker.position = {alt: val}
+      });
+      pose.add( params, 'euler x', -Math.PI, Math.PI ).onChange( function ( val ) {
+        marker.euler = {x: val}
+      });
+      pose.add( params, 'euler y', -Math.PI, Math.PI ).onChange( function ( val ) {
+        marker.euler = {y: val}
+      });
+      pose.add( params, 'euler z', -Math.PI, Math.PI ).onChange( function ( val ) {
+        marker.euler = {z: val}
+      });
+      pose.add( params, 'scale', -5, 5 ).onChange( function ( val ) {
+        marker.scale = Math.pow(10, val)
+      });
+
+      gui.open();
+    }
+  </script>
+  </body>
+</html>
