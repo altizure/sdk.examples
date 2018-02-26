@@ -35,9 +35,10 @@
       .then((m) => {
         altmarker = m
         altmarkerpos = m.position
-        sandbox.polygonsFromGeoJson(altmarker, {top: 80, bottom: 10, color: 0x0000ff, opacity: 0.3})
+
+        sandbox.queryGeoJsonForAltizureProjectMarker(altmarker)
         .then((result) => {
-          polygonMarkers = result.polygons
+          polygonMarkers = sandbox.polygonsFromGeoJson(result.geojson, {top: 80, bottom: 10, color: 0x0000ff, opacity: 0.3})
           boundary = [result.bbox.min, result.bbox.max]
 
           setUpUI(altmarker, polygonMarkers, boundary)
