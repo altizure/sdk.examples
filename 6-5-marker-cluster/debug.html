@@ -7,8 +7,6 @@
   <body>
     <div id="page-content"></div>
     <script type="text/javascript" src="../build/altizure.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script src="../third_party/osmtogeojson.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -46,86 +44,31 @@
         // console.log(`sandbox.camera.pose = {lng: ${m.position.lng}, lat: ${m.position.lat}, alt: 4000}`)
         altmarker = m
         // altmarker.visible = false
-        queryForAltmarker(altmarker)
+        sandbox.queryGeoJsonForAltizureProjectMarker(altmarker)
+        .then((result) => {
+          console.log(result.geojson)
+          let geojson = result.geojson
+          // poly = sandbox.polygonsFromGeoJson(result.geojson)
+          visualizeGeoJSONData(result.geojson)
+          sandbox.positionsAltitude(positions).map((alt, i) => {
+            tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
+            tagMarkers[i].depthTest = true
+          })
+    
+          console.log('start clustering')
+          setTimeout(start(500), 2000)
+        })
       })
 
       // document.addEventListener('click', (event) => {
       //   console.log(JSON.stringify(sandbox.window.toLngLatAlt(event)))
       // })
-      
-      function buildQuery (marker) {
-        // http://overpass-api.de/query_form.html
-        let lowerLat = marker._apiInfo.geoInfo.minLat
-        let lowerLng = marker._apiInfo.geoInfo.minLong
-        let higherLat = marker._apiInfo.geoInfo.maxLat
-        let higherLng = marker._apiInfo.geoInfo.maxLong
-        // let lowerLat = 22.32
-        // let lowerLng = 114.25
-        // let higherLat = 22.35
-        // let higherLng = 114.28
-        let query = ''
-        query += '('
-        query += 'node["building"]' + bboxStr(lowerLat, lowerLng, higherLat, higherLng) + ';'
-        query += 'way["building"]' + bboxStr(lowerLat, lowerLng, higherLat, higherLng) + ';'
-        query += ');'
-        query += '(._;>;);'
-        query += 'out;'
-        function bboxStr (slat, slng, llat, llng) {
-          return '('+slat+','+slng+','+llat+','+llng+')'
-        }
-        let bbox = {
-          min: {lng: lowerLng, lat: lowerLat}, max: {lng: higherLng, lat: higherLat}
-        }
-        return [query, bbox]
-      }
-      function query_overpass (query, callback) {
-        $.ajax({
-          url:
-            'http://overpass-api.de/api/interpreter?data=[out:json][timeout:60];' + query,
-          dataType: 'json',
-          type: 'GET',
-          async: true,
-          crossDomain: true
-        }).done(function ( data, textStatus, jqXHR ) {
-          // console.log('second success', data, textStatus, jqXHR)
-          var error = false
-          callback(error, data, textStatus, jqXHR)
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-          console.log('error', jqXHR, textStatus, errorThrown)
-          var error = true
-          callback(error, jqXHR, textStatus, errorThrown)
-        }).always(function () {
-          console.log('complete')
-
-          console.log('start clustering')
-          setTimeout(start(500), 2000)
-        })
-      }
-      function queryForAltmarker (marker) {
-        let [query, bbox] = buildQuery(marker)
-        console.log('query: ', query)
-
-        let callback = (errorOccured, data, textStatus, other) => {
-          if (!errorOccured) {
-            console.log('succuss')
-            let geojson = osmtogeojson(data)
-            console.log(data)
-            console.log(geojson)
-            visualizeGeoJSONData(geojson)
-          } else {
-            console.log('failure')
-          }
-        }
-        query_overpass(query, callback)
-      }
 
       function visualizeGeoJSONData (geojson) {
         let features = geojson.features
         for (let i = 0; i < features.length; ++i) {
           let feature = features[i]
-          if (feature.properties.type === 'node') {
-            // visualizeAsTagMarker(feature.geometry.coordinates)
-          } else if (feature.properties.type === 'way') {
+          if (feature.geometry.type === 'Polygon') {
             let pt = [0, 0]
             let ptarray = feature.geometry.coordinates[0]
             ptarray.map((v) => {
@@ -139,9 +82,8 @@
         }
       }
 
-      
+      let positions = []
       function visualizeAsTagMarker (point) {
-        let positions = []
         let pos = new altizure.LngLatAlt(point[0],point[1],0.1)
         positions.push(pos)
         let tag = new altizure.TagMarker({
@@ -153,11 +95,6 @@
         tag.sprite.material.color.set(0xff0000)
         tagMarkers.push(tag)
         cluster.add(tag)
-
-        sandbox.positionsAltitude(positions).map((alt, i) => {
-          tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
-          tagMarkers[i].depthTest = true
-        })
       }
 
       const debounce = (func, delay) => {
@@ -174,12 +111,12 @@
         sandbox.on('cameraChange', debounce(function () {
           cluster.clustering().then((clusters) => {
             // console.log('clusters', cluster.clustersTag.length)
-            cluster.enable()
+            cluster.enable({})
           })
         }, debounce_delay))
         cluster.clustering().then((clusters) => {
           // console.log('clusters', cluster.clustersTag.length)
-          cluster.enable()
+          cluster.enable({})
         })
       }
     </script>
