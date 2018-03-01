@@ -13,11 +13,7 @@
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          flyTo: { alt:1020.0739295752213,
-            lat:22.538388886344876,
-            lng:113.94255600866971,
-            north:-27.271585092584015,
-            tilt:74.7023627906978 }
+          flyTo: {"lng":113.93996418720731,"lat":22.537915235924434,"alt":530.820697468223,"north":333.34434005623467,"tilt":72.42230739155441,"up":0}
         },
         renderItems: {
           earth: true,
@@ -31,7 +27,7 @@
 
       let marker = null
       let selectedCamera = null
-      let cameraState = 'positioning' // 'positioning', 'eulering' 
+      let cameraState = 'positioning' // 'positioning', 'eulering', 'none' 
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
       .then(m => {
         marker = m
@@ -52,7 +48,8 @@
           visPenumbra: 0,
           visDecay: 0.1
         })
-        selectedCamera.near = 5
+        // selectedCamera.near = 5
+        selectedCamera.showFar = true
         sandbox.visibilityCamera = selectedCamera
         syncCam()
       })
@@ -64,32 +61,27 @@
       function moveHandler (event) {
         let pt = sandbox.pickOnProjects(event)
         if (!pt) {return}
-        // console.log('onclick point coordinate', pt)
-        // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
-
         if (selectedCamera) {
-          if (cameraState === 'positioning') {
-            pt.alt += 50
-            selectedCamera.position = pt
-          } else if (cameraState === 'eulering') {
-
+          if (cameraState === 'eulering') {
+            selectedCamera.lookAt(pt) // change the orientation of the camera
           }
         }
       }
 
       function clickHandler (event) {
-        console.log(event)
         let pt = sandbox.pickOnProjects(event)
         if (!pt) {return}
-        // console.log('onclick point coordinate', pt)
-        // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
-
         if (selectedCamera) {
           if (cameraState === 'positioning') {
+            pt.alt += 5
+            selectedCamera.position = pt // change the position of the camera
             cameraState = 'eulering'
+            params.message = 'move to orient'
           } else if (cameraState === 'eulering') {
             cameraState = 'positioning'
-          }
+            params.message = 'click to position'
+          } 
+          syncCam()
         }
       }
 
@@ -99,10 +91,9 @@
     <script>
       var params = {
         Enable: false,
-        message: 'click model to add Camera',
+        message: 'click model to position',
         visColor: 0x00ff00,
         visIntensity: 1,
-        farInMeter: 1,
         fov: 45,
         visPenumbra: 0,
         visDecay: 0.1
@@ -115,7 +106,6 @@
         let cam = selectedCamera
         params.visColor = cam.visColor
         params.visIntensity = cam.visIntensity
-        params.farInMeter = cam.farInMeter
         params.fov = cam.fov
         params.visPenumbra = cam.visPenumbra
         params.visDecay = cam.visDecay
@@ -148,9 +138,6 @@
         // Change visIntensity to 100 for more obvious green
 				frustum.add( params, 'visIntensity', 1, 100 ).onChange( function ( val ) {
           if (selectedCamera) selectedCamera.visIntensity = val
-				} );
-				frustum.add( params, 'farInMeter', 1, 500 ).onChange( function ( val ) {
-					if (selectedCamera) selectedCamera.farInMeter = val;
 				} );
 				frustum.add( params, 'fov', 20, 70 ).onChange( function ( val ) {
 					if (selectedCamera) selectedCamera.fov = val;
