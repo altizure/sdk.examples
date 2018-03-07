@@ -19,11 +19,10 @@
           orbitRing: false
         }
       }
-      // let projectMarkerID = '56736f6bfc92159a165cdc38' // wierd scale project
 
       let sandbox = new altizure.Sandbox('page-content', options)
       // let projectMarkerID = '58428f1d97b73e0b090675cd' // hkust
-      let projectMarkerID = '572e2668ad5ed4204d2f8e5a' // science park
+      // let projectMarkerID = '572e2668ad5ed4204d2f8e5a' // science park
       // let projectMarkerID = '5a4aa0d1d38c8a075496721c' // 香港龙鼓滩发电厂
 
       let altmarker, altmarkerpos, polygonMarkers, boundary
@@ -60,6 +59,7 @@
           this.start_time = 0
           this.time = 0
 
+          // automatically align 3D model to polygons
           this.align = () => {
             if (this.computing) return
             this.computing = true

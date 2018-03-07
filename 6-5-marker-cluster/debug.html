@@ -24,46 +24,34 @@
       let projectMarkerID = '58428f1d97b73e0b090675cd'
       // let projectMarkerID = '5723553732f7a5ee26ff526b'
       // let projectMarkerID = '5a58de8c93ac3d233f7980c5'
-      let altmarker
+      let projectMarker
       var tagMarkers = []
       var cluster = new altizure.MarkerCluster({
         sandbox: sandbox,
-        // config: {
-        //   minDistance: 30, // pixel distance,
-        //   minNumber: 4, // minimum number of elements to form a cluster,
-        //   method: 'dbscan'
-        // }
       })
-      sandbox.add('AltizureProjectMarker', {pid: '5723553732f7a5ee26ff526b'})
-      sandbox.add('AltizureProjectMarker', {pid: projectMarkerID})
+      sandbox.add('AltizureProjectMarker', {
+        pid: projectMarkerID,
+        pose: {
+          position: {lng:114.26335, lat:22.3344,alt:0} // to align with the vector data
+        } 
+      })
       .then((m) => {
         return m.initialized
       })
       .then((m) => {
         sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
-        // console.log(`sandbox.camera.pose = {lng: ${m.position.lng}, lat: ${m.position.lat}, alt: 4000}`)
-        altmarker = m
-        // altmarker.visible = false
-        sandbox.queryGeoJsonForAltizureProjectMarker(altmarker)
+        projectMarker = m
+        sandbox.queryGeoJsonForAltizureProjectMarker(projectMarker)
         .then((result) => {
-          console.log(result.geojson)
-          let geojson = result.geojson
-          // poly = sandbox.polygonsFromGeoJson(result.geojson)
           visualizeGeoJSONData(result.geojson)
           sandbox.positionsAltitude(positions).map((alt, i) => {
             tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
             tagMarkers[i].depthTest = true
           })
-    
-          console.log('start clustering')
+
           setTimeout(start(500), 2000)
         })
       })
-
-      // document.addEventListener('click', (event) => {
-      //   console.log(JSON.stringify(sandbox.window.toLngLatAlt(event)))
-      // })
-
       function visualizeGeoJSONData (geojson) {
         let features = geojson.features
         for (let i = 0; i < features.length; ++i) {
@@ -90,9 +78,10 @@
           sandbox: sandbox,
           position: pos,
           imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
-          scale: 2
+          scale: 1
         })
         tag.sprite.material.color.set(0xff0000)
+        tag.pinLength = 15
         tagMarkers.push(tag)
         cluster.add(tag)
       }
@@ -110,12 +99,10 @@
       function start(debounce_delay) {
         sandbox.on('cameraChange', debounce(function () {
           cluster.clustering().then((clusters) => {
-            // console.log('clusters', cluster.clustersTag.length)
             cluster.enable({})
           })
         }, debounce_delay))
         cluster.clustering().then((clusters) => {
-          // console.log('clusters', cluster.clustersTag.length)
           cluster.enable({})
         })
       }
