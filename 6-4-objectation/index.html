@@ -49,7 +49,7 @@
     <script>
       function setUpUI (altmarker, polygonMarkers, boundary) {
         var AlignSetting = function (altizuremarker, polygonMarkers, boundary) {
-          this.resolution = 1024
+          this.resolution = 512
           this.rotationDegree = 0
           this.progress = 0
           this.computing = false
@@ -90,13 +90,7 @@
           }
 
           this._autoAdjustPolygon = () => {
-            this.polygonmarkers.map((poly) => {
-              this.altizuremarker.measureByPolygon(poly, 0)
-              .then((measureInfo) => {
-                poly.top = measureInfo.highest
-                poly.bottom = measureInfo.lowest
-              })
-            })
+            this.altizuremarker.autoAdjustPolygons(this.boundarypts, this.polygonmarkers, this.resolution)
           }
         }
         var setting = new AlignSetting(altmarker, polygonMarkers, boundary)
