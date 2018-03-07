@@ -1,0 +1,155 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.9 Interactive visibility </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          flyTo: {"lng":113.93996418720731,"lat":22.537915235924434,"alt":530.820697468223,"north":333.34434005623467,"tilt":72.42230739155441,"up":0}
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let marker = null
+      let selectedCamera = null
+      let cameraState = 'positioning' // 'positioning', 'eulering', 'none' 
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+      .then(m => {
+        marker = m
+        return m.initialized
+      })
+      .then((m) => {
+        buildGui()
+        sandbox.render(marker, 'visibility')
+        selectedCamera = new altizure.CameraMarker({
+          sandbox: sandbox,
+          position: {"lng":113.93965393317609,"lat":22.535795450218195,"alt":50}, // initial position
+          showFar: true,
+          showNear: true,
+          color: 0xff0000, // the color of the camera
+          fov: 45,
+          visColor: 0x00ff00, // the color of the casting light
+          visIntensity: 50,
+          visPenumbra: 0,
+          visDecay: 0.1
+        })
+        // selectedCamera.near = 5
+        selectedCamera.showFar = true
+        sandbox.visibilityCamera = selectedCamera
+        syncCam()
+      })
+
+      document.addEventListener('mousemove', moveHandler)
+      document.addEventListener('click', clickHandler)
+      document.addEventListener('touchstart', clickHandler)
+
+      function moveHandler (event) {
+        let pt = sandbox.pickOnProjects(event)
+        if (!pt) {return}
+        if (selectedCamera) {
+          if (cameraState === 'eulering') {
+            selectedCamera.lookAt(pt) // change the orientation of the camera
+          }
+        }
+      }
+
+      function clickHandler (event) {
+        let pt = sandbox.pickOnProjects(event)
+        if (!pt) {return}
+        if (selectedCamera) {
+          if (cameraState === 'positioning') {
+            pt.alt += 5
+            selectedCamera.position = pt // change the position of the camera
+            cameraState = 'eulering'
+            params.message = 'move to orient'
+          } else if (cameraState === 'eulering') {
+            cameraState = 'positioning'
+            params.message = 'click to position'
+          } 
+          syncCam()
+        }
+      }
+
+
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      var params = {
+        Enable: false,
+        message: 'click model to position',
+        visColor: 0x00ff00,
+        visIntensity: 1,
+        fov: 45,
+        visPenumbra: 0,
+        visDecay: 0.1
+      }
+
+      gui = new dat.GUI();
+
+      function syncCam () {
+        if (!selectedCamera) return
+        let cam = selectedCamera
+        params.visColor = cam.visColor
+        params.visIntensity = cam.visIntensity
+        params.fov = cam.fov
+        params.visPenumbra = cam.visPenumbra
+        params.visDecay = cam.visDecay
+        // Iterate over all controllers
+        for (var i in gui.__controllers) {
+          gui.__controllers[i].updateDisplay();
+        }
+      }
+
+      function buildGui() {
+        gui.add(params, 'Enable').onChange(function (val) {
+            if (val) {
+              // start the visibility analysis mode
+              sandbox.render(marker, 'visibility')
+              if (selectedCamera) {
+                sandbox.visibilityCamera = selectedCamera
+              }
+            } else {
+              // return to the normal texture mode
+              sandbox.render(marker, 'texture')
+            }
+          }
+        );
+        gui.add(params, 'message')
+
+        let frustum = gui.addFolder('Frustum');
+				frustum.addColor( params, 'visColor' ).onChange( function ( val ) {
+          if (selectedCamera) selectedCamera.visColor = val
+        } );
+        // Change visIntensity to 100 for more obvious green
+				frustum.add( params, 'visIntensity', 1, 100 ).onChange( function ( val ) {
+          if (selectedCamera) selectedCamera.visIntensity = val
+				} );
+				frustum.add( params, 'fov', 20, 70 ).onChange( function ( val ) {
+					if (selectedCamera) selectedCamera.fov = val;
+				} );
+				frustum.add( params, 'visPenumbra', 0, 1 ).onChange( function ( val ) {
+					if (selectedCamera) selectedCamera.visPenumbra = val;
+				} );
+				frustum.add( params, 'visDecay', 0.1, 1 ).onChange( function ( val ) {
+					if (selectedCamera) selectedCamera.visDecay = val;
+        } );
+				gui.open();
+			}
+    </script>
+  </body>
+</html>
