@@ -3,8 +3,35 @@
     <meta charset="utf-8">
     <title> Altizure Objectation </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        body {
+          font-family: Monospace;
+          background-color: #000;
+          color: rgb(188, 206, 26);
+          margin: 0px;
+          overflow: hidden;
+        }
+  
+        #info {
+          position: absolute;
+          padding: 10px;
+          width: 50%;
+          text-align: center;
+          z-index: 10;
+        }
+  
+        a {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+  
+      </style>
   </head>
   <body>
+    <div id="info">Import GeoJson<br/>
+      Click "Align" to auto align the model to GeoJson.<br/>
+      Click "Adjust Polygon" to change the height of polygons.<br/>
+    </div>
     <div id="page-content"></div>
     <script type="text/javascript" src="../build/altizure.js"></script>
     <script>
@@ -22,7 +49,7 @@
 
       let sandbox = new altizure.Sandbox('page-content', options)
       // let projectMarkerID = '58428f1d97b73e0b090675cd' // hkust
-      // let projectMarkerID = '572e2668ad5ed4204d2f8e5a' // science park
+      let projectMarkerID = '572e2668ad5ed4204d2f8e5a' // science park
       // let projectMarkerID = '5a4aa0d1d38c8a075496721c' // 香港龙鼓滩发电厂
 
       let altmarker, altmarkerpos, polygonMarkers, boundary
