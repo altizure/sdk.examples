@@ -42,7 +42,7 @@ with your own key
 
 Three versions are provided:
 
-* beta: https://beta.altizure.com/sdk
+* beta: https://beta.altizure.cn/sdk
 * stable: https://www.altizure.com/sdk
 * China: https://www.altizure.cn/sdk
 
