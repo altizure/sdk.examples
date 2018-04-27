@@ -1,0 +1,134 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure Add Zone </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { lng:113.94255600866971, lat:22.538388886344876, alt:100000},
+          flyTo: {lng: 114.20918760138036, lat: 22.424215498081942, alt: 1457.6769007647472, north: 350.5930327038691, tilt: 15.732665028748109}
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: false
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+      let pid = '572e2668ad5ed4204d2f8e5a' // science park
+      let altmarker
+      sandbox.add('AltizureProjectMarker', {pid: pid})
+      .then((m) => {
+        sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
+        console.log(m)
+        altmarker = m
+      })
+
+      let array0 = [
+        new altizure.LngLatAlt(114.21186101893935, 22.428228681061963, 0),
+        new altizure.LngLatAlt(114.21123177447554, 22.427335448692784, 0),
+        new altizure.LngLatAlt(114.21253196255999, 22.42643080548697, 0),
+        new altizure.LngLatAlt(114.21319580845478, 22.427249979470133, 0),
+        new altizure.LngLatAlt(114.21186101893935, 22.428228681061963, 0)
+      ]
+      let array1 = [
+        new altizure.LngLatAlt(114.21187267609257, 22.42729036132955, 0),
+        new altizure.LngLatAlt(114.21213458987283, 22.427605782548987, 0),
+        new altizure.LngLatAlt(114.21248169394998, 22.427340893752923, 0),
+        new altizure.LngLatAlt(114.21222367269515, 22.427077350835003, 0),
+        new altizure.LngLatAlt(114.21187267609257, 22.42729036132955, 0)
+      ]
+      let points = [
+        {array: array0, hole: false},
+        {array: array1, hole: true}
+      ]
+      let volume1 = {
+        color: 0xffffff,
+        opacity: 1.0,
+        points: points,
+        top: 30,
+        bottom: 10
+      }
+      let zoneMarker = new altizure.ZoneMarker({
+        volume: volume1,
+        sandbox: sandbox,
+        tagOrientation: altizure.ZoneMarker.TAG_ORIENTATION.HORIZONTAL,
+        tagScale: 2.0,
+        imgUrl: '../public/assets/img/meta_description.png',
+        textOptions: {
+          text: 'Zone 0',
+          fillStyle: 'red'
+        }
+      })
+
+      let pose1 = {lng: 114.21200459635797, lat: 22.426549076154643, alt: 549.14604375754, north: 343.2410576765175, tilt: 45.35059343771804}
+      let pose2 = {lng: 114.21177813191075, lat: 22.42661181010421, alt: 582.6804744887133, north: 63.86050308756302, tilt: 54.87084658623886}
+      let pose3 = {lng: 114.21221887277076, lat: 22.426454314149066, alt: 653.9987454279769, north: 148.08666741571557, tilt: 65.41536195045057}
+      let pose4 = {lng: 114.21214144156328, lat: 22.42758345849436, alt: 587.109175482169, north: 235.93493288952598, tilt: 51.27251051185841}
+      let index = 0
+      let poses = [pose1, pose2, pose3, pose4]
+      let flying = () => {
+        sandbox.camera.flyTo(poses[index])
+        index = (index+1) % poses.length
+        setTimeout(flying, 8000)
+      }
+      flying()
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      let ZoneSetting = function (params) {
+        for (key in params) {
+          this[key] = params[key]
+        }
+      }
+      let setting = new ZoneSetting({
+        tagScale: 2.0,
+        tagOrientation: 'HORIZONTAL',
+        color: 0xffffff,
+        opacity: 1.0,
+        useImgUrl: false,
+        text: 'Zone 0',
+        imgUrl: '../public/assets/img/meta_description.png'
+      })
+      var gui = new dat.GUI({autoplace: false, width: 300})
+      gui.add(setting, 'tagScale', 0.1, 5, 0.1).name('tag scale').onChange((value) => {
+        zoneMarker.tagScale = value
+      })
+      gui.add(setting, 'tagOrientation', {HORIZONTAL: 'HORIZONTAL', VERTICAL: 'VERTICAL'}).name('tag orientation').onChange((value) => {
+        if (value === 'HORIZONTAL') {
+          zoneMarker.tagOrientation = altizure.ZoneMarker.TAG_ORIENTATION.HORIZONTAL
+        } else if (value === 'VERTICAL') {
+          zoneMarker.tagOrientation = altizure.ZoneMarker.TAG_ORIENTATION.VERTICAL
+        }
+      })
+      gui.addColor(setting, 'color').onChange((value) => {
+        zoneMarker.color = value
+      })
+      gui.add(setting, 'opacity', 0.0, 1.0, 0.1).onChange((value) => {
+        zoneMarker.opacity = value
+      })
+      gui.add(setting, 'useImgUrl').onChange((value) => {
+        if (value) {
+          zoneMarker.imgUrl = setting.imgUrl
+        } else {
+          zoneMarker.textOptions = Object.assign({}, zoneMarker.textOptions, {text: setting.text})
+        }
+      })
+      gui.add(setting, 'text').onChange((value) => {
+        if (!setting.useImgUrl) {
+          zoneMarker.textOptions = Object.assign({}, zoneMarker.textOptions, {text: value})
+        }
+      })
+    </script>
+  </body>
+</html>

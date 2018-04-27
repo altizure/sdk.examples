@@ -3,8 +3,35 @@
     <meta charset="utf-8">
     <title> Altizure Objectation </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+        body {
+          font-family: Monospace;
+          background-color: #000;
+          color: rgb(188, 206, 26);
+          margin: 0px;
+          overflow: hidden;
+        }
+  
+        #info {
+          position: absolute;
+          padding: 10px;
+          width: 50%;
+          text-align: center;
+          z-index: 10;
+        }
+  
+        a {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+  
+      </style>
   </head>
   <body>
+    <div id="info">Import GeoJson<br/>
+      Click "Align" to auto align the model to GeoJson.<br/>
+      Click "Adjust Polygon" to change the height of polygons.<br/>
+    </div>
     <div id="page-content"></div>
     <script type="text/javascript" src="../build/altizure.js"></script>
     <script>
@@ -19,7 +46,6 @@
           orbitRing: false
         }
       }
-      // let projectMarkerID = '56736f6bfc92159a165cdc38' // wierd scale project
 
       let sandbox = new altizure.Sandbox('page-content', options)
       // let projectMarkerID = '58428f1d97b73e0b090675cd' // hkust
@@ -60,6 +86,7 @@
           this.start_time = 0
           this.time = 0
 
+          // automatically align 3D model to polygons
           this.align = () => {
             if (this.computing) return
             this.computing = true

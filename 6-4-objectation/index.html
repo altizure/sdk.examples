@@ -1,130 +1,157 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title> Altizure Objectation </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  </head>
-  <body>
-    <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
-    <script>
-      let options = {
-        altizureApi:{
-          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
-        },
-        renderItems: {
-          earth: true,
-          earthUseTexture: true,
-          featureInView: false,
-          orbitRing: false
-        }
-      }
-      // let projectMarkerID = '56736f6bfc92159a165cdc38' // wierd scale project
-
-      let sandbox = new altizure.Sandbox('page-content', options)
-      // let projectMarkerID = '58428f1d97b73e0b090675cd' // hkust
-      let projectMarkerID = '572e2668ad5ed4204d2f8e5a' // science park
-      // let projectMarkerID = '5a4aa0d1d38c8a075496721c' // 香港龙鼓滩发电厂
-      
-      let altmarker, altmarkerpos, polygonMarkers, boundary
-      sandbox.add('AltizureProjectMarker', {pid: projectMarkerID})
-      .then((m) => {
-        sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
-        return m.initialized
-      })
-      .then((m) => {
-        altmarker = m
-        altmarkerpos = m.position
-
-        sandbox.queryGeoJsonForAltizureProjectMarker(altmarker)
-        .then((result) => {
-          polygonMarkers = sandbox.polygonsFromGeoJson(result.geojson, {top: 80, bottom: 10, color: 0x0000ff, opacity: 0.3})
-          boundary = [result.bbox.min, result.bbox.max]
-
-          setUpUI(altmarker, polygonMarkers, boundary)
-        })
-      })
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
-    <script>
-      function setUpUI (altmarker, polygonMarkers, boundary) {
-        var AlignSetting = function (altizuremarker, polygonMarkers, boundary) {
-          this.resolution = 512
-          this.rotationDegree = 0
-          this.progress = 0
-          this.computing = false
-          this.altizuremarker = altizuremarker
-          this.polygonmarkers = polygonMarkers
-          this.boundarypts = boundary
-
-          this.start_time = 0
-          this.time = 0
-
-          this.align = () => {
-            if (this.computing) return
-            this.computing = true
-            this.progress = 1
-            this.start_time = Date.now()
-
-            let images = this.altizuremarker._generateImages({
-              polygonMarkers: this.polygonmarkers,
-              boundary: this.boundarypts,
-              resolution: this.resolution
-            })
-            this.altizuremarker._detectOffset(images.srcImg, images.dstImg, {}, (progress) => {
-              if (progress.log) {
-                console.log(progress.msg)
-              } else if (typeof progress === 'number') {
-                this.progress = progress
-              }
-              this.time = (Date.now() - this.start_time) / 1000.0
-            })
-            .then((val) => {
-              console.log('offset is', val)
-              let pos = this.altizuremarker.position
-              pos.lng += val.lng
-              pos.lat += val.lat
-              this.altizuremarker.position = pos
-              this.computing = false
-            })
+    <head>
+      <meta charset="utf-8">
+      <title> Altizure Objectation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+      <style>
+          body {
+            font-family: Monospace;
+            background-color: #000;
+            color: rgb(188, 206, 26);
+            margin: 0px;
+            overflow: hidden;
           }
-
-          this._autoAdjustPolygon = () => {
-            this.altizuremarker.autoAdjustPolygons(this.boundarypts, this.polygonmarkers, this.resolution)
+    
+          #info {
+            position: absolute;
+            padding: 10px;
+            width: 50%;
+            text-align: center;
+            z-index: 10;
+          }
+    
+          a {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+    
+        </style>
+    </head>
+    <body>
+      <div id="info">Import GeoJson<br/>
+        Click "Align" to auto align the model to GeoJson.<br/>
+        Click "Adjust Polygon" to change the height of polygons.<br/>
+      </div>
+      <div id="page-content"></div>
+      <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+      <script>
+        let options = {
+          altizureApi:{
+            key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+          },
+          renderItems: {
+            earth: true,
+            earthUseTexture: true,
+            featureInView: false,
+            orbitRing: false
           }
         }
-        var setting = new AlignSetting(altmarker, polygonMarkers, boundary)
-
-        var gui = new dat.GUI({ autoplace: false, width: 320 })
-        var alignFolder = gui.addFolder('Align Project')
-        alignFolder.open()
-
-        var resolutionController = alignFolder.add(setting, 'resolution', 512, 1024, 128)
-        resolutionController.onChange((value) => {
-          setting.resolution = value
+  
+        let sandbox = new altizure.Sandbox('page-content', options)
+        // let projectMarkerID = '58428f1d97b73e0b090675cd' // hkust
+        let projectMarkerID = '572e2668ad5ed4204d2f8e5a' // science park
+        // let projectMarkerID = '5a4aa0d1d38c8a075496721c' // 香港龙鼓滩发电厂
+  
+        let altmarker, altmarkerpos, polygonMarkers, boundary
+        sandbox.add('AltizureProjectMarker', {pid: projectMarkerID})
+        .then((m) => {
+          sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
+          return m.initialized
         })
-        resolutionController.listen()
-        var rotationDegreeController = alignFolder.add(setting, 'rotationDegree', -5, 5, 0.1)
-        rotationDegreeController.onChange((value) => {
-          setting.rotationDegree = value
-          let orientation = altmarker.orientation
-          orientation.setFromAxisAngle({x: 0, y: 0, z: 1}, Math.PI / 180 * value)
-          altmarker.orientation = orientation
+        .then((m) => {
+          altmarker = m
+          altmarkerpos = m.position
+  
+          sandbox.queryGeoJsonForAltizureProjectMarker(altmarker)
+          .then((result) => {
+            polygonMarkers = sandbox.polygonsFromGeoJson(result.geojson, {top: 80, bottom: 10, color: 0x0000ff, opacity: 0.3})
+            boundary = [result.bbox.min, result.bbox.max]
+  
+            setUpUI(altmarker, polygonMarkers, boundary)
+          })
         })
-        rotationDegreeController.name('rotation degree')
-        rotationDegreeController.listen()
-        alignFolder.add(setting, 'align').name('Align')
-        var progressController = alignFolder.add(setting, 'progress', 0, 100, 1)
-        progressController.domElement.style.pointerEvents = "none"
-        progressController.domElement.style.opacity = 0.9
-        progressController.listen()
-        var timeController = alignFolder.add(setting, 'time').name('time (s)')
-        timeController.domElement.style.pointerEvents = "none"
-        timeController.domElement.style.opacity = 0.9
-        timeController.listen()
-
-        alignFolder.add(setting, '_autoAdjustPolygon').name('Adjust Polygon')
-      }
-    </script>
-  </body>
-</html>
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>      
+      <script>
+        function setUpUI (altmarker, polygonMarkers, boundary) {
+          var AlignSetting = function (altizuremarker, polygonMarkers, boundary) {
+            this.resolution = 512
+            this.rotationDegree = 0
+            this.progress = 0
+            this.computing = false
+            this.altizuremarker = altizuremarker
+            this.polygonmarkers = polygonMarkers
+            this.boundarypts = boundary
+  
+            this.start_time = 0
+            this.time = 0
+  
+            // automatically align 3D model to polygons
+            this.align = () => {
+              if (this.computing) return
+              this.computing = true
+              this.progress = 1
+              this.start_time = Date.now()
+  
+              let images = this.altizuremarker._generateImages({
+                polygonMarkers: this.polygonmarkers,
+                boundary: this.boundarypts,
+                resolution: this.resolution
+              })
+              this.altizuremarker._detectOffset(images.srcImg, images.dstImg, {}, (progress) => {
+                if (progress.log) {
+                  console.log(progress.msg)
+                } else if (typeof progress === 'number') {
+                  this.progress = progress
+                }
+                this.time = (Date.now() - this.start_time) / 1000.0
+              })
+              .then((val) => {
+                console.log('offset is', val)
+                let pos = this.altizuremarker.position
+                pos.lng += val.lng
+                pos.lat += val.lat
+                this.altizuremarker.position = pos
+                this.computing = false
+              })
+            }
+  
+            this._autoAdjustPolygon = () => {
+              this.altizuremarker.autoAdjustPolygons(this.boundarypts, this.polygonmarkers, this.resolution)
+            }
+          }
+          var setting = new AlignSetting(altmarker, polygonMarkers, boundary)
+  
+          var gui = new dat.GUI({ autoplace: false, width: 320 })
+          var alignFolder = gui.addFolder('Align Project')
+          alignFolder.open()
+  
+          var resolutionController = alignFolder.add(setting, 'resolution', 512, 1024, 128)
+          resolutionController.onChange((value) => {
+            setting.resolution = value
+          })
+          resolutionController.listen()
+          var rotationDegreeController = alignFolder.add(setting, 'rotationDegree', -5, 5, 0.1)
+          rotationDegreeController.onChange((value) => {
+            setting.rotationDegree = value
+            let orientation = altmarker.orientation
+            orientation.setFromAxisAngle({x: 0, y: 0, z: 1}, Math.PI / 180 * value)
+            altmarker.orientation = orientation
+          })
+          rotationDegreeController.name('rotation degree')
+          rotationDegreeController.listen()
+          alignFolder.add(setting, 'align').name('Align')
+          var progressController = alignFolder.add(setting, 'progress', 0, 100, 1)
+          progressController.domElement.style.pointerEvents = "none"
+          progressController.domElement.style.opacity = 0.9
+          progressController.listen()
+          var timeController = alignFolder.add(setting, 'time').name('time (s)')
+          timeController.domElement.style.pointerEvents = "none"
+          timeController.domElement.style.opacity = 0.9
+          timeController.listen()
+  
+          alignFolder.add(setting, '_autoAdjustPolygon').name('Adjust Polygon')
+        }
+      </script>
+    </body>
+  </html>
