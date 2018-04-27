@@ -7,6 +7,7 @@
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
     <script type="text/javascript" src="https://beta.altizure.com/sdk"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -57,11 +58,6 @@
         if (marker) marker.dim() // hide the blue fence
       }
 
-    </script>
-
-    <script src="../third_party/dat.gui.js"></script>
-
-    <script>
       function setProjectUI (marker) {
         
         function controller () {
@@ -87,6 +83,7 @@
         gui.add(c1, 'eventOff')
         gui.add(c1, 'message').listen()
       }
+
     </script>
   </body>
 </html>
