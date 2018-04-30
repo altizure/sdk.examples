@@ -122,6 +122,9 @@
       return m.initialized
     })
     .then((m) => {
+      return m.loadCropMask() // [optional] download crop mask configured in Altizure
+    })
+    .then((m) => {
       // altizure project initialized
       m.crop(boundary) // crop by boundary defined above
       m.crop(boundary2) // crop by boundary2
