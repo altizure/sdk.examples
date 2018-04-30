@@ -1,0 +1,222 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure Markercluster</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {lng: 116.35618449911304, lat: 42.576162395152416, alt: 2416.778675196671, north: 165.20491408981275, tilt: 70.86642190403151},
+          flyTo: {lng: 116.35618449911304, lat: 42.576162395152416, alt: 2416.778675196671, north: 165.20491408981275, tilt: 70.86642190403151}
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: false
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let viewPoint = {lng: 116.36100409428327, lat: 42.57951774739637, alt: 44.20660836912626}
+      let tagInViewPoint = new altizure.TagMarker({
+        position: {lng: viewPoint.lng, lat: viewPoint.lat, alt: viewPoint.alt,},
+        pinLength: 0,
+        sandbox: sandbox,
+        scale: 4
+      })
+
+      let polygon = new altizure.PolygonMarker({
+        sandbox: sandbox,
+        volume: {
+          points: [
+            {lng: 116.354268710125, lat: 42.54903831604285, alt: 93.40062798509614},
+            {lng: 116.35027406360564, lat: 42.564127369387684, alt: 47.39192154048365},
+            {lng: 116.33522555919645, lat: 42.5678709952487, alt: 48.38537979120726},
+            {lng: 116.32164929412806, lat: 42.56392088771665, alt: 76.26154249073731},
+            {lng: 116.32462514375021, lat: 42.55410253584618, alt: 87.82058331126802},
+            {lng: 116.34160411359991, lat: 42.546632372674885, alt: 86.67171156577324},
+            {lng: 116.354268710125, lat: 42.54903831604285, alt: 93.40062798509614}
+          ].map((lla) => { return new altizure.LngLatAlt(lla.lng, lla.lat, 0) }),
+          top: 10,
+          bottom: 0.1,
+          opacity: 0.07,
+          color: 0x0000ff
+        },
+        depthTest: false
+      })
+
+      let calculatorSettings = {
+        sandbox: sandbox,
+        viewPoint: viewPoint,
+        polygon: polygon,
+        blockMarkers: [],
+        skylineLength: 1024,
+        polygonSampleResolution: 100
+      }
+      let calculator = new altizure.SkylineHeightLimitCalculator(calculatorSettings)
+
+      let pid = '592459d56626254ddff4032b'
+      let altmarker
+      sandbox.add('AltizureProjectMarker', {
+        pid: pid,
+        pose: {
+          position: {lng: 116.35926312130725, lat: 42.564267891757254, alt: 0}
+        }
+      })
+      .then((m) => {
+        altmarker = m
+        setUpUI()
+      })
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
+    <script>
+      let skylineMarker = null
+      let nearMarker = null
+      let farMarker = null
+      let heightLimitMarker = null
+      var settings = {
+        viewPoint: viewPoint,
+        viewPointTagPinLength: 0,
+        polygon: polygon,
+        blockMarkers: [altmarker],
+        skylineLength: 256,
+        polygonSampleResolution: 50,
+        heightResolution: 1,
+        nearDistance: 0,
+        farDistance: 0,
+        fov: 40,
+        computeHeightLimit: () => {
+          // skyline
+          let time0 = Date.now()
+          calculator.computeSkyline()
+          let skylinePoints = calculator.skyline
+          if (skylineMarker !== null) {
+            skylineMarker.destruct()
+            skylineMarker = null
+          }
+          skylineMarker = new altizure.PolyCylinderLineMarker({
+            sandbox: sandbox,
+            points: skylinePoints,
+            lineWidth: 2,
+            depthTest: true,
+            color: 0xff111
+          })
+          if (nearMarker !== null) {
+            nearMarker.destruct()
+            nearMarker = null
+          }
+          let vpt = Object.assign({}, calculator.viewPoint)
+          let nearPts = [vpt].concat(calculator.near).concat([vpt])
+          nearMarker = new altizure.PolyCylinderLineMarker({
+            sandbox: sandbox,
+            points: nearPts,
+            lineWidth: 1,
+            depthTest: false,
+            color: 0x0000ff
+          })
+          if (farMarker !== null) {
+            farMarker.destruct()
+            farMarker = null
+          }
+          let farPts = [vpt].concat(calculator.far).concat([vpt])
+          farMarker = new altizure.PolyCylinderLineMarker({
+            sandbox: sandbox,
+            points: farPts,
+            lineWidth: 4,
+            depthTest: false,
+            color: 0xff0000
+          })
+          settings.nearDistance = calculator.nearDistance
+          settings.farDistance = calculator.farDistance
+          let time1 = Date.now()
+          console.log('computeSkyline time: ', time1 - time0)
+          // height limit
+          let time2 = Date.now()
+          let heightMap = calculator.computeHeightLimitMap()
+          if (heightLimitMarker !== null) {
+            heightLimitMarker.destruct()
+            heightLimitMarker = null
+          }
+          heightLimitMarker = new altizure.HeightMapMarker({
+            sandbox: sandbox,
+            heightMap: heightMap,
+            lineWidth: 2
+          })
+          let time3 = Date.now()
+          console.log('computeHeightLimit time: ', time3 - time2)
+          console.log(heightMap)
+        },
+        changingViewPointLngLat: false
+      }
+      let currentPt = viewPoint
+      document.addEventListener('click', (event) => {
+        if (settings.changingViewPointLngLat) {
+          let pt = sandbox.window.toLngLatAlt(event)
+          if (pt) {
+            tagInViewPoint.position = {lng: pt.lng, lat: pt.lat, alt: pt.alt}
+            tagInViewPoint.pinLength = settings.viewPointTagPinLength
+            settings.viewPoint = {lng: pt.lng, lat: pt.lat, alt: pt.alt + settings.viewPointTagPinLength}
+            calculator.viewPoint = settings.viewPoint
+            currentPt = pt
+          }
+        }
+      })
+      function setUpUI () {
+        settings.blockMarkers = [altmarker]
+        calculator.viewPoint = settings.viewPoint
+        calculator.polygon = settings.polygon
+        calculator.blockMarkers = settings.blockMarkers
+        calculator.skylineLength = settings.skylineLength
+        calculator.polygonSampleResolution = settings.polygonSampleResolution
+        calculator.fov = settings.fov
+        calculator.heightResolution = settings.heightResolution
+
+        var gui = new dat.GUI({autoplace: false, width: 400})
+        var paraFolder = gui.addFolder('Parameters')
+        paraFolder.add(settings, 'skylineLength', 10, 1024, 1).onChange((value) => {
+          settings.skylineLength = value
+          calculator.skylineLength = value
+        })
+        paraFolder.add(settings, 'polygonSampleResolution', 10, 100, 1).onChange((value) => {
+          settings.polygonSampleResolution = value
+          calculator.polygonSampleResolution = value
+        })
+        paraFolder.add(settings, 'changingViewPointLngLat')
+        paraFolder.add(settings, 'viewPointTagPinLength', 0, 300, 1).onChange((value) => {
+          settings.viewPoint = {lng: currentPt.lng, lat: currentPt.lat, alt: currentPt.alt + value}
+          settings.viewPointTagPinLength = value
+          calculator.viewPoint = settings.viewPoint
+          tagInViewPoint.pinLength = value
+        })
+        var cameraFolder = gui.addFolder('Camera Parameters')
+        cameraFolder.add(settings, 'fov', 10, 60, 1).name('fov (degree)').onChange((v) => {
+          settings.fov = v
+          calculator.fov = v
+        })
+        cameraFolder.add(settings, 'heightResolution', 0.1, 2, 0.1).name('height resolution (m)').onChange((v) => {
+          settings.heightResolution = v
+          calculator.heightResolution = v
+        })
+        cameraFolder.add(settings, 'nearDistance', 0, 10000, 1).name('near (m)').onChange((v) => {
+          settings.nearDistance = v
+          calculator.nearDistance = v
+        }).listen()
+        cameraFolder.add(settings, 'farDistance', 0, 10000, 1).name('far (m)').onChange((v) => {
+          settings.farDistance = v
+          calculator.farDistance = v
+        }).listen()
+        gui.add(settings, 'computeHeightLimit')
+      }
+    </script>
+  </body>
+</html>
