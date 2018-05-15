@@ -72,5 +72,54 @@
       tag3.on('mouseleave', (e) => { tag3.scale = 2 })
 
     </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      var gui = new dat.GUI()
+      setUpUIFolder(tag1, 'Meta Description', true)
+      setUpUIFolder(tag2, 'Tag Demo', true)
+      setUpUIFolder(tag3, 'Logo', true)
+
+      function setUpUIFolder (tag, folderName, open) {
+        let folder = gui.addFolder(folderName)
+        let isSprite = true
+        let pivotx = 0.5
+        let pivoty = 0.5
+        let rulerx = Math.PI / 2
+        let rulery = 0
+        let rulerz = 0
+        let pinLength = 0
+        let settings = {isSprite, pivotx, pivoty, rulerx, rulery, rulerz, pinLength}
+        folder.add(settings, 'isSprite').onChange((v) => {
+          tag.isSprite = v
+          settings.isSprite = v
+        })
+        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange((v) => {
+          tag.pivot = {x: v}
+          settings.pivotx = v
+        })
+        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange((v) => {
+          tag.pivot = {y: v}
+          settings.pivoty = v
+        })
+        folder.add(settings, 'rulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: v, y: settings.rulery, z: settings.rulerz, order: 'XYZ', isEuler: true}
+          settings.rulerx = v
+        })
+        folder.add(settings, 'rulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.rulerx, y: v, z: settings.rulerz, order: 'XYZ', isEuler: true}
+          settings.rulery = v
+        })
+        folder.add(settings, 'rulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.rulerx, y: settings.rulery, z: v, order: 'XYZ', isEuler: true}
+          settings.rulerz = v
+        })
+        folder.add(settings, 'pinLength', 0, 20, 1).onChange((v) => {
+          tag.pinLength = v
+          settings.pinLength = v
+        })
+        if (open) folder.open()
+      }
+
+    </script>
   </body>
 </html>
