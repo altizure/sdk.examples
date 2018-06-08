@@ -34,7 +34,11 @@
 
     let sandbox = new altizure.Sandbox('page-content', options)
 
+    let altmarker
     sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+    .then((m) => {
+      altmarker = m
+    })
 
     // endpoints (longitude, latitude, altitude)
     let pts1 = [
@@ -89,6 +93,90 @@
       fenceHeight: 10
     })
 
+    let pl1color = pl1.color
+    pl1.interactable = true
+    pl1.on('mouseenter', (event) => {
+      pl1color = pl1.color
+      pl1.color = 0xffffff
+    })
+    pl1.on('mouseleave', (event) => {
+      pl1.color = pl1color
+    })
+
+    let pl2color = pl2.color
+    pl2.interactable = true
+    pl2.on('mouseenter', (event) => {
+      pl2color = pl2.color
+      pl2.color = 0xffffff
+    })
+    pl2.on('mouseleave', (event) => {
+      pl2.color = pl2color
+    })
+
+    let pl3color = pl3.color
+    pl3.interactable = true
+    pl3.on('mouseenter', (event) => {
+      pl3color = pl3.color
+      pl3.color = 0xffffff
+    })
+    pl3.on('mouseleave', (event) => {
+      pl3.color = pl3color
+    })
+
+  </script>
+  <script src="../third_party/dat.gui.js"></script>
+  <script>
+    setUpUI()
+    function setUpUI () {
+      var LineMarkerProperty = function(linemarker) {
+        this.linemarker = linemarker
+        this.opacity = linemarker.opacity
+        this.color = linemarker.color
+        this.animation = 'horizontal'
+        this.texture = 'fence'
+        this.fenceHeight = linemarker.fenceHeight
+      } 
+      var gui = new dat.GUI()
+      gui.add({hide: false}, 'hide').name('Hide Project').onChange((v) => {
+        altmarker.visible = !v
+      })
+      addFolder('red style', pl1)
+      addFolder('purple style', pl2)
+      addFolder('green style', pl3, true)      
+
+      function addFolder (name, marker, open) {
+        var folder = gui.addFolder(name)
+        var text = new LineMarkerProperty(marker)
+
+        let colorController = folder.addColor(text, 'color')
+        colorController.onChange((v) => {
+          marker.color = v
+        })
+
+        let opacityController = folder.add(text, 'opacity', 0.0, 1.0, 0.01)
+        opacityController.onChange(function (value) {
+          marker.opacity = value
+        })
+        opacityController.listen()
+
+        let animationController = folder.add(text, 'animation', {horizontal: 'horizontal', vertical: 'vertical', none: 'none'})
+        animationController.onChange((v) => {
+          marker.style = {animation: v}
+        })
+
+        let textureController = folder.add(text, 'texture', {arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
+        textureController.onChange((v) => {
+          marker.style = {texture: v}
+        })
+
+        let fenceHeightController = folder.add(text, 'fenceHeight', 1, 50, 1)
+        fenceHeightController.onChange((v) => {
+          marker.fenceHeight = v
+        })
+
+        if (open) folder.open()
+      }     
+    }
   </script>
 </body>
 
