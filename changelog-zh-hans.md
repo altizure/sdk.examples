@@ -1,5 +1,46 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 0.2.21
+__发布时间:__
+2018年6月11日
+
+__新功能:__
+* 根据选取的(不少于)三个点作为水平面，调整marker的的向上方向，`Marker::orientationByHorizontalPoints`
+    ``` 
+    /**
+      * get the realigned orientation from horizontal points
+      * @param {LngLatAlt[]} pts 
+      * @param {bool} flip
+      * @public
+      * @returns {Quaternion}
+      * @memberof Marker
+      */
+      orientationByHorizontalPoints (pts, flip = false)
+    ```
+* 高速测量平面面积，在不需要体积测量时使用 `GeometryUtils::areaByLngLatAlts`
+    ```
+    /**
+      * @param {LngLatAlt[] | PolygonBaseMarker} pts - boundary points
+      * @returns {Number} - squared meters
+      */
+      function areaByLngLatAlts (pts) {}
+  ```
+* 判断一个点（投影到地表后）是否在polygon范围内 `GeometryUtils::checkPtsInPoly`
+    ```
+    /**
+      * @param {LngLatAlts} pts
+      * @param {LngLatAlts} poly - conter clock wise boundary
+      * @returns { bool[] } - whether the points are in the poly
+      */
+      function checkPtsInPoly (pts, poly) {}
+    ```
+
+__改进:__
+* 增加autoScale範例 [范例 2.1.2](https://altizure.github.io/sdk.examples/2-1-add-project-autoScale/index.html)
+
+__缺陷修复:__
+
+
 ### 0.2.20
 __发布时间:__
 2018年5月24日
@@ -7,7 +48,7 @@ __发布时间:__
 __新功能:__
 * Tag 类 Marker 增加 `isSprite` 属性，区分是否总面向镜头。更新 [范例 2.2*](https://altizure.github.io/sdk.examples/2-2-add-tag/index.html)。
 * Tag 类增加 `pivot` -- 面向镜头时的旋转中心，详见[文档](http://docs.altizure.cn/zh-hans/docs/user_docs/web/TagMarker.html#pivot)。
-* `AltizureProjectMarker` 初始化选项 `autoscale: {number | bool}` 自动缩放CAD类模型。
+* `AltizureProjectMarker` 初始化选项 `autoscale: {number | bool}` 自动缩放CAD类模型。[范例 2.1.2](https://altizure.github.io/sdk.examples/2-1-add-project-autoScale/index.html)
 * 根据天际线的区域限高。[范例 6.6](https://altizure.github.io/sdk.examples/6-6-skyline/index.html)
     
     ![效果图](./public/assets/img/examples/6-6-height-limit.png "区域限高")
