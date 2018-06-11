@@ -1,10 +1,27 @@
 # Altizure Sandbox 3D SDK 更新日志
 
-### 0.2.21
+### 0.2.22
 __发布时间:__
 2018年6月11日
 
 __新功能:__
+* `PolyLineMarker` 增加了动画，以及可选的纹理。可以通过调整`marker.style{animation, textture}`设置不同效果。 [範例2.4](https://altizure.github.io/sdk.examples/2-4-add-polyline/)
+    ```
+    /**
+      * set the style of the fence
+      * @public
+      * @param {object} _style
+      * @memberof PolyFenceLineMarker
+      * @example <caption> Set the style </caption>
+      *  polyFenceLineMarker.style = {
+      *    texture: 'fence', // 'fence', 'arrow' or an image file url
+      *    color: 0xffffff,
+      *    animation: 'horizontal', // or 'verticle', 'none'. default 'hortizontal'
+      *    opacity: 1.0
+      *  }
+      */
+      set style (_style){}
+    ```
 * 根据选取的(不少于)三个点作为水平面，调整marker的的向上方向，`Marker::orientationByHorizontalPoints`
     ``` 
     /**
