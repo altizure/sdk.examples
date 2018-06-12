@@ -1,0 +1,157 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.10 Camera Lookat </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:100000,
+            lat:22.538388886344876,
+            lng:113.94255600866971 },
+          flyTo: { lng: 114.15165597777191, lat: 22.412575357907805, alt: 57757.92453912146, north: 155.8328260296388, tilt: 2.3279230287827266 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: false
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let altmarker0, altmarker1, altmarker2
+      Promise.all([{id: '5849104597b73e0b090c01e8'}, {id: '58428f1d97b73e0b090675cd'}, {id: '572e2668ad5ed4204d2f8e5a'}].map((obj) => {
+        return sandbox.add('AltizureProjectMarker', {pid: obj.id})
+      })).then((values) => {
+        altmarker0 = values[0]
+        altmarker1 = values[1]
+        altmarker2 = values[2]
+        setUpUI()
+      })
+
+      let objmarker = new altizure.OBJMarker({
+        position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 200},
+        sandbox: sandbox,
+        name: 'XXX',
+        shape: 'CUSTOMIZE',
+        objUrl: '../public/assets/object/optimus/optimus.obj',
+        mtlUrl: '../public/assets/object/optimus/optimus.obj.mtl',
+        upDir: {x: 0, y: 0, z: 1},
+        scale: 10
+      })
+
+      let polygonmarker = new altizure.PolygonMarker({
+        volume: {
+          points: [
+            {lng: 113.94296517658995, lat: 22.542562824052045, alt: 0},
+            {lng: 113.9413217989335, lat: 22.54154586161965, alt: 0},
+            {lng: 113.94128898764849, lat: 22.539635760204636, alt: 0},
+            {lng: 113.9417334352745, lat: 22.5370887274697, alt: 0},
+            {lng: 113.94369925276999, lat: 22.536785558829393, alt: 0},
+            {lng: 113.94498199525816, lat: 22.5375315026567, alt: 0},
+            {lng: 113.94449732252289, lat: 22.540488516895692, alt: 0},
+            {lng: 113.94453377411432, lat: 22.542449777483725, alt: 0},
+            {lng: 113.94337091245552, lat: 22.542380402518752, alt: 0},
+            {lng: 113.94296517658995, lat: 22.542562824052045, alt: 0}
+          ].map((pt) => {
+            return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
+          }),
+          top: 40,
+          bottom: 0.1,
+          color: 0x0000ff,
+          opacity: 0.3
+        },
+        sandbox: sandbox
+      })
+
+      let polylinemarker = new altizure.PolyLineMarker({
+        sandbox: sandbox,
+        points: [
+          {lng: 114.26024528610667, lat: 22.329083597537693, alt: 30.844568006123293},
+          {lng: 114.26034651056196, lat: 22.327749592644633, alt: 24.079639729690644},
+          {lng: 114.26017696265293, lat: 22.327126677627223, alt: 26.54841281545881},
+          {lng: 114.25946770924074, lat: 22.326485728423755, alt: 21.72812620854708},
+          {lng: 114.25745592676037, lat: 22.32771347149495, alt: 18.57034639613351},
+          {lng: 114.25569523513406, lat: 22.327893273011313, alt: 20.188444683097305},
+          {lng: 114.25356916379374, lat: 22.327381228330974, alt: 0},
+          {lng: 114.25366924889575, lat: 22.32325303725311, alt: 0},
+          {lng: 114.25027227130325, lat: 22.32593534851234, alt: 0},
+          {lng: 114.24964403879926, lat: 22.3249940533211, alt: 0},
+          {lng: 114.25040059179635, lat: 22.323615733289277, alt: 0},
+          {lng: 114.24997688309988, lat: 22.322119767514707, alt: 0},
+          {lng: 114.25014812262552, lat: 22.321195292402127, alt: 0},
+          {lng: 114.25412951455897, lat: 22.321010301358054, alt: 0}
+        ].map((pt) => {
+          return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
+        }),
+        color: 0x00ffff,
+        fenceHeight: 50,
+        style: {
+          texture: 'arrow',
+          animation: 'horizontal'
+        }
+      })
+
+      let texttagmarker = new altizure.TextTagMarker({
+        sandbox: sandbox,
+        position: {lng: 114.21138197634231, lat: 22.42577109288257, alt: 46.755768972746054},
+        scale: 2,
+        text: 'Science Park',
+        textStyle: {
+          fillStyle: 'rgb(255, 255, 255)',
+          font: '500 70px Arial',
+          outlineWidth: 0.1,
+          outlineStyle: 'rgb(0, 0, 0)'
+        },
+        pinLength: 100
+      })
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
+    <script>
+      let text
+      function setUpUI () {
+        text = {
+          marker: 'altmarker0',
+          altmarker0, altmarker1, altmarker2, objmarker, polygonmarker, polylinemarker, texttagmarker,
+
+          north: 0,
+          tilt: 0,
+          compute: () => {
+            sandbox.camera.lookAt(text[text.marker], text.north, text.tilt, undefined)
+          }
+        }
+        var gui = new dat.GUI({autoplace: false, width: 280})
+        gui.add(text, 'compute').name('look at')
+        gui.add(text, 'marker', {
+          '深圳珠科创新技术有限公司': 'altmarker0',
+          'HKUST': 'altmarker1',
+          'Science Park': 'altmarker2',
+          OBJMarker: 'objmarker',
+          PolygonMarker: 'polygonmarker',
+          PolyLineMarker: 'polylinemarker',
+          TextTagMarker: 'texttagmarker'
+        }).onChange((v) => {
+          sandbox.camera.lookAt(text[v], text.north, text.tilt, undefined)
+          text.marker = v
+        })
+        gui.add(text, 'north', 0, 360, 1).onFinishChange((v) => {
+          sandbox.camera.lookAt(text[text.marker], v, text.tilt, undefined)
+          text.north = v
+        })
+        gui.add(text, 'tilt', 0, 89, 1).onFinishChange((v) => {
+          sandbox.camera.lookAt(text[text.marker], text.north, v, undefined)
+          text.tilt = v
+        })
+      }
+    </script>
+  </body>
+</html>
