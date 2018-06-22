@@ -191,7 +191,7 @@
           var text = new PolyMeasureText(altmarker, poly)
           let topController = polyFolder.add(text, 'refPlane', -100.0, 100.0, 1.0)
           topController.name('Ref Plane (m)')
-          topController.onChange(function (value) {
+          topController.onFinishChange(function (value) {
             poly.top = value
             text.Recompute()
           })

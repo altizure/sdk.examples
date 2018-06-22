@@ -80,6 +80,28 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
     <script>
+      let cameraMarker = null
+      function updateCameraMarker () {
+        // todo
+        let camera = calculator._perspectiveCamera
+        if (cameraMarker === null) {
+          cameraMarker = new altizure.CameraMarker({
+            sandbox: sandbox,
+            camToEarth: camera.projectionMatrix.clone().elements,
+            showNear: true,
+            showFar: true
+          })
+        }
+        cameraMarker.position = settings.viewPoint
+        let lookatPt = settings.polygon.position
+        lookatPt.alt = settings.viewPoint.alt
+        cameraMarker.lookAt(lookatPt)
+        cameraMarker.fov = camera.fov
+        cameraMarker.aspect = camera.aspect
+        cameraMarker.near = camera.near
+        cameraMarker.far = camera.far
+      }
+
       let skylineMarker = null
       let nearMarker = null
       let farMarker = null
@@ -155,6 +177,8 @@
           let time3 = Date.now()
           console.log('computeHeightLimit time: ', time3 - time2)
           console.log(heightMap)
+          // update camera marker
+          updateCameraMarker()
         },
         changingViewPointLngLat: false
       }
