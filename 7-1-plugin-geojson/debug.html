@@ -1,0 +1,209 @@
+<html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title> Altizure GeoJson Plugin </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+      <style>
+          body {
+            font-family: Monospace;
+            background-color: #000;
+            color: rgb(188, 206, 26);
+            margin: 0px;
+            overflow: hidden;
+          }
+    
+          #info {
+            position: absolute;
+            padding: 10px;
+            width: 60%;
+            text-align: center;
+            z-index: 10;
+            color: rgb(207, 180, 26);
+          }
+    
+          a {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+    
+        </style>
+    </head>
+    <body>
+      <div id="info">Import GeoJson<br/>
+        Click "Visualize GeoJson" to get and visualize the boundary and geojson.<br/>
+        Click "Visualize Boundary" to visualize the boundary only.<br/>
+        Click on the Polygon to get message of it
+      </div>
+      <div id="page-content"></div>
+      <script type="text/javascript" src="../build/altizure.js"></script>
+      <script type="text/javascript" src="https://unpkg.com/altizure-plugin-geojson"></script>
+    <script>
+        let options = {
+          altizureApi:{
+            key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+          },
+          renderItems: {
+            earth: true,
+            earthUseTexture: true,
+            featureInView: false,
+            orbitRing: false
+          }
+        }
+  
+        let sandbox = new altizure.Sandbox('page-content', options)
+        sandbox.camera.flyTo({lng: 114.26389759274555, lat: 22.3369102228582, alt: 5772.141840522206, north: 0, tilt: 0})
+
+        let bboxMarkers = []
+        function visualizeBBOX (lngArray, latArray) {
+            for (let i = 0; i < 2; ++i) {
+                for (let j = 0; j < 2; ++j) {
+                    let index = j * 2 + i
+                    let lng = lngArray[i]
+                    let lat = latArray[j]
+                    if (bboxMarkers[index]) {
+                        bboxMarkers[index].text = Math.floor(lng * 100) / 100 + ',' + Math.floor(lat * 100) / 100
+                        bboxMarkers[index].position = {
+                            lng: lng, lat: lat, alt: 0.1
+                        }
+                    } else {
+                        bboxMarkers[index] = new altizure.TextTagMarker({
+                            text: Math.floor(lng * 100) / 100 + ',' + Math.floor(lat * 100) / 100,
+                            textStyle: {
+                            fillStyle: 'rgb(155, 155, 255)',
+                            font: 'normal 500 48px Arial',
+                            outlineWidth: 2,
+                            outlineStyle: 'rgb(0, 0, 0)'
+                            },
+                            position: new altizure.LngLatAlt(lng, lat, 0.1),
+                            sandbox: sandbox,
+                            pinLength: 100,
+                            scale: 10
+                        })
+                    }
+                }
+            }
+        }
+        let features = []
+        let polygonMarkers = []
+
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>      
+      <script>
+        var BoundarySettings = function () {
+          this.minLng = '114.26'
+          this.minLat = '22.33'
+          this.maxLng = '114.27'
+          this.maxLat = '22.34'
+          this.visualizeBoundary = () => {
+            if (!this._validateBoundary()) return
+            let minLng = parseFloat(this.minLng)
+            let minLat = parseFloat(this.minLat)
+            let maxLng = parseFloat(this.maxLng)
+            let maxLat = parseFloat(this.maxLat)
+            visualizeBBOX([minLng, maxLng], [minLat, maxLat])
+          }
+          this.queryAndVisualize = () => {
+            if (!this._validateBoundary()) return
+            let minLng = parseFloat(this.minLng)
+            let minLat = parseFloat(this.minLat)
+            let maxLng = parseFloat(this.maxLng)
+            let maxLat = parseFloat(this.maxLat)
+            let bbox = {
+                min: {lng: minLng, lat: minLat},
+                max: {lng: maxLng, lat: maxLat}
+            }
+            visualizeBBOX([minLng, maxLng], [minLat, maxLat])
+            altizure.GeoJson.getGeoJson({bbox}).then((res) => {
+                polygonMarkers.map((polygon) => {polygon.destruct()})
+                polygonMarkers = []
+                features = []
+                console.log(res.geojson)
+                res.geojson.features.map((feature) => {
+                    if (feature.geometry.type === 'Polygon') {
+                        features.push(feature)
+                    }
+                })
+                polygonMarkers = altizure.GeoJson.polygonsFromGeoJson(res.geojson, sandbox, {
+                    top: 20,
+                    bottom: 0.1,
+                    color: 0xffffff * Math.random(),
+                    opacity: 0.2
+                })
+                polygonMarkers.map((polygon, i) => {
+                    polygon.color = 0xffffff * Math.random()
+                    polygon.interactable = true
+                    polygon.on('click', (e) => {
+                        refreshMessage(features[i].properties)
+                        polygonMarkers.map((polygon) => {polygon.opacity = 0.2})
+                        polygon.opacity = polygon.opacity === 0.2 ? 0.8 : 0.2
+                    })
+                })
+            })
+          }
+          this._validateBoundary = () => {
+            let minLng = parseFloat(this.minLng)
+            let minLat = parseFloat(this.minLat)
+            let maxLng = parseFloat(this.maxLng)
+            let maxLat = parseFloat(this.maxLat)
+            if (Math.abs(maxLat - minLat) > 0.02 || Math.abs(maxLng - minLng) > 0.02) {
+              console.warn('the Longtitude and the Latitude differences should be smaller or equal to 0.2')
+              return false
+            }
+            return true
+          }
+  
+          this.showPoint = true
+          this.showLineString = true
+          this.showPolygon = true
+  
+          this.msgObject = {}
+        }
+        let setting = new BoundarySettings()
+        setting.queryAndVisualize()
+  
+        var gui = new dat.GUI({autoplace: false, width: 370})
+        let geojsonBoundaryFolder = gui.addFolder('GeoJson Boundary')
+        geojsonBoundaryFolder.open()
+        geojsonBoundaryFolder.add(setting, 'queryAndVisualize').name('Visualize GeoJson')
+        geojsonBoundaryFolder.add(setting, 'visualizeBoundary').name('Visualize Boundary')
+        addEntry(geojsonBoundaryFolder, setting, 'minLng', 'Min Longtitude')
+        addEntry(geojsonBoundaryFolder, setting, 'minLat', 'Min Latitude')
+        addEntry(geojsonBoundaryFolder, setting, 'maxLng', 'Max Longtitude')
+        addEntry(geojsonBoundaryFolder, setting, 'maxLat', 'Min Latitude')
+  
+        let msgFolder = gui.addFolder('Message')
+        msgFolder.open()
+  
+        function addEntry (folder, properties, key, name, onChangeFunc) {
+          let controller = folder.add(properties, key)
+          controller.name(name)
+          if (onChangeFunc) {
+            controller.onFinishChange(onChangeFunc)
+          } else {
+            controller.onFinishChange((value) => {
+              setting[key] = value
+              setting.visualizeBoundary()
+            })
+          }
+        }
+        dat.GUI.prototype.removeFolder = function(name) {
+          var folder = this.__folders[name];
+          if (!folder) {
+            return;
+          }
+          folder.close();
+          this.__ul.removeChild(folder.domElement.parentNode);
+          delete this.__folders[name];
+          this.onResize();
+        }
+        function refreshMessage (tags) {
+          gui.removeFolder('Message')
+          let msgFolder = gui.addFolder('Message')
+          msgFolder.open()
+          for (key in tags) {
+            msgFolder.add(tags, key)
+          }
+        }
+      </script>
+    </body>
+  </html>

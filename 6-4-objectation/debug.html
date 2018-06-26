@@ -34,6 +34,7 @@
     </div>
     <div id="page-content"></div>
     <script type="text/javascript" src="../build/altizure.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/altizure-plugin-geojson"></script>
     <script>
       let options = {
         altizureApi:{
@@ -62,9 +63,9 @@
         altmarker = m
         altmarkerpos = m.position
 
-        sandbox.queryGeoJsonForAltizureProjectMarker(altmarker)
+        altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(altmarker)
         .then((result) => {
-          polygonMarkers = sandbox.polygonsFromGeoJson(result.geojson, {top: 80, bottom: 10, color: 0x0000ff, opacity: 0.3})
+          polygonMarkers = altizure.GeoJson.polygonsFromGeoJson(result.geojson, sandbox, {top: 80, bottom: 10, color: 0x0000ff, opacity: 0.3})
           boundary = [result.bbox.min, result.bbox.max]
 
           setUpUI(altmarker, polygonMarkers, boundary)
