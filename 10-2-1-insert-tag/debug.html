@@ -1,0 +1,125 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 10.2.1 Insert Tag </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          flyTo: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      dat.GUI.prototype.removeFolder = function(name) {
+        var folder = this.__folders[name];
+        if (!folder) {
+          return;
+        }
+        folder.close();
+        this.__ul.removeChild(folder.domElement.parentNode);
+        delete this.__folders[name];
+        this.onResize();
+      }
+    </script>
+    <script>
+      var gui = new dat.GUI()
+
+      let tagIndex = 0
+      sandbox.renderer.domElement.addEventListener('click', (e) => {
+        let pt = sandbox.window.toLngLatAlt(e)
+        if (pt) {
+          let tag = new altizure.TagMarker({
+            sandbox: sandbox,
+            scale: 2,
+            position: pt,
+            imgUrl: '../public/assets/img/tag/normal/tagDemo.png'
+          })
+          tag.interactable = true
+          tag.on('mouseenter', (e) => {
+            tag.scale = 4
+          })
+          tag.on('mouseleave', (e) => {
+            tag.scale = 2
+          })
+          setUpUIFolder(tag, '../public/assets/img/tag/normal/tagDemo.png', 'Tag ' + tagIndex, true)
+          tagIndex += 1
+        }
+      })
+
+      function setUpUIFolder (tag, url, folderName, open) {
+        let folder = gui.addFolder(folderName)
+        let isSprite = tag.isSprite
+        let pivotx = tag.pivot.x
+        let pivoty = tag.pivot.y
+        let rulerx = Math.PI / 2
+        let rulery = 0
+        let rulerz = 0
+        let pinLength = tag.pinLength
+        let texture = url
+        let settings = {isSprite, pivotx, pivoty, rulerx, rulery, rulerz, pinLength, texture}
+        folder.add(settings, 'isSprite').onChange((v) => {
+          tag.isSprite = v
+          settings.isSprite = v
+        })
+        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange((v) => {
+          tag.pivot = {x: v}
+          settings.pivotx = v
+        })
+        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange((v) => {
+          tag.pivot = {y: v}
+          settings.pivoty = v
+        })
+        folder.add(settings, 'rulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: v, y: settings.rulery, z: settings.rulerz, order: 'XYZ', isEuler: true}
+          settings.rulerx = v
+        })
+        folder.add(settings, 'rulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.rulerx, y: v, z: settings.rulerz, order: 'XYZ', isEuler: true}
+          settings.rulery = v
+        })
+        folder.add(settings, 'rulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.rulerx, y: settings.rulery, z: v, order: 'XYZ', isEuler: true}
+          settings.rulerz = v
+        })
+        folder.add(settings, 'pinLength', 0, 20, 1).onChange((v) => {
+          tag.pinLength = v
+          settings.pinLength = v
+        })
+        folder.add(settings, 'texture').onFinishChange((v) => {
+          tag.texture = v
+          settings.texture = v
+        })
+        settings.remove = () => {
+          tag.destruct()
+          gui.removeFolder(folderName)
+        }
+        folder.add(settings, 'remove')
+        if (open) folder.open()
+      }
+
+    </script>
+  </body>
+</html>
