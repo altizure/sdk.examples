@@ -13,6 +13,8 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="getScreenshot()">
     Take screenshot
   </button>
+  width: <input id="imgWidth" type="number"></input>
+  height: <input id="imgHeight" type="number"></input>
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -145,6 +147,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
   <script>
+
+    let widthMsg = document.getElementById('imgWidth')
+    let heightMsg = document.getElementById('imgHeight')
+    widthMsg.value = sandbox.width
+    heightMsg.value = sandbox.height
+    window.onresize = () => {
+      widthMsg.value = sandbox.width
+      heightMsg.value = sandbox.height
+    }
   
     var rgbresult
     var img = new Image()
@@ -157,7 +168,9 @@
       rgbresult = null
       // take screenshot
       // {data: Uint8Array with length 4 * width * height, width: width of the screenshot, height: height of the screenshot}
-      rgbresult = sandbox.window.screenshot()
+      rgbresult = sandbox.window.screenshot({
+        width: parseInt(widthMsg.value), height: parseInt(heightMsg.value)
+      })
 
       // parse data to canvas and data url
       var ctx = downloadcanvas.getContext('2d')
