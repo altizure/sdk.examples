@@ -1,23 +1,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 4.2 Project pickpoint </title>
+    <title> Altizure 10.2.2 Insert Tag </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
     <script>
       let options = {
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { alt: 319.02169601663104,
-            lat: 22.5364271949327,
-            lng: 113.93977612840078,
-            north: 56.82289356559219,
-            tilt: 56.19205822511624 },
           flyTo: { alt: 319.02169601663104,
             lat: 22.5364271949327,
             lng: 113.93977612840078,
@@ -26,7 +21,7 @@
         },
         renderItems: {
           earth: true,
-          earthUseTexture: true,
+          earthUseTexture: false,
           featureInView: false,
           orbitRing: true
         }
@@ -35,63 +30,8 @@
       let sandbox = new altizure.Sandbox('page-content', options)
 
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
-
-      document.addEventListener('click', handler)
-      document.addEventListener('touchstart', handler)
-
-      let tagIndex = 0
-      function handler (event) {
-        console.log(event)
-        let pt = sandbox.pickOnProjects(event)
-
-        if (!pt) {
-          return
-        }
-        console.log('onclick point coordinate', pt)
-        // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
-
-        let tag = new altizure.TagMarker({
-          // img url
-          imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
-          // icon position
-          position: {
-            "lng": pt.lng,
-            "lat": pt.lat,
-            "alt": pt.alt
-          },
-          // scene
-          sandbox: sandbox,
-          scale: 1 // icon size
-        })
-
-        let tt = new altizure.TextTagMarker({
-          // text string
-          text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
-          // text style
-          textStyle: {
-            fillStyle: 'rgb(255, 255, 255)',
-            font: 'normal 500 24px Arial',
-            outlineWidth: 2,
-            outlineStyle: 'rgb(0, 0, 0)'
-          },
-
-          // icon position
-          position: {
-            "lng": pt.lng,
-            "lat": pt.lat,
-            "alt": pt.alt
-          },
-          // scene
-          sandbox: sandbox,
-          scale: 1 // icon size
-        })
-
-        setUpUIFolder(tag, tt, '../public/assets/img/tag/normal/tagDemo.png', 'Tag ' + tagIndex, true)
-        tagIndex += 1
-      }
-
     </script>
-    <script src="../third_party/dat.gui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
     <script>
       dat.GUI.prototype.removeFolder = function(name) {
         var folder = this.__folders[name];
@@ -106,7 +46,61 @@
     </script>
     <script>
       var gui = new dat.GUI()
-      function setUpUIFolder (tag, ttag, url, folderName, open) {
+
+      let tagIndex = 0
+      let insertTag = () => {
+        let pt = sandbox.window.toLngLatAlt({
+          x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
+        })
+        if (pt) {
+          let tag = new altizure.TagMarker({
+            sandbox: sandbox,
+            scale: 2,
+            position: pt,
+            imgUrl: '../public/assets/img/tag/normal/tagDemo.png'
+          })
+          tag.interactable = true
+          tag.on('mouseenter', (e) => {
+            tag.scale = 4
+          })
+          tag.on('mouseleave', (e) => {
+            tag.scale = 2
+          })
+          setUpUIFolder(tag, '../public/assets/img/tag/normal/tagDemo.png', 'Tag ' + tagIndex, true)
+          tagIndex += 1
+        }
+      }
+      gui.add({insertTag}, 'insertTag')
+
+      let demoTag = new altizure.TagMarker({
+        sandbox: sandbox,
+        scale: 1,
+        position: sandbox.window.toLngLatAlt({
+          x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
+        }),
+        imgUrl: '../public/assets/img/tag/normal/tagDemo.png'
+      })
+      sandbox.on('cameraChange', () => {
+        let pt = sandbox.window.toLngLatAlt({
+          x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
+        })
+        if (pt) {
+          demoTag.position = pt
+          let scale = fromPose2TagScale(demoTag.pinLength + pt.alt, sandbox.camera.pose, true)
+          demoTag.scale = scale * 0.5
+        }
+      })
+
+      function fromPose2TagScale (height, pose, init = false) {
+        let alt = pose.alt
+        let tilt = pose.tilt
+        let angle = Math.sin((90 - tilt) * Math.PI / 180)
+        let distance = Math.abs(alt - height / angle)
+        if (distance > 3500 && !init) return 0.001
+        return distance * 0.007
+      }
+
+      function setUpUIFolder (tag, url, folderName, open) {
         let folder = gui.addFolder(folderName)
         let isSprite = tag.isSprite
         let pivotx = tag.pivot.x
@@ -151,12 +145,12 @@
         })
         settings.remove = () => {
           tag.destruct()
-          ttag.destruct()
           gui.removeFolder(folderName)
         }
         folder.add(settings, 'remove')
         if (open) folder.open()
       }
+
     </script>
   </body>
 </html>

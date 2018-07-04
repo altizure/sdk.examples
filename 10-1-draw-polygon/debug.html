@@ -68,7 +68,8 @@
     </script>
     <script>
       let globalGuiSettings = {
-        drawing: false
+        drawing: false,
+        polygonIndex: 0
       }
       let drawingLine
       let finalDataObjects = {
@@ -104,20 +105,64 @@
 
         let points = finalDataObjects.points
         if (points.length >= 3) {
-          points.push(points[0])
-          let lnglatpoints = points.map((pt) => {return new altizure.LngLatAlt(pt.lng, pt.lat, 0)})
+          let lnglatpoints = points.map((pt) => {return new altizure.LngLatAlt(pt.lng, pt.lat, 0)}) // for tags
+          let boundary = lnglatpoints.slice()
+          boundary.push(boundary[0]) // this is for polygon construction
           let polygon = new altizure.PolygonMarker({
             sandbox: sandbox,
             volume: {
-              points: lnglatpoints,
+              points: boundary,
               top: 40,
               bottom: 0.1,
               color: 0x0000ff,
               opacity: 0.2
             }
           })
+          let tags = lnglatpoints.map((pt) => {
+            let tag = new altizure.TagMarker({
+              sandbox: sandbox,
+              position: pt,
+              scale: 2,
+              pinLength: 10,
+              imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+              pivot: {x: 0.5, y: 0.1}
+            })
+            return tag
+          })
+          let polygonName = 'Polygon ' + globalGuiSettings.polygonIndex.toString()
+          globalGuiSettings.polygonIndex += 1
+          globalGuiSettings[polygonName] = {
+            polygon: polygon, tags: tags
+          }
+          tags.map((tag) => {
+            tag.interactable = true
+            tag.on('mousedrag', (e) => {
+              let pt = sandbox.window.toLngLatAlt(e)
+              if (pt) {
+                tag.position = pt
+                // reconstruct polygon
+                let polygonBoundary = tags.map((tag) => {
+                  let pos = tag.position
+                  return new altizure.LngLatAlt(pos.lng, pos.lat, 0)
+                })
+                polygonBoundary.push(polygonBoundary[0])
+                let prevPolygon = globalGuiSettings[polygonName].polygon
+                let newPolygon = new altizure.PolygonMarker({
+                  sandbox: sandbox,
+                  volume: {
+                    top: prevPolygon.top,
+                    bottom: prevPolygon.bottom,
+                    points: polygonBoundary,
+                    color: prevPolygon.color
+                  }
+                })
+                prevPolygon.destruct()
+                globalGuiSettings[polygonName].polygon = newPolygon
+              }
+            })
+          })
           // add gui
-          addPolygon(polygon)
+          addPolygon(polygonName)
         }
         enableGUIElement(0, 'Click to draw a polygon')
         removeMessage()
@@ -158,32 +203,33 @@
       }
       var gui = new dat.GUI({autoplace: false, width: 300})
       gui.add(globalGuiSettings, 'createPolygon').name('Click to draw a polygon')
-      let polygonIndex = 0
-      function addPolygon (polygon) {
-        let name = 'Polygon ' + polygonIndex
+      function addPolygon (name) {
         let polygonFolder = gui.addFolder(name)
-        polygonIndex += 1
         let polygonSettings = {
-          top: polygon.top,
-          bottom: polygon.bottom,
-          color: polygon.color,
-          opacity: polygon.opacity,
+          top: globalGuiSettings[name].polygon.top,
+          bottom: globalGuiSettings[name].polygon.bottom,
+          color: globalGuiSettings[name].polygon.color,
+          opacity: globalGuiSettings[name].polygon.opacity,
           remove: () => {
             gui.removeFolder(name)
-            polygon.destruct()
+            globalGuiSettings[name].polygon.destruct()
+            globalGuiSettings[name].tags.map((tag) => {
+              tag.destruct()
+            })
+            delete globalGuiSettings[name]
           }
         }
         addEntry(polygonFolder, polygonSettings, 'top', 'number', 0, 300, 1, (v) => {
           polygonSettings.top = v
-          polygon.top = v
+          globalGuiSettings[name].polygon.top = v
         })
         addEntry(polygonFolder, polygonSettings, 'bottom', 'number', 0, 300, 1, (v) => {
           polygonSettings.bottom = v
-          polygon.bottom = v
+          globalGuiSettings[name].polygon.bottom = v
         })
         addEntry(polygonFolder, polygonSettings, 'color', 'color', 0, 300, 1, (v) => {
           polygonSettings.color = v
-          polygon.color = colorInt(v)
+          globalGuiSettings[name].polygon.color = colorInt(v)
           function colorInt (v) {
             let c = v
             if (typeof v === 'object') c = v.r * 256 * 256 + v.g * 256 + v.b
@@ -192,7 +238,7 @@
         })
         addEntry(polygonFolder, polygonSettings, 'opacity', 'number', 0, 1, 0.05, (v) => {
           polygonSettings.opacity = v
-          polygon.opacity = v
+          globalGuiSettings[name].polygon.opacity = v
         })
         addEntry(polygonFolder, polygonSettings, 'remove')
       }
