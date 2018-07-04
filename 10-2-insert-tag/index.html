@@ -1,12 +1,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 10.2.1 Insert Tag </title>
+    <title> Altizure 10.2.2 Insert Tag </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
     <script>
       let options = {
         altizureApi:{
@@ -31,7 +31,7 @@
 
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
     </script>
-    <script src="../third_party/dat.gui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
     <script>
       dat.GUI.prototype.removeFolder = function(name) {
         var folder = this.__folders[name];
@@ -48,8 +48,10 @@
       var gui = new dat.GUI()
 
       let tagIndex = 0
-      sandbox.renderer.domElement.addEventListener('click', (e) => {
-        let pt = sandbox.window.toLngLatAlt(e)
+      let insertTag = () => {
+        let pt = sandbox.window.toLngLatAlt({
+          x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
+        })
         if (pt) {
           let tag = new altizure.TagMarker({
             sandbox: sandbox,
@@ -67,19 +69,48 @@
           setUpUIFolder(tag, '../public/assets/img/tag/normal/tagDemo.png', 'Tag ' + tagIndex, true)
           tagIndex += 1
         }
+      }
+      gui.add({insertTag}, 'insertTag')
+
+      let demoTag = new altizure.TagMarker({
+        sandbox: sandbox,
+        scale: 1,
+        position: sandbox.window.toLngLatAlt({
+          x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
+        }),
+        imgUrl: '../public/assets/img/tag/normal/tagDemo.png'
       })
+      sandbox.on('cameraChange', () => {
+        let pt = sandbox.window.toLngLatAlt({
+          x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
+        })
+        if (pt) {
+          demoTag.position = pt
+          let scale = fromPose2TagScale(demoTag.pinLength + pt.alt, sandbox.camera.pose, true)
+          demoTag.scale = scale * 0.5
+        }
+      })
+
+      function fromPose2TagScale (height, pose, init = false) {
+        let alt = pose.alt
+        let tilt = pose.tilt
+        let angle = Math.sin((90 - tilt) * Math.PI / 180)
+        let distance = Math.abs(alt - height / angle)
+        if (distance > 3500 && !init) return 0.001
+        return distance * 0.007
+      }
 
       function setUpUIFolder (tag, url, folderName, open) {
         let folder = gui.addFolder(folderName)
         let isSprite = tag.isSprite
         let pivotx = tag.pivot.x
         let pivoty = tag.pivot.y
-        let rulerx = Math.PI / 2
-        let rulery = 0
-        let rulerz = 0
+        let eulerx = Math.PI / 2
+        let eulery = 0
+        let eulerz = 0
         let pinLength = tag.pinLength
         let texture = url
-        let settings = {isSprite, pivotx, pivoty, rulerx, rulery, rulerz, pinLength, texture}
+        let settings = {isSprite, pivotx, pivoty, eulerx, eulery, eulerz, pinLength, texture}
         folder.add(settings, 'isSprite').onChange((v) => {
           tag.isSprite = v
           settings.isSprite = v
@@ -92,17 +123,17 @@
           tag.pivot = {y: v}
           settings.pivoty = v
         })
-        folder.add(settings, 'rulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
-          tag.tagQuaternion = {x: v, y: settings.rulery, z: settings.rulerz, order: 'XYZ', isEuler: true}
-          settings.rulerx = v
+        folder.add(settings, 'eulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: v, y: settings.eulery, z: settings.eulerz, order: 'XYZ', isEuler: true}
+          settings.eulerx = v
         })
-        folder.add(settings, 'rulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
-          tag.tagQuaternion = {x: settings.rulerx, y: v, z: settings.rulerz, order: 'XYZ', isEuler: true}
-          settings.rulery = v
+        folder.add(settings, 'eulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.eulerx, y: v, z: settings.eulerz, order: 'XYZ', isEuler: true}
+          settings.eulery = v
         })
-        folder.add(settings, 'rulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
-          tag.tagQuaternion = {x: settings.rulerx, y: settings.rulery, z: v, order: 'XYZ', isEuler: true}
-          settings.rulerz = v
+        folder.add(settings, 'eulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.eulerx, y: settings.eulery, z: v, order: 'XYZ', isEuler: true}
+          settings.eulerz = v
         })
         folder.add(settings, 'pinLength', 0, 20, 1).onChange((v) => {
           tag.pinLength = v
