@@ -121,6 +121,7 @@
     sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
     .then((m) => {
       // altizure project created, m is the arker
+      marker = m
       return m.initialized
     })
     .then((m) => {
@@ -130,10 +131,12 @@
       // altizure project initialized
       m.crop(boundary) // crop by boundary defined above
       m.crop(boundary2) // crop by boundary2
+
+      showGUI(m)
       return Promise.resolve(m)
     })
     .then(m => {
-      m.uncrop(boundary) // cancel cropping
+      m.uncrop(boundary) // cancel cropping of a specified region
       return Promise.resolve(m)
     })
     .catch((err) => {
@@ -141,6 +144,49 @@
       return err
     })
 
+  </script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>      
+  <script>
+
+    function showGUI (projectMarker) {
+      var Settings = function () {
+        this.crop1 = () => {
+          projectMarker.uncrop() // remove effects caused by other operations
+          projectMarker.crop(boundary)
+        }
+        this.keep1 = () => {
+          projectMarker.uncrop()
+          projectMarker.crop(boundary, false)
+        }
+        this.crop2 = () => {
+          projectMarker.uncrop() // remove effects caused by other operations
+          projectMarker.crop(boundary2)
+        }
+        this.keep2 = () => {
+          projectMarker.uncrop()
+          projectMarker.crop(boundary2, false)
+        }
+        this.clear = () => {
+          projectMarker.uncrop()
+        }
+      }
+
+      var settings = new Settings()
+      var gui = new dat.GUI()
+
+      var f1 = gui.addFolder('boundary 1')
+      var crop1 = f1.add(settings, 'crop1')
+      f1.add(settings, 'keep1')
+
+      var f2 = gui.addFolder('boundary 2')
+      f2.add(settings, 'crop2')
+      f2.add(settings, 'keep2')
+
+      f2.open();
+
+      gui.add(settings, 'clear')
+    }
+    
   </script>
 </body>
 
