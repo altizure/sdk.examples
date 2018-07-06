@@ -1,0 +1,277 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure Draw Polygon </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+      .disabledButton {
+        background: 'rgb(255, 255, 255)';
+        background-color: 'rgb(255, 255, 255)';
+      }
+    </style>
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script>
+      let options = {
+        // camera 
+        camera: {
+          poseTo: {
+            alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078
+          },
+          flyTo: {
+            alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624
+          }
+        },
+        // render items
+        renderItems: { featureInView: false, earth: true },
+        // show mouse tip
+        develop: true,
+        // altizure api: contact altizure to get your developer key
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+      }
+
+      let sandbox = new altizure.Solution('page-content', options)
+      let altmarker
+      // add project at the default GPS position
+      // sandbox.add('AltizureProjectMarker', {pid: '5969e005fce736590e33edd2'})
+      // sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // add project at the default GPS position
+      sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+        .then((m) => {
+          altmarker = m
+        })
+
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      dat.GUI.prototype.removeFolder = function(name) {
+        var folder = this.__folders[name];
+        if (!folder) {
+          return;
+        }
+        folder.close();
+        this.__ul.removeChild(folder.domElement.parentNode);
+        delete this.__folders[name];
+        this.onResize();
+      }
+    </script>
+    <script>
+      let globalGuiSettings = {
+        drawing: false,
+        polygonIndex: 0
+      }
+      let drawingLine
+      let finalDataObjects = {
+        points: []
+      }
+      let leftClickFunc = (e) => {
+        if (!globalGuiSettings.drawing) return
+        // left click to draw line
+        let pt = sandbox.window.toLngLatAlt(e)
+        if (!pt) return
+        if (drawingLine) {
+          drawingLine.addPoint(drawingLine.points[0])
+        } else {
+          drawingLine = new altizure.PolyLineMarker({
+            sandbox: sandbox,
+            points: [pt, pt, pt]
+          })
+        }
+        finalDataObjects.points.push(pt)
+      }
+      let moveFunc = (e) => {
+        // editing line
+        if (!globalGuiSettings.drawing) return
+        let pt = sandbox.window.toLngLatAlt(e)
+        if (!pt) return
+        if (drawingLine) {
+          drawingLine.setPoint(drawingLine.pointsNumber - 2, pt)
+        }
+      }
+      let rightClickFunc = (e) => {
+        // right click to finish
+        // console.log(e.button)
+
+        let points = finalDataObjects.points
+        if (points.length >= 3) {
+          let lnglatpoints = points.map((pt) => {return new altizure.LngLatAlt(pt.lng, pt.lat, 0)}) // for tags
+          let boundary = lnglatpoints.slice()
+          boundary.push(boundary[0]) // this is for polygon construction
+          let polygon = new altizure.PolygonMarker({
+            sandbox: sandbox,
+            volume: {
+              points: boundary,
+              top: 40,
+              bottom: 0.1,
+              color: 0x0000ff,
+              opacity: 0.2
+            }
+          })
+          let tags = lnglatpoints.map((pt) => {
+            let tag = new altizure.TagMarker({
+              sandbox: sandbox,
+              position: pt,
+              scale: 2,
+              pinLength: 10,
+              imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+              pivot: {x: 0.5, y: 0.1}
+            })
+            return tag
+          })
+          let polygonName = 'Polygon ' + globalGuiSettings.polygonIndex.toString()
+          globalGuiSettings.polygonIndex += 1
+          globalGuiSettings[polygonName] = {
+            polygon: polygon, tags: tags
+          }
+          tags.map((tag) => {
+            tag.interactable = true
+            tag.on('mousedrag', (e) => {
+              let pt = sandbox.window.toLngLatAlt(e)
+              if (pt) {
+                tag.position = pt
+                // reconstruct polygon
+                let polygonBoundary = tags.map((tag) => {
+                  let pos = tag.position
+                  return new altizure.LngLatAlt(pos.lng, pos.lat, 0)
+                })
+                polygonBoundary.push(polygonBoundary[0])
+                let prevPolygon = globalGuiSettings[polygonName].polygon
+                let newPolygon = new altizure.PolygonMarker({
+                  sandbox: sandbox,
+                  volume: {
+                    top: prevPolygon.top,
+                    bottom: prevPolygon.bottom,
+                    points: polygonBoundary,
+                    color: prevPolygon.color
+                  }
+                })
+                prevPolygon.destruct()
+                globalGuiSettings[polygonName].polygon = newPolygon
+              }
+            })
+          })
+          // add gui
+          addPolygon(polygonName)
+        }
+        enableGUIElement(0, 'Click to draw a polygon')
+        removeMessage()
+        // reset parameters
+        if (drawingLine) {
+          drawingLine.destruct()
+          drawingLine = undefined
+        }
+        finalDataObjects.points = []
+        globalGuiSettings.drawing = false
+      }
+
+      let lastDownEvent
+      sandbox.renderer.domElement.addEventListener('mousedown', (e) => {
+        lastDownEvent = e
+      })
+      sandbox.renderer.domElement.addEventListener('mouseup', (e) => {
+        if (e.button === lastDownEvent.button && Math.abs(e.x - lastDownEvent.x) <= 3 && Math.abs(e.y - lastDownEvent.y) <= 3) {
+          if (e.button === 0) {
+            leftClickFunc(e)
+          } else if (e.button === 2) {
+            rightClickFunc(e)
+          }
+        }
+      })
+      sandbox.renderer.domElement.addEventListener('mousemove', (e) => {
+        moveFunc(e)
+      })
+
+      globalGuiSettings.createPolygon = () => {
+        if (globalGuiSettings.drawing) return
+        globalGuiSettings.drawing = true
+        disableGUIElement(0, 'Right Click To End')
+        addMessage({
+          'Left Click To': 'add point',
+          'Right Click To': 'Finish drawing'
+        })
+      }
+      var gui = new dat.GUI({autoplace: false, width: 300})
+      gui.add(globalGuiSettings, 'createPolygon').name('Click to draw a polygon')
+      function addPolygon (name) {
+        let polygonFolder = gui.addFolder(name)
+        let polygonSettings = {
+          top: globalGuiSettings[name].polygon.top,
+          bottom: globalGuiSettings[name].polygon.bottom,
+          color: globalGuiSettings[name].polygon.color,
+          opacity: globalGuiSettings[name].polygon.opacity,
+          remove: () => {
+            gui.removeFolder(name)
+            globalGuiSettings[name].polygon.destruct()
+            globalGuiSettings[name].tags.map((tag) => {
+              tag.destruct()
+            })
+            delete globalGuiSettings[name]
+          }
+        }
+        addEntry(polygonFolder, polygonSettings, 'top', 'number', 0, 300, 1, (v) => {
+          polygonSettings.top = v
+          globalGuiSettings[name].polygon.top = v
+        })
+        addEntry(polygonFolder, polygonSettings, 'bottom', 'number', 0, 300, 1, (v) => {
+          polygonSettings.bottom = v
+          globalGuiSettings[name].polygon.bottom = v
+        })
+        addEntry(polygonFolder, polygonSettings, 'color', 'color', 0, 300, 1, (v) => {
+          polygonSettings.color = v
+          globalGuiSettings[name].polygon.color = colorInt(v)
+          function colorInt (v) {
+            let c = v
+            if (typeof v === 'object') c = v.r * 256 * 256 + v.g * 256 + v.b
+            return c
+          }
+        })
+        addEntry(polygonFolder, polygonSettings, 'opacity', 'number', 0, 1, 0.05, (v) => {
+          polygonSettings.opacity = v
+          globalGuiSettings[name].polygon.opacity = v
+        })
+        addEntry(polygonFolder, polygonSettings, 'remove')
+      }
+      function addEntry (folder, settings, key, type, low, high, interval, onChangeFunc) {
+        if (type === 'number') {
+          folder.add(settings, key, low, high, interval).onChange(onChangeFunc)
+        } else if (type === 'color') {
+          folder.addColor(settings, key).onChange(onChangeFunc)
+        } else {
+          folder.add(settings, key)
+        }
+        folder.open()
+      }
+      function removeMessage () {
+        gui.removeFolder('Message')
+      }
+      function addMessage (msg) {
+        removeMessage()
+        let msgFolder = gui.addFolder('Message')
+        for (let key in msg) {
+          msgFolder.add(msg, key)
+        }
+        msgFolder.open()
+      }
+      function enableGUIElement (index, msg) {
+        gui.domElement.children[1].children[index].style.background = ''
+        gui.domElement.children[1].children[index].children[0].children[0].textContent = msg
+      }
+      function disableGUIElement (index, msg) {
+        gui.domElement.children[1].children[index].style.background = 'gray'
+        gui.domElement.children[1].children[index].children[0].children[0].textContent = msg
+      }
+
+    </script>
+  </body>
+</html>

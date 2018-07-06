@@ -39,6 +39,7 @@
       document.addEventListener('click', handler)
       document.addEventListener('touchstart', handler)
 
+      let tagIndex = 0
       function handler (event) {
         console.log(event)
         let pt = sandbox.pickOnProjects(event)
@@ -49,7 +50,7 @@
         console.log('onclick point coordinate', pt)
         // alert(`longitude: ${pt.lng}(deg), latitude: ${pt.lat}(deg), altitude ${pt.alt}(m)`)
 
-        new altizure.TagMarker({
+        let tag = new altizure.TagMarker({
           // img url
           imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
           // icon position
@@ -84,8 +85,78 @@
           sandbox: sandbox,
           scale: 1 // icon size
         })
+
+        setUpUIFolder(tag, tt, '../public/assets/img/tag/normal/tagDemo.png', 'Tag ' + tagIndex, true)
+        tagIndex += 1
       }
 
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.1/dat.gui.min.js"></script>
+    <script>
+      dat.GUI.prototype.removeFolder = function(name) {
+        var folder = this.__folders[name];
+        if (!folder) {
+          return;
+        }
+        folder.close();
+        this.__ul.removeChild(folder.domElement.parentNode);
+        delete this.__folders[name];
+        this.onResize();
+      }
+    </script>
+    <script>
+      var gui = new dat.GUI()
+      function setUpUIFolder (tag, ttag, url, folderName, open) {
+        let folder = gui.addFolder(folderName)
+        let isSprite = tag.isSprite
+        let pivotx = tag.pivot.x
+        let pivoty = tag.pivot.y
+        let eulerx = Math.PI / 2
+        let eulery = 0
+        let eulerz = 0
+        let pinLength = tag.pinLength
+        let texture = url
+        let settings = {isSprite, pivotx, pivoty, eulerx, eulery, eulerz, pinLength, texture}
+        folder.add(settings, 'isSprite').onChange((v) => {
+          tag.isSprite = v
+          settings.isSprite = v
+        })
+        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange((v) => {
+          tag.pivot = {x: v}
+          settings.pivotx = v
+        })
+        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange((v) => {
+          tag.pivot = {y: v}
+          settings.pivoty = v
+        })
+        folder.add(settings, 'eulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: v, y: settings.eulery, z: settings.eulerz, order: 'XYZ', isEuler: true}
+          settings.eulerx = v
+        })
+        folder.add(settings, 'eulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.eulerx, y: v, z: settings.eulerz, order: 'XYZ', isEuler: true}
+          settings.eulery = v
+        })
+        folder.add(settings, 'eulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+          tag.tagQuaternion = {x: settings.eulerx, y: settings.eulery, z: v, order: 'XYZ', isEuler: true}
+          settings.eulerz = v
+        })
+        folder.add(settings, 'pinLength', 0, 20, 1).onChange((v) => {
+          tag.pinLength = v
+          settings.pinLength = v
+        })
+        folder.add(settings, 'texture').onFinishChange((v) => {
+          tag.texture = v
+          settings.texture = v
+        })
+        settings.remove = () => {
+          tag.destruct()
+          ttag.destruct()
+          gui.removeFolder(folderName)
+        }
+        folder.add(settings, 'remove')
+        if (open) folder.open()
+      }
     </script>
   </body>
 </html>
