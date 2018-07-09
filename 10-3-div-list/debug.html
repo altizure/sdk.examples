@@ -1,0 +1,655 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Div List </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <script src="../public/js/jquery-2.1.1.min.js"></script>
+
+  <link href="../public/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="../public/js/bootstrap.min.js"></script>
+</head>
+
+<body style="margin: 0px; padding: 0px; overflow: hidden;">
+  <div id="page-content"></div>
+  <canvas id='ui' style="position: absolute; left: 0; top: 0; pointer-events: none"></canvas>
+  <script type="text/javascript" src="../build/altizure.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: false
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+    sandbox.add('AltizureProjectMarker', {
+      pid: '58428f1d97b73e0b090675cd'
+    })
+      .then((m) => {
+        sandbox.camera.flyTo({
+          lng: m.position.lng,
+          lat: m.position.lat,
+          alt: 4000
+        }, 1)
+      })
+
+    // canvas
+    let canvas = document.getElementById('ui')
+    let ctx = canvas.getContext('2d')
+
+    // Card UI
+    let cardWidth = 150
+    let cardHeight = 40
+    let margin = 30
+
+    // construciton options for polygons, refering to altizure.PolygonMarker
+    let polygonsOptions = [{
+      volume: {
+        color: 0xe0513e,
+        opacity: 0.3,
+        points: [
+          [114.26389393487725, 22.338119102782738],
+          [114.26391340714665, 22.338150886025854],
+          [114.26394921874373, 22.338155307570243],
+          [114.26397220687377, 22.338135371118067],
+          [114.2639744040927, 22.338103349319884],
+          [114.26395553493398, 22.33808491275796],
+          [114.2639228695482, 22.33808247966067],
+          [114.26390453796425, 22.338094541028923],
+          [114.26389393487725, 22.338119102782738]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 134,
+        bottom: 124,
+      },
+      sandbox: sandbox,
+      name: 'fireChicken',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0x4cc147,
+        opacity: 0.3,
+        points: [
+          [114.26951995192896, 22.33695485108905],
+          [114.26857474181341, 22.33785651970498],
+          [114.26862167339974, 22.33790728288977],
+          [114.26867255229669, 22.338151149003664],
+          [114.26876969221101, 22.338299369533416],
+          [114.26911706082943, 22.338417050092737],
+          [114.26930028410796, 22.338355506389227],
+          [114.27010299037237, 22.337603825230513],
+          [114.27015142247996, 22.337356432647965],
+          [114.27006508987206, 22.337166552843406],
+          [114.26989107566953, 22.337034154791112],
+          [114.26971262710704, 22.336991829503738],
+          [114.26951995192896, 22.33695485108905]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 25,
+        bottom: 7,
+      },
+      sandbox: sandbox,
+      name: 'footballGround',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0x6fedde,
+        opacity: 0.3,
+        points: [
+          [114.26486701724113, 22.338384650487036],
+          [114.26497561683425, 22.33837605613807],
+          [114.26497968492824, 22.338391104517473],
+          [114.265113863947, 22.338387079373817],
+          [114.26523829369049, 22.338470352542522],
+          [114.26525406444577, 22.338560004318563],
+          [114.26530468100617, 22.338756997024976],
+          [114.26522007667232, 22.338845123903504],
+          [114.26512781079758, 22.33890878104476],
+          [114.26501359147215, 22.33896567526211],
+          [114.26492974829559, 22.338990588630782],
+          [114.26484037186643, 22.338967018404148],
+          [114.26486894352294, 22.338833520641934],
+          [114.26486701724113, 22.338384650487036]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 140,
+        bottom: 90,
+      },
+      sandbox: sandbox,
+      name: 'library',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0xf7a027,
+        opacity: 0.3,
+        points: [
+          [114.26240932407124, 22.335088654999804],
+          [114.26260714302916, 22.3355279553204],
+          [114.26263992920654, 22.33615133084412],
+          [114.26261706764959, 22.336719185586237],
+          [114.26235847340894, 22.337715825474024],
+          [114.26206269976112, 22.338802197217618],
+          [114.26197668626706, 22.339092205720263],
+          [114.2620882456202, 22.33925747418814],
+          [114.26186918927733, 22.339416369020558],
+          [114.26173218509193, 22.339760417363703],
+          [114.26194015043946, 22.340029615795082],
+          [114.26060950620102, 22.340206123489825],
+          [114.26011609241343, 22.33971257327432],
+          [114.26002785552153, 22.33940068267483],
+          [114.26002675678076, 22.338109076585344],
+          [114.26068928591364, 22.336462332770775],
+          [114.26122762010127, 22.33519557648671],
+          [114.26159894585672, 22.334946964659217],
+          [114.26199967090072, 22.33493425531558],
+          [114.2621236860415, 22.335043859270897],
+          [114.26240932407124, 22.335088654999804]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 160,
+        bottom: 110,
+      },
+      sandbox: sandbox,
+      name: 'smallTown',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0x2781f7,
+        opacity: 0.3,
+        points: [
+          [114.26430363723762, 22.337586183049194],
+          [114.26512748447675, 22.337613432648293],
+          [114.2651194701072, 22.335709091722318],
+          [114.26433443196397, 22.335737262174245],
+          [114.26432518145029, 22.33593892498252],
+          [114.26363106884946, 22.335949760731157],
+          [114.2636598648849, 22.33740217672001],
+          [114.26428705476395, 22.33740077725161],
+          [114.26430363723762, 22.337586183049194]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 175,
+        bottom: 110,
+      },
+      sandbox: sandbox,
+      name: 'ab',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0xfcf774,
+        opacity: 0.3,
+        points: [
+          [114.26297335837081, 22.339268805999154],
+          [114.26308232017706, 22.33942929961764],
+          [114.263240649011, 22.339431795646803],
+          [114.26333905318519, 22.339341552433808],
+          [114.26332629293537, 22.33921651689291],
+          [114.26321125964168, 22.339152912812867],
+          [114.2630864097108, 22.33908281757001],
+          [114.26297335837081, 22.339268805999154]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 145,
+        bottom: 125,
+      },
+      sandbox: sandbox,
+      name: 'nBus',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0xeb65f2,
+        opacity: 0.3,
+        points: [
+          [114.26377178203023, 22.33474254230985],
+          [114.2642844488428, 22.334736186578226],
+          [114.2642886848202, 22.33503854888636],
+          [114.26463943474695, 22.33504186297052],
+          [114.26474836865334, 22.334950985755064],
+          [114.26474107711881, 22.334528298108953],
+          [114.26473465952152, 22.334504421448706],
+          [114.26467942356363, 22.3344579229012],
+          [114.26447962420622, 22.334489223521924],
+          [114.26440080114276, 22.334266452126993],
+          [114.26417645562175, 22.334226990415466],
+          [114.26404987805074, 22.334307535436697],
+          [114.2638685466663, 22.334550581784686],
+          [114.26377755213099, 22.334704643748694],
+          [114.26377178203023, 22.33474254230985]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 145,
+        bottom: 130,
+      },
+      sandbox: sandbox,
+      name: 'carPark',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0xe83766,
+        opacity: 0.3,
+        points: [
+          [114.26599022685109, 22.33336927060381],
+          [114.26517490138731, 22.33429962292544],
+          [114.26498722481038, 22.334417000354478],
+          [114.26507068694849, 22.334593845907435],
+          [114.26517758279807, 22.334584322434058],
+          [114.26551065359251, 22.334381718632812],
+          [114.26564001908548, 22.33447152996474],
+          [114.26619356045896, 22.33415409860226],
+          [114.26648050043445, 22.33372763277779],
+          [114.26599022685109, 22.33336927060381]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 196,
+        bottom: 130,
+      },
+      sandbox: sandbox,
+      name: 'businessSchool',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0xf24535,
+        opacity: 0.3,
+        points: [
+          [114.26687653669458, 22.33331639610923],
+          [114.26695469249012, 22.333464165227003],
+          [114.2671652505962, 22.333604932177366],
+          [114.26758419816314, 22.33331882022036],
+          [114.26749589369678, 22.333158352472807],
+          [114.26734712558878, 22.333022707221836],
+          [114.26719858251673, 22.33306650318172],
+          [114.26697710677558, 22.333228060646768],
+          [114.26687653669458, 22.33331639610923]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 206,
+        bottom: 150,
+      },
+      sandbox: sandbox,
+      name: 'IAS',
+      interactable: false
+    },
+    {
+      volume: {
+        color: 0x75f97e,
+        opacity: 0.3,
+        points: [
+          [114.26354916876855, 22.334039567384036],
+          [114.26392295919554, 22.334042087497853],
+          [114.26403455564918, 22.333976804275338],
+          [114.26404869946947, 22.33375998168439],
+          [114.2640371635264, 22.33361671954081],
+          [114.26389053947352, 22.33367503313045],
+          [114.26362089255102, 22.333669751419013],
+          [114.26353842515793, 22.333744925559525],
+          [114.26354916876855, 22.334039567384036],
+          [114.26354916876855, 22.334039567384036]
+        ].map((lnglat) => {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+        top: 150,
+        bottom: 130,
+      },
+      sandbox: sandbox,
+      name: 'sBus',
+      interactable: false
+    }
+    ]
+
+    // global variable controlling the cards infos
+    let cards = {
+      'smallTown': {
+        pinPosition: new altizure.LngLatAlt(114.2607587811444, 22.33858008312231, 126)
+      },
+      'nBus': {
+        pinPosition: new altizure.LngLatAlt(114.26316496480878, 22.339309247808348, 130)
+      },
+      'fireChicken': {
+        pinPosition: new altizure.LngLatAlt(114.26393695472679, 22.338138551518878, 127)
+      },
+      'library': {
+        pinPosition: new altizure.LngLatAlt(114.26507045609817, 22.33870009511779, 134)
+      },
+      'ab': {
+        pinPosition: new altizure.LngLatAlt(114.26467232259891, 22.33667437240354, 159)
+      },
+      'footballGround': {
+        pinPosition: new altizure.LngLatAlt(114.26923564855072, 22.337868780496684, 15)
+      },
+      'carPark': {
+        pinPosition: new altizure.LngLatAlt(114.26426431488832, 22.33457579300262, 140)
+      },
+      'sBus': {
+        pinPosition: new altizure.LngLatAlt(114.26378359047439, 22.333862140572666, 140)
+      },
+      'businessSchool': {
+        pinPosition: new altizure.LngLatAlt(114.2657315135319, 22.33408321961105, 187)
+      },
+      'IAS': {
+        pinPosition: new altizure.LngLatAlt(114.2672835019631, 22.333320571755234, 200)
+      }
+    }
+
+    // generate polygon markers in the sandbox
+    polygonsOptions.map((p) => {
+      let tmp = new altizure.PolygonMarker(p)
+      // tmp.interactable = true
+      // tmp.on('click', (e) => { console.log(tmp.name) })
+      // polygons.push(tmp)
+      cards[p.name].polygon = tmp
+    })
+
+    initCards()
+    setupCanvas()
+
+    // listen on camera changes
+    let updatePositionDebounced = Debounce(updatePosition, 100)
+    sandbox.on('cameraChange', updatePositionDebounced)
+
+    window.addEventListener('resize', () => {
+      setupCanvas()
+      updatePosition()
+    })
+
+    // Cards init: position and ui
+    function initCards() {
+      let cnt = 0
+      for (let key in cards) {
+        let card = cards[key]
+        card.position = {
+          x: margin,
+          y: (cnt++) * (cardHeight + margin) + margin
+        }
+        card.ui = generateCardUI(key, card.position)
+
+        // set color and mouse event
+        $(card.ui).css('background-color', card.polygon.color.getStyle())
+          .css('opacity', 0.5)
+          .on('mouseover', () => {
+            card.polygon.opacity = 0.6
+            $(card.ui).css('opacity', 0.9)
+          })
+          .on('mouseleave', () => {
+            card.polygon.opacity = 0.3
+            $(card.ui).css('opacity', 0.5)
+          })
+
+        card.polygon.interactable = true
+        card.polygon.on('mouseenter', () => {
+          card.polygon.opacity = 0.6
+          $(card.ui).css('opacity', 0.9)
+        })
+        card.polygon.on('mouseleave', () => {
+          card.polygon.opacity = 0.3
+          $(card.ui).css('opacity', 0.5)
+        })
+      }
+
+      function generateCardUI(name, position) {
+        let content =
+          `<div class="card" style="width: ${cardWidth}px; height: ${cardHeight}px; position: absolute; left: ${position.x}px; top: ${position.y}px; text-align: center;">
+              <p class="card-text" style="margin: auto auto">${name}</p>
+          </div>`
+        let cardDom = document.createElement("div")
+        cardDom.className = 'cardContainer'
+        cardDom.innerHTML = content
+        document.body.appendChild(cardDom)
+        return cardDom.firstElementChild
+      }
+    }
+
+    function changeCardPosition(card, position, time = 95) {
+      card.position = position
+      // card.ui.style.left = left
+      // card.ui.style.top = top
+
+      // jquery animation for card position changing
+      $(card.ui).animate({
+        "top": card.position.y + "px",
+        "left": card.position.x + "px"
+      }, time)
+    }
+
+    function Debounce(func, delay) {
+      let timer
+      return function () {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          if (func) func()
+        }, delay)
+      }
+    }
+
+    function setupCanvas() {
+      let size = sandbox.renderer.getSize()
+      canvas.width = size.width
+      canvas.height = size.height
+
+      ctx.globalAlpha = 0.5
+    }
+
+    function updatePosition() {
+      // clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.beginPath()
+
+      // mapping ui with polygon pinPosition
+      let clusterInput = []
+      for (let key in cards) {
+        let card = cards[key]
+        // transforms from earth-space position {lng, lat, alt} to screen-space {x, y}
+        let screenPosition = sandbox.window.fromLngLatAlt(card.pinPosition)
+        if (screenPosition && screenPosition.x > 0 && screenPosition.y > 0) {
+          card.ui.style.display = ''
+          // drawLine(card.position, screenPosition)
+
+          screenPosition.key = key
+          clusterInput.push(screenPosition)
+        } else {
+          card.ui.style.display = 'none'
+        }
+      }
+
+      if (clusterInput.length === 0) { return }
+      if (clusterInput.length === 1) {
+        let target = clusterInput[0]
+        if (target.x < window.innerWidth / 2) {
+          let pin = {
+            x: margin + cardWidth,
+            y: margin + cardHeight / 2
+          }
+          changeCardPosition(cards[target.key], {
+            x: margin,
+            y: margin
+          })
+          drawLine(pin, target, cards[target.key].polygon.color.getStyle())
+        } else {
+          let pin = {
+            x: window.innerWidth - margin - cardWidth,
+            y: margin + cardHeight / 2
+          }
+          changeCardPosition(cards[target.key], {
+            x: window.innerWidth - margin - cardWidth,
+            y: margin
+          })
+          drawLine(pin, target, cards[target.key].polygon.color.getStyle())
+        }
+        return
+      }
+
+      let clusters = kmeans(clusterInput, 2)
+      // console.log(clusters)
+      let _sum = 0
+      clusters[0].map((p) => {
+        _sum += p.x
+      })
+      let center0 = _sum / clusters[0].length
+      _sum = 0
+      clusters[1].map((p) => {
+        _sum += p.x
+      })
+      let center1 = _sum / clusters[1].length
+
+      sortCardsAndDrawLine(clusters[0], center0 <= center1)
+      sortCardsAndDrawLine(clusters[1], center0 > center1)
+
+      // sort the cards and draw mapping lines
+      function sortCardsAndDrawLine(cardsArray, isLeft) {
+        // console.log(cardsArray, isLeft)
+        let num = cardsArray.length
+        for (let i = 0; i < num; ++i) {
+          let pin = {
+            x: isLeft ? margin + cardWidth : window.innerWidth - margin - cardWidth,
+            y: i * (cardHeight + margin) + margin + cardHeight / 2
+          }
+          let match = undefined
+          let minValue = undefined
+          for (let j = 0; j < num; ++j) {
+            if (cardsArray[j].mapped) { continue }
+            let v = calculateTanValue(pin, cardsArray[j])
+            if (minValue) {
+              if (minValue > v) {
+                minValue = v
+                match = cardsArray[j]
+              }
+            } else {
+              minValue = v
+              match = cardsArray[j]
+            }
+          }
+          if (match === undefined) {
+            console.error('no match finded for a card')
+          }
+          match.mapped = true
+          changeCardPosition(cards[match.key], {
+            x: isLeft ? margin : window.innerWidth - margin - cardWidth,
+            y: i * (cardHeight + margin) + margin
+          })
+          drawLine(pin, match, cards[match.key].polygon.color.getStyle())
+        }
+      }
+
+      function calculateTanValue(pin, target) {
+        if (pin.x === target.x) {
+          return -9999999
+        }
+        return pin.x < target.x ? (target.y - pin.y) / (target.x - pin.x) : (target.y - pin.y) / (pin.x - target.x)
+      }
+
+      function drawLine(from, to, color) {
+        ctx.beginPath()
+        ctx.strokeStyle = color
+        ctx.lineWidth = 3
+        ctx.moveTo(from.x, from.y)
+        ctx.lineTo(to.x, to.y)
+        ctx.stroke()
+      }
+    }
+
+    function kmeans(points, k) {
+      k = k || Math.max(2, Math.ceil(Math.sqrt(points.length / 2)));
+
+      function distance(v1, v2) {
+        return Math.sqrt(Math.pow(v2.x - v1.x, 2) + Math.pow(v2.y - v1.y, 2));
+      }
+
+      var centroids = randomCentroids(points, k);
+      var assignment = new Array(points.length);
+      var clusters = new Array(k);
+
+      var movement = true;
+      while (movement) {
+        // update point-to-centroid assignments
+        for (var i = 0; i < points.length; i++) {
+          assignment[i] = closestCentroid(points[i], centroids, distance);
+        }
+
+        // update location of each centroid
+        movement = false;
+        for (var j = 0; j < k; j++) {
+          var assigned = [];
+          for (var i = 0; i < assignment.length; i++) {
+            if (assignment[i] == j) {
+              assigned.push(points[i]);
+            }
+          }
+
+          if (!assigned.length) {
+            continue;
+          }
+          var centroid = centroids[j];
+          var newCentroid = new Array(centroid.length);
+
+          for (var g = 0; g < centroid.length; g++) {
+            var sum = 0;
+            for (var i = 0; i < assigned.length; i++) {
+              sum += assigned[i][g];
+            }
+            newCentroid[g] = sum / assigned.length;
+
+            if (newCentroid[g] != centroid[g]) {
+              movement = true;
+            }
+          }
+          centroids[j] = newCentroid;
+          clusters[j] = assigned;
+        }
+      }
+      return clusters;
+
+      function randomCentroids(points, k) {
+        var centroids = points.slice(0); // copy
+        centroids.sort(function () {
+          return (Math.round(Math.random()) - 0.5);
+        });
+        return centroids.slice(0, k);
+      }
+
+      function closestCentroid(point, centroids, distance) {
+        var min = Infinity,
+          index = 0;
+        for (var i = 0; i < centroids.length; i++) {
+          var dist = distance(point, centroids[i]);
+          if (dist < min) {
+            min = dist;
+            index = i;
+          }
+        }
+        return index;
+      }
+    }
+    // window.addEventListener('click', (event) => {
+    //   let pt = sandbox.pickOnProjects(event)
+    //   if (!pt) {
+    //     pt = sandbox.pick(event)
+    //   }
+    //   console.log([pt.lng, pt.lat, pt.alt].join(', '))
+    // }, false)
+  </script>
+</body>
+
+</html>
