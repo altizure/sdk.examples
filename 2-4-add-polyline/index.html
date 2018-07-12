@@ -92,6 +92,11 @@
       color: 0x26b74f,
       fenceHeight: 10
     })
+    pl3.style = {
+      texture: 'arrow',
+      mapping: 'repeat'
+    }
+    pl3.speed = 1.0
 
     let pl1color = pl1.color
     pl1.interactable = true
@@ -132,12 +137,14 @@
         this.linemarker = linemarker
         this.opacity = linemarker.opacity
         this.color = linemarker.color
-        this.animation = 'horizontal'
-        this.texture = 'fence'
+        this.animation = linemarker.style.animation
+        this.speed = linemarker.speed
+        this.texture = linemarker.style.texture
+        this.mapping = linemarker.style.mapping
         this.fenceHeight = linemarker.fenceHeight
       } 
       var gui = new dat.GUI()
-      gui.add({hide: false}, 'hide').name('Hide AltizureProjectMarker').onChange((v) => {
+      gui.add({hide: false}, 'hide').name('Hide Project').onChange((v) => {
         altmarker.visible = !v
       })
       addFolder('red style', pl1)
@@ -164,9 +171,19 @@
           marker.style = {animation: v}
         })
 
+        let speedController = folder.add(text, 'speed', -1, 1, 0.01)
+        speedController.onChange((v) => {
+          marker.speed = v
+        }).listen()
+
         let textureController = folder.add(text, 'texture', {arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
         textureController.onChange((v) => {
           marker.style = {texture: v}
+        })
+
+        let mappingController = folder.add(text, 'mapping', {linear: 'linear', repeat: 'repeat'})
+        mappingController.onChange((v) => {
+          marker.style = {mapping: v}
         })
 
         let fenceHeightController = folder.add(text, 'fenceHeight', 1, 50, 1)

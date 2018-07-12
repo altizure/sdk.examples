@@ -1,0 +1,180 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure Add Particles </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-particle-effect"></script>
+    <script>
+      let options = {
+          altizureApi:{
+              key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+          },
+          camera: {
+              poseTo: { 
+                  alt:763.6946517327125,
+                  lat:22.537496189265454,
+                  lng:113.94468283493356,
+                  north:1.5916973967930517,
+                  tilt:58.26999623257451,
+              },
+              flyTo: { alt:763.6946517327125,
+                  lat:22.537496189265454,
+                  lng:113.94468283493356,
+                  north:1.5916973967930517,
+                  tilt:58.26999623257451,
+              }
+          },
+          renderItems: {
+              earth: true,
+              earthUseTexture: false,
+              featureInView: false,
+              orbitRing: false
+          }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      // with an arbitrary position (longitude, latitude, altitude)
+      sandbox.add('AltizureProjectMarker', {
+          pid: '5849104597b73e0b090c01e8',
+          pose: {
+              position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 0}
+          }
+      })
+
+    </script>
+    <script>
+      let candle = new altizure.ParticleEffectsMarker({
+          sandbox: sandbox,
+          position: {lng: 113.94502395441609, lat: 22.537514302934216, alt: 36.23341798691775},
+          effect: 'fire',
+          scale: 1
+      })
+      candle.animatingTime = -1
+      candle.interactable = true
+      candle.on('click', (e) => {
+          console.log('click on ', candle, e)
+      })
+      candle.on('mousedrag', (e) => {
+          let pt = sandbox.window.toLngLatAlt(e)
+          if (pt) {
+              candle.position = pt
+          }
+      })
+    </script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      var gui = new dat.GUI()
+      let settings = {
+          effect: candle.effect,
+          scale: candle.scale,
+          particleScale: candle.particleScale,
+          particlesPerSecond: candle.particlesPerSecond,
+          animatingTime: candle.animatingTime,
+          rangex: candle.range.spread[0],
+          rangey: candle.range.spread[1],
+          rangez: candle.range.spread[2],
+          vx: candle.velocity.base[0],
+          vy: candle.velocity.base[1],
+          vz: candle.velocity.base[2],
+          ax: candle.acceleration.base[0],
+          ay: candle.acceleration.base[1],
+          az: candle.acceleration.base[2]
+      }
+      gui.add(settings, 'effect', {fire: 'fire', snow: 'snow', clouds: 'clouds', smoke: 'smoke'}).onFinishChange((v) => {
+          candle.effect = v
+          candle.animatingTime = -1
+          currentSettings = {
+              effect: candle.effect,
+              scale: candle.scale,
+              particleScale: candle.particleScale,
+              particlesPerSecond: candle.particlesPerSecond,
+              animatingTime: candle.animatingTime,
+              rangex: candle.range.spread[0],
+              rangey: candle.range.spread[1],
+              rangez: candle.range.spread[2],
+              vx: candle.velocity.base[0],
+              vy: candle.velocity.base[1],
+              vz: candle.velocity.base[2],
+              ax: candle.acceleration.base[0],
+              ay: candle.acceleration.base[1],
+              az: candle.acceleration.base[2]
+          }
+          for (let key in currentSettings) {
+              settings[key] = currentSettings[key]
+          }
+      })
+      gui.add(settings, 'scale', 0.1, 20, 0.1).onChange((v) => {
+          settings.scale = v
+          candle.scale = v
+      }).listen()
+      gui.add(settings, 'particleScale', 0.1, 20, 0.1).onChange((v) => {
+          settings.particleScale = v
+          candle.particleScale = v
+      }).listen()
+      gui.add(settings, 'particlesPerSecond', 0.1, 200, 0.1).onFinishChange((v) => {
+          settings.particlesPerSecond = v
+          candle.particlesPerSecond = v
+      }).listen()
+
+      gui.add(settings, 'rangex', 0, 200, 0.1).onFinishChange((v) => {
+          settings.rangex = v
+          candle.range = {
+              spread: [settings.rangex, settings.rangey, settings.rangez]
+          }
+      }).listen()
+      gui.add(settings, 'rangey', 0, 200, 0.1).onFinishChange((v) => {
+          settings.rangey = v
+          candle.range = {
+              spread: [settings.rangex, settings.rangey, settings.rangez]
+          }
+      }).listen()
+      gui.add(settings, 'rangez', 0, 200, 0.1).onFinishChange((v) => {
+          settings.rangez = v
+          candle.range = {
+              spread: [settings.rangex, settings.rangey, settings.rangez]
+          }
+      }).listen()
+      gui.add(settings, 'vx', -200, 200, 0.1).onFinishChange((v) => {
+          settings.vx = v
+          candle.velocity = {
+              base: [settings.vx, settings.vy, settings.vz]
+          }
+      }).listen()
+      gui.add(settings, 'vy', -200, 200, 0.1).onFinishChange((v) => {
+          settings.vy = v
+          candle.velocity = {
+              base: [settings.vx, settings.vy, settings.vz]
+          }
+      }).listen()
+      gui.add(settings, 'vz', -200, 200, 0.1).onFinishChange((v) => {
+          settings.vz = v
+          candle.velocity = {
+              base: [settings.vx, settings.vy, settings.vz]
+          }
+      }).listen()
+      gui.add(settings, 'ax', -200, 200, 0.1).onFinishChange((v) => {
+          settings.ax = v
+          candle.acceleration = {
+              base: [settings.ax, settings.ay, settings.az]
+          }
+      }).listen()
+      gui.add(settings, 'ay', -200, 200, 0.1).onFinishChange((v) => {
+          settings.ay = v
+          candle.acceleration = {
+              base: [settings.ax, settings.ay, settings.az]
+          }
+      }).listen()
+      gui.add(settings, 'az', -200, 200, 0.1).onFinishChange((v) => {
+          settings.az = v
+          candle.acceleration = {
+              base: [settings.ax, settings.ay, settings.az]
+          }
+      }).listen()
+    </script>
+  </body>
+</html>
