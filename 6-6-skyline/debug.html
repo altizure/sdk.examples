@@ -182,6 +182,9 @@
           console.log('computeSkyline time: ', time1 - time0)
           // height limit
           let time2 = Date.now()
+          for (let i = 0; i < index; ++i) {
+            gui.removeFolder('' + i)
+          }
           index = 0
           contactInfos = []
           tagMarkers.map((tag) => {if (tag) tag.destruct()})
