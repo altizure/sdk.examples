@@ -1,0 +1,158 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure Compute Overlap Area </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    body {
+      font-family: Monospace;
+      background-color: #000;
+      color: rgb(12, 243, 243);
+      margin: 0px;
+      overflow: hidden;
+    }
+
+    #info {
+      position: absolute;
+      padding: 10px;
+      width: 50%;
+      text-align: center;
+      z-index: 10;
+    }
+
+    a {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body style="margin: 0px; padding: 0px">
+  <div id="info">Calculate Overlap Area
+    <br/> Click "computeOverlap" to visualize the overlapping region
+    <br/> and the area of that region will be calculated.
+    <br/>
+  </div>
+  <div id="page-content"></div>
+  <script type="text/javascript" src="../build/altizure.js"></script>
+  <script>
+    let options = {
+      // camera 
+      camera: {
+        poseTo: {
+          alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078
+        },
+        flyTo: {
+          alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624
+        }
+      },
+      // render items
+      renderItems: { featureInView: false, earth: true },
+      // show mouse tip
+      develop: true,
+      // altizure api: contact altizure to get your developer key
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+    }
+    let sandbox = new altizure.Solution('page-content', options)
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+
+    let concaveBoundary = [
+      [113.93946558379362, 22.53664904958026],
+      [113.93977786049744, 22.53635423688311],
+      [113.93920390517839, 22.535847702018067],
+      [113.93880453487387, 22.5361347838086],
+      [113.93878110345742, 22.53637535687338],
+      [113.93903510962122, 22.536700304538535],
+      [113.93946558379362, 22.53664904958026]
+    ].reverse()
+    let convex = new altizure.PolygonMarker({
+      sandbox: sandbox,
+      volume: {
+        points: concaveBoundary.map((x) => new altizure.LngLatAlt(x[0], x[1], 0)),
+        top: 40,
+        bottom: 0.1,
+        color: 0x0000ff,
+        opacity: 0.2
+      }
+    })
+
+    let irregularBoundary = [
+      [113.93966267262213, 22.536616486805773],
+      [113.93969323246276, 22.536441883631966],
+      [113.93976292883491, 22.536229210881753],
+      [113.93967504063676, 22.53601719199077],
+      [113.9386956571867, 22.535894281775985],
+      [113.93868337117037, 22.536036284557785],
+      [113.93888991630268, 22.53606971071321],
+      [113.93888597631435, 22.536169725995943],
+      [113.9386800639691, 22.53616010140463],
+      [113.93867824405193, 22.536305722432257],
+      [113.93887702500938, 22.536321966691467],
+      [113.93887390605903, 22.536427256515907],
+      [113.93865918730089, 22.53643209247219],
+      [113.93866640832536, 22.536575679687306],
+      [113.93966267262213, 22.536616486805773]
+    ].reverse()
+    let irregular = new altizure.PolygonMarker({
+      sandbox: sandbox,
+      volume: {
+        points: irregularBoundary.map((x) => new altizure.LngLatAlt(x[0], x[1], 0)),
+        top: 40,
+        bottom: 0.1,
+        color: 0xff00ff,
+        opacity: 0.2
+      }
+    })
+  </script>
+  <script src="../third_party/dat.gui.js"></script>
+  <script>
+    dat.GUI.prototype.removeFolder = function (name) {
+      var folder = this.__folders[name];
+      if (!folder) {
+        return;
+      }
+      folder.close();
+      this.__ul.removeChild(folder.domElement.parentNode);
+      delete this.__folders[name];
+      this.onResize();
+    }
+  </script>
+  <script>
+    let gui = new dat.GUI()
+    let clipPolygon
+    let settings = {
+      computeOverlap: () => {
+        let clipResult = altizure.GeometryUtils.overlapRegion(irregular.boundaryPts, convex.boundaryPts)
+        if (clipPolygon) {
+          clipPolygon.destruct()
+        }
+        clipPolygon = new altizure.PolygonMarker({
+          sandbox: sandbox,
+          volume: {
+            points: clipResult,
+            top: 50,
+            bottom: 0.1,
+            color: 0x00ff00,
+            opacity: 0.2
+          }
+        })
+        gui.removeFolder('message')
+        let folder = gui.addFolder('message')
+        folder.add({area: altizure.GeometryUtils.areaByLngLatAlts(clipResult)}, 'area')
+        folder.open()
+      }
+    }
+    gui.add(settings, 'computeOverlap')
+  </script>
+</body>
+
+</html>
