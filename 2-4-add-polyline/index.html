@@ -142,6 +142,15 @@
         this.texture = linemarker.style.texture
         this.mapping = linemarker.style.mapping
         this.fenceHeight = linemarker.fenceHeight
+        this.update = () => {
+          this.opacity = this.linemarker.opacity
+          this.color = this.linemarker.color
+          this.animation = this.linemarker.style.animation
+          this.speed = this.linemarker.speed
+          this.texture = this.linemarker.style.texture
+          this.mapping = this.linemarker.style.mapping
+          this.fenceHeight = this.linemarker.fenceHeight
+        }
       } 
       var gui = new dat.GUI()
       gui.add({hide: false}, 'hide').name('Hide Project').onChange((v) => {
@@ -158,7 +167,7 @@
         let colorController = folder.addColor(text, 'color')
         colorController.onChange((v) => {
           marker.color = v
-        })
+        }).listen()
 
         let opacityController = folder.add(text, 'opacity', 0.0, 1.0, 0.01)
         opacityController.onChange(function (value) {
@@ -169,7 +178,8 @@
         let animationController = folder.add(text, 'animation', {horizontal: 'horizontal', vertical: 'vertical', none: 'none'})
         animationController.onChange((v) => {
           marker.style = {animation: v}
-        })
+          text.update()
+        }).listen()
 
         let speedController = folder.add(text, 'speed', -1, 1, 0.01)
         speedController.onChange((v) => {
@@ -179,17 +189,19 @@
         let textureController = folder.add(text, 'texture', {arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
         textureController.onChange((v) => {
           marker.style = {texture: v}
-        })
+          text.update()
+        }).listen()
 
         let mappingController = folder.add(text, 'mapping', {linear: 'linear', repeat: 'repeat'})
         mappingController.onChange((v) => {
           marker.style = {mapping: v}
-        })
+          text.update()
+        }).listen()
 
         let fenceHeightController = folder.add(text, 'fenceHeight', 1, 50, 1)
         fenceHeightController.onChange((v) => {
           marker.fenceHeight = v
-        })
+        }).listen()
 
         if (open) folder.open()
       }     
