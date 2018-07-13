@@ -78,7 +78,8 @@
         position: sandbox.window.toLngLatAlt({
           x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
         }),
-        imgUrl: '../public/assets/img/tag/normal/tagDemo.png'
+        imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+        fixedSize: 50
       })
       sandbox.on('cameraChange', () => {
         let pt = sandbox.window.toLngLatAlt({
@@ -86,19 +87,8 @@
         })
         if (pt) {
           demoTag.position = pt
-          let scale = fromPose2TagScale(demoTag.pinLength + pt.alt, sandbox.camera.pose, true)
-          demoTag.scale = scale * 0.5
         }
       })
-
-      function fromPose2TagScale (height, pose, init = false) {
-        let alt = pose.alt
-        let tilt = pose.tilt
-        let angle = Math.sin((90 - tilt) * Math.PI / 180)
-        let distance = Math.abs(alt - height / angle)
-        if (distance > 3500 && !init) return 0.001
-        return distance * 0.007
-      }
 
       function setUpUIFolder (tag, url, folderName, open) {
         let folder = gui.addFolder(folderName)
