@@ -1,0 +1,256 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 6.1 Crop project </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078 },
+        flyTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      },
+      control:{
+        doubleTap: false // disable double tap/click to zoom
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    // crop must happend after the altizure project is initialized
+    // 5b44864f28be223b4dd232ee
+    // 5849104597b73e0b090c01e8
+    let marker = null
+    sandbox.add('AltizureProjectMarker', {
+      pid: '5b44864f28be223b4dd232ee',
+      pose: {
+        position: {lng: 113.93920875334851, lat: 22.53672047469201, alt: 0.01}
+      }
+    })
+    .then((m) => {
+      // altizure project created, m is the arker
+      marker = m
+      return m.initialized
+    })
+    .then((m) => {
+      return m.loadCropMask() // [optional] download crop mask configured in Altizure
+    })
+    .then((m) => {
+      // altizure project initialized
+      // setup the cropping tools
+      showGUI(m)
+      return Promise.resolve(m)
+    })
+    .catch((err) => {
+      console.error(err)
+      return err
+    })
+
+  </script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+    let height = 2
+    let globalGuiSettings = {
+      drawing: false,
+      cropInner: true
+    }
+    let drawingLine
+    let finalDataObjects = {
+      points: []
+    }
+    let leftClickFunc = (e) => {
+      if (!globalGuiSettings.drawing) return
+      // left click to draw line
+      let pt = sandbox.window.toLngLatAlt(e)
+      if (!pt) return
+      if (drawingLine) {
+        drawingLine.addPoint(drawingLine.points[0])
+      } else {
+        drawingLine = new altizure.PolyLineMarker({
+          sandbox: sandbox,
+          points: [pt, pt, pt],
+          fenceHeight: height,
+          color: '#1DBE57'
+        })
+      }
+      finalDataObjects.points.push(pt)
+    }
+    let moveFunc = (e) => {
+      // editing line
+      if (!globalGuiSettings.drawing) return
+      let pt = sandbox.window.toLngLatAlt(e)
+      if (!pt) return
+      if (drawingLine) {
+        drawingLine.setPoint(drawingLine.pointsNumber - 2, pt)
+      }
+    }
+    let rightClickFunc = (e) => {
+      // right click to finish
+      // console.log(e.button)
+      if (!globalGuiSettings.drawing) return
+
+      let points = finalDataObjects.points
+      if (points.length >= 3) {
+        let lnglatpoints = points.map((pt) => {return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)}) // for tags
+        let tags = lnglatpoints.map((pt) => {
+          let tag = new altizure.TagMarker({
+            sandbox: sandbox,
+            position: pt,
+            scale: 1,
+            fixedSize: 50,
+            pinLength: height,
+            imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+            pivot: {x: 0.5, y: -0.1}
+          })
+          return tag
+        })
+        lnglatpoints.push(lnglatpoints[0])
+        let finalLine = new altizure.PolyLineMarker({
+          sandbox: sandbox, points: lnglatpoints, fenceHeight: height, color: '#1DBE57'
+        })
+        globalGuiSettings.drawingMarker = {
+          tags: tags, line: finalLine
+        }
+        tags.map((tag, i) => {
+          tag.interactable = true
+          tag.on('mousedrag', (e) => {
+            let pt = sandbox.window.toLngLatAlt(e)
+            if (pt) {
+              tag.position = pt
+              if (i === 0 || i === finalLine.pointsNumber - 1) {
+                finalLine.setPoint(0, pt)
+                finalLine.setPoint(finalLine.pointsNumber - 1, pt)
+              } else {
+                finalLine.setPoint(i, pt)
+              }
+              finalDataObjects.points[i] = pt
+            }
+          })
+        })
+      }
+      // reset parameters
+      if (drawingLine) {
+        drawingLine.destruct()
+        drawingLine = undefined
+      }
+      globalGuiSettings.drawing = false
+    }
+
+    let lastDownEvent
+    sandbox.renderer.domElement.addEventListener('mousedown', (e) => {
+      lastDownEvent = e
+    })
+    sandbox.renderer.domElement.addEventListener('mouseup', (e) => {
+      if (e.button === lastDownEvent.button && Math.abs(e.x - lastDownEvent.x) <= 3 && Math.abs(e.y - lastDownEvent.y) <= 3) {
+        if (e.button === 0) {
+          leftClickFunc(e)
+        } else if (e.button === 2) {
+          rightClickFunc(e)
+        }
+      }
+    })
+    sandbox.renderer.domElement.addEventListener('mousemove', (e) => {
+      moveFunc(e)
+    })
+
+    function refreshAll () {
+      // reset parameters
+      if (drawingLine) {
+        drawingLine.destruct()
+        drawingLine = undefined
+      }
+      finalDataObjects.points = []
+      globalGuiSettings.drawing = false
+      // remove others
+      if (globalGuiSettings.drawingMarker) {
+        if (globalGuiSettings.drawingMarker.line) {
+          globalGuiSettings.drawingMarker.line.destruct()
+        }
+        if (globalGuiSettings.drawingMarker.tags) {
+          globalGuiSettings.drawingMarker.tags.map(function (tag) {
+            tag.destruct()
+          })
+        }
+        globalGuiSettings.drawingMarker = undefined
+      }
+    }
+    var gui = new dat.GUI()
+    function showGUI (marker) {
+      height = (marker.projInfo.max_bound.z - marker.projInfo.min_bound.z) / 10
+
+      let selectedType = 'none'
+      let guiSettings = {
+        keep: () => {
+          if (selectedType !== 'none') return
+          selectedType = 'keep'
+          refreshAll()
+          globalGuiSettings.drawing = true
+          globalGuiSettings.cropInner = false
+          gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = 'gray'
+        },
+        remove: () => {
+          if (selectedType !== 'none') return
+          selectedType = 'remove'
+          refreshAll()
+          globalGuiSettings.drawing = true
+          globalGuiSettings.cropInner = true
+          gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = 'gray'
+        },
+        apply: () => {
+          if (finalDataObjects.points && finalDataObjects.points.length > 2) {
+            let pts = finalDataObjects.points.map((pt) => {
+              return new altizure.LngLatAlt(pt.lng, pt.lat, 0)
+            })
+            pts.push(pts[0])
+            marker.crop(pts, globalGuiSettings.cropInner)
+            finalDataObjects.points = []
+          }
+          refreshAll()
+          gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = ''
+          gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = ''
+          selectedType = 'none'
+        },
+        reset: () => {
+          refreshAll()
+          marker.uncrop()
+          gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = ''
+          gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = ''
+          selectedType = 'none'
+          finalDataObjects.points = []
+        }
+      }
+
+      let cropFolder = gui.addFolder('Crop Type')
+      cropFolder.open()
+      cropFolder.add(guiSettings, 'keep').name('Keep')
+      cropFolder.add(guiSettings, 'remove').name('Remove')
+
+      let effectFolder = gui.addFolder('Apply or Reset')
+      effectFolder.open()
+      effectFolder.add(guiSettings, 'apply').name('Apply')
+      effectFolder.add(guiSettings, 'reset').name('Reset')
+    }
+  </script>
+</body>
+
+</html>
