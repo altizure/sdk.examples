@@ -51,7 +51,7 @@
 
       let pMarkerList = []
 
-      pList.forEach((pid, ind) => {
+      pList.forEach(function(pid, ind)  {
         sandbox.add('AltizureProjectMarker', {
           pid: pid,
           pose: {
@@ -59,13 +59,13 @@
           },
           autoScale: 600
         })
-          .then((m) => {
+          .then(function(m){
             console.log(m)
             addNameTag(m)
             pMarkerList.push(m)
             return m.initialized
           })
-          .then((m) => {
+          .then(function(m){
             sandbox.render(m, 'phong') // [essential] choose rendering mode for the marker
             sandbox.lights.ambient.intensity = 0.01 // ambient light intensity
           })
@@ -96,7 +96,7 @@
         })
       }
       
-      document.addEventListener('click', (event) => {
+      document.addEventListener('click', function(event){
         console.log(sandbox.window.toLngLatAlt(event))
       })
     </script>
@@ -106,9 +106,9 @@
         autoScale: 600
       }
       var gui = new dat.GUI()
-      gui.add(settings, 'autoScale', 10, 2000, 1).onChange((v) => {
+      gui.add(settings, 'autoScale', 10, 2000, 1).onChange(function(v){
         settings.autoScale = v
-        pMarkerList.map((altizureProjectMarker) => {
+        pMarkerList.map(function(altizureProjectMarker)  {
           altizureProjectMarker.autoScale = v
         })
       })

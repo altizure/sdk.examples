@@ -54,19 +54,19 @@
           position: {lng: 113.9438, lat: 22.5361, alt: 32}
         }
       })
-      .then((res) => {
+      .then(function(res) {
         m = res // reference to the marker
         m.scale = 0.001 // change the scale
         m.euler = {x: -Math.PI/2} // change the up direction
         return m.initialized // resolves when initialization is done
       })
-      .then((res) => {
+      .then(function(res) {
         m.dim() // hide the blue square around the marker
         sandbox.render(m, 'phong') // [essential] choose rendering mode for the marker
         sandbox.lights.ambient.intensity = 0.01 // ambient light intensity
         return sandbox.camera.flyTo({north: 0, alt: 400}, 5000) // fly animation after the model is initialized
       })
-      .then(() => {
+      .then(function() {
         buildGui(sandbox, m) // create the GUI
       })
     </script>

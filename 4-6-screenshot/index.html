@@ -84,7 +84,7 @@
 
     var objects = []
     var tags = []
-    positions.forEach((pos) => {
+    positions.forEach(function(pos) {
       objects.push(new altizure.OBJMarker({
         position: pos,
         sandbox: sandbox,
@@ -124,7 +124,7 @@
       [127.54478921643462, 45.020521817167525],
       [127.54478921643462, 45.025521817167525]
     ]
-    let pts = lnglats.map((lnglat) => {
+    let pts = lnglats.map(function(lnglat)  {
       return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
     })
     let volume = {
@@ -152,7 +152,7 @@
     let heightMsg = document.getElementById('imgHeight')
     widthMsg.value = sandbox.width
     heightMsg.value = sandbox.height
-    window.onresize = () => {
+    window.onresize = function() {
       widthMsg.value = sandbox.width
       heightMsg.value = sandbox.height
     }
@@ -189,7 +189,7 @@
       var showctx = showcanvas.getContext('2d')
       img.src = null
       img.src = downloadcanvasDataURL
-      img.onload = () => {
+      img.onload = function() {
         showctx.drawImage(img, 0, 0, showcanvas.width, showcanvas.height)
       }
 

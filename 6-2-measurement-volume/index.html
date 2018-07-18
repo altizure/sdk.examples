@@ -42,7 +42,7 @@
 
       // add project at the default GPS position
       sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
-        .then((res) => {
+        .then(function(res) {
           altmarker = res   
           setUpUI(altmarker)               
         })
@@ -75,7 +75,7 @@
           {"lng":113.93942737784649,"lat":22.53651686154076,"alt":9.514778250040766},
           {"lng":113.93936907663237,"lat":22.536481244484463,"alt":10.517884341906576},
           {"lng":113.93934905932814,"lat":22.536453027243834,"alt":10.651991354552662}
-        ].map((lnglat) => {
+        ].map(function(lnglat) {
           return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
         }),
         top: 64,
@@ -97,7 +97,7 @@
           {"lng":113.93945176046242,"lat":22.536855591284745,"alt":8.028126358218916},
           {"lng":113.9386848766892,"lat":22.53683648818326,"alt":9.349154154423246},
           {"lng":113.93866222615023,"lat":22.537138392991075,"alt":7.909390417182902}
-        ].map((lnglat) => {
+        ].map(function(lnglat) {
           return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
         }),
         "top": 39,
@@ -122,7 +122,7 @@
           {"lng":113.93969138018679,"lat":22.537303020911885,"alt":12.727811733920012},
           {"lng":113.93964304227006,"lat":22.537659912793334,"alt":7.27202130371452},
           {"lng":113.94044806888913,"lat":22.537657700703136,"alt":13.508704893658477}
-        ].map((lnglat) => {
+        ].map(function(lnglat) {
           return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, 0)
         }),
         "top": 39,
@@ -169,7 +169,7 @@
           this.surface = 0
           this.highest = 0
           this.lowest = 0
-          this.Recompute = () => {
+          this.Recompute = function() {
             this.refPlane = this.polygon.top
             let ref = this.refPlane
             let measureInfo = altmarker.getRegionVolume(this.polygon, ref)

@@ -34,12 +34,12 @@
 
       let marker = null
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
-      .then(m => {
+      .then(function(m) {
         marker = m
         return m.initialized
       })
-      .then((m) => {
-        cameraMarkers.map((marker) => {
+      .then(function(m) {
+        cameraMarkers.map(function(marker) {
           marker.fov = sandbox.earthView.camera.fov
           marker.aspect = sandbox.earthView.camera.aspect
           marker.near = marker.near * 2 / 3
@@ -56,14 +56,14 @@
         [0.0064516780157386445,-0.7063573140682357,-0.7078260525814861,0,0.3479433464177138,0.6651955577699518,-0.6606438508052315,0,0.9374933618615247,-0.24202110400836999,0.25006395517976143,0,0.8430953845907726,0.3830971534949193,-0.37426473976251834,0.9999999999999996]
       ]
       let invisibleMarker = null
-      let cameraMarkers = ms.map((mat, index) => {
+      let cameraMarkers = ms.map(function(mat, index)  {
         let marker = new altizure.CameraMarker({
           sandbox: sandbox, camToEarth: mat, showFar: false, showNear: true, color: 0xff0000
         })
         marker.interactable = true
-        marker.on('mouseenter', (event) => {marker.color = 0xffffff})
-        marker.on('mouseleave', (event) => {marker.color = 0xff0000})
-        marker.on('click', (event) => {
+        marker.on('mouseenter', function(event) {marker.color = 0xffffff})
+        marker.on('mouseleave', function(event) {marker.color = 0xff0000})
+        marker.on('click', function(event)  {
           marker.visible = false
           if (invisibleMarker) {
             invisibleMarker.visible = true
@@ -79,9 +79,9 @@
           sandbox: sandbox, camToEarth: sandbox.camera.mat
         })
         marker.interactable = true
-        marker.on('mouseenter', (event) => {marker.color = 0xffffff})
-        marker.on('mouseleave', (event) => {marker.color = 0xff0000})
-        marker.on('click', (event) => {
+        marker.on('mouseenter', function(event)  {marker.color = 0xffffff})
+        marker.on('mouseleave', function(event) {marker.color = 0xff0000})
+        marker.on('click', function(event) {
           marker.visible = false
           if (invisibleMarker) {
             invisibleMarker.visible = true
@@ -103,7 +103,7 @@
     <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
     <script>
       var Operations = function() {
-        this.visualize = () => {visualizeCurrentCamera()}
+        this.visualize = function() {visualizeCurrentCamera()}
       }
       var gui = new dat.GUI()
       var op = new Operations()

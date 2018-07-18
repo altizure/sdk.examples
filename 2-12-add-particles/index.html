@@ -56,10 +56,10 @@
       })
       candle.animatingTime = -1
       candle.interactable = true
-      candle.on('click', (e) => {
+      candle.on('click', function(e) {
           console.log('click on ', candle, e)
       })
-      candle.on('mousedrag', (e) => {
+      candle.on('mousedrag', function(e) {
           let pt = sandbox.window.toLngLatAlt(e)
           if (pt) {
               candle.position = pt
@@ -85,7 +85,7 @@
           ay: candle.acceleration.base[1],
           az: candle.acceleration.base[2]
       }
-      gui.add(settings, 'effect', {fire: 'fire', snow: 'snow', clouds: 'clouds', smoke: 'smoke'}).onFinishChange((v) => {
+      gui.add(settings, 'effect', {fire: 'fire', snow: 'snow', clouds: 'clouds', smoke: 'smoke'}).onFinishChange(function(v) {
           candle.effect = v
           candle.animatingTime = -1
           currentSettings = {
@@ -108,68 +108,68 @@
               settings[key] = currentSettings[key]
           }
       })
-      gui.add(settings, 'scale', 0.1, 20, 0.1).onChange((v) => {
+      gui.add(settings, 'scale', 0.1, 20, 0.1).onChange(function(v){
           settings.scale = v
           candle.scale = v
       }).listen()
-      gui.add(settings, 'particleScale', 0.1, 20, 0.1).onChange((v) => {
+      gui.add(settings, 'particleScale', 0.1, 20, 0.1).onChange(function(v) {
           settings.particleScale = v
           candle.particleScale = v
       }).listen()
-      gui.add(settings, 'particlesPerSecond', 0.1, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'particlesPerSecond', 0.1, 200, 0.1).onFinishChange(function(v) {
           settings.particlesPerSecond = v
           candle.particlesPerSecond = v
       }).listen()
 
-      gui.add(settings, 'rangex', 0, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'rangex', 0, 200, 0.1).onFinishChange(function(v) {
           settings.rangex = v
           candle.range = {
               spread: [settings.rangex, settings.rangey, settings.rangez]
           }
       }).listen()
-      gui.add(settings, 'rangey', 0, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'rangey', 0, 200, 0.1).onFinishChange(function(v) {
           settings.rangey = v
           candle.range = {
               spread: [settings.rangex, settings.rangey, settings.rangez]
           }
       }).listen()
-      gui.add(settings, 'rangez', 0, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'rangez', 0, 200, 0.1).onFinishChange(function(v) {
           settings.rangez = v
           candle.range = {
               spread: [settings.rangex, settings.rangey, settings.rangez]
           }
       }).listen()
-      gui.add(settings, 'vx', -200, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'vx', -200, 200, 0.1).onFinishChange(function(v) {
           settings.vx = v
           candle.velocity = {
               base: [settings.vx, settings.vy, settings.vz]
           }
       }).listen()
-      gui.add(settings, 'vy', -200, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'vy', -200, 200, 0.1).onFinishChange(function(v){
           settings.vy = v
           candle.velocity = {
               base: [settings.vx, settings.vy, settings.vz]
           }
       }).listen()
-      gui.add(settings, 'vz', -200, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'vz', -200, 200, 0.1).onFinishChange(function(v) {
           settings.vz = v
           candle.velocity = {
               base: [settings.vx, settings.vy, settings.vz]
           }
       }).listen()
-      gui.add(settings, 'ax', -200, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'ax', -200, 200, 0.1).onFinishChange(function(v) {
           settings.ax = v
           candle.acceleration = {
               base: [settings.ax, settings.ay, settings.az]
           }
       }).listen()
-      gui.add(settings, 'ay', -200, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'ay', -200, 200, 0.1).onFinishChange(function(v) {
           settings.ay = v
           candle.acceleration = {
               base: [settings.ax, settings.ay, settings.az]
           }
       }).listen()
-      gui.add(settings, 'az', -200, 200, 0.1).onFinishChange((v) => {
+      gui.add(settings, 'az', -200, 200, 0.1).onFinishChange(function(v) {
           settings.az = v
           candle.acceleration = {
               base: [settings.ax, settings.ay, settings.az]
