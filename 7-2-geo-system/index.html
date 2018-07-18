@@ -82,7 +82,7 @@
       ]
 
       Promise.all(addProjects(projs))
-      .then(() => {
+      .then(function() {
         // use the first project as the base
         let baseMarker = projs[0].marker
         let baseCenter = projs[0].center
@@ -102,23 +102,23 @@
         }
         return sandbox.camera.lookAt(baseMarker, 0, 40, 1000)
       })
-      .then(()=>{
+      .then(function(){
         console.log('completed')
       })
 
       function addProjects (pList) {
-        let tList = pList.map((project) => {
+        let tList = pList.map(function(project) {
           return sandbox.add('AltizureProjectMarker', {pid: project.pid})
-          .then((marker) => {
+          .then(function(marker) {
             console.log('marker', marker)
             project.marker = marker
             marker.dim() // hide the blue square around the marker
             return marker.initialized
           })
-          .then((res) => {
+          .then(function(res) {
             let mat = res._tree.root.mesh.material
             if (mat instanceof Array) {
-              mat.forEach((matt) => {
+              mat.forEach(function(matt) {
                 matt.flatShading = true
                 // matt.shading = FlatShading
               })

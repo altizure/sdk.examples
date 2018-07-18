@@ -35,16 +35,16 @@
           position: {lng:114.26335, lat:22.3344,alt:0} // to align with the vector data
         } 
       })
-      .then((m) => {
+      .then(function(m){
         return m.initialized
       })
-      .then((m) => {
+      .then(function(m){
         sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
         sandbox.queryGeoJsonForAltizureProjectMarker(projectMarker)
-        .then((result) => {
+        .then(function(result) {
           visualizeGeoJSONData(result.geojson)
-          sandbox.positionsAltitude(positions).map((alt, i) => {
+          sandbox.positionsAltitude(positions).map(function(alt, i) {
             tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
             tagMarkers[i].depthTest = true
           })
@@ -59,7 +59,7 @@
           if (feature.geometry.type === 'Polygon') {
             let pt = [0, 0]
             let ptarray = feature.geometry.coordinates[0]
-            ptarray.map((v) => {
+            ptarray.map(function(v) {
               pt[0] += v[0]
               pt[1] += v[1]
             })
@@ -86,23 +86,23 @@
         cluster.add(tag)
       }
 
-      const debounce = (func, delay) => {
+      const debounce = function(func, delay) {
         let inDebounce
         return function() {
           const context = this
           const args = arguments
           clearTimeout(inDebounce)
-          inDebounce = setTimeout(() => func.apply(context, args), delay)
+          inDebounce = setTimeout(function() {func.apply(context, args), delay})
         }
       }
 
       function start(debounce_delay) {
         sandbox.on('cameraChange', debounce(function () {
-          cluster.clustering().then((clusters) => {
+          cluster.clustering().then(function(clusters){
             cluster.enable({})
           })
         }, debounce_delay))
-        cluster.clustering().then((clusters) => {
+        cluster.clustering().then(function(clusters) {
           cluster.enable({})
         })
       }

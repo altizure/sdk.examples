@@ -56,7 +56,7 @@
         {lng: 113.93966724961462, lat: 22.536738004201695, alt: 8.149216227643219},
         {lng: 113.93953799838187, lat: 22.53677042341269, alt: 8.187253301797654}
       ];
-      let pts = lnglats.map((lnglat) => {
+      let pts = lnglats.map(function(lnglat){
         return new altizure.LngLatAlt(lnglat.lng, lnglat.lat, lnglat.alt)
       })
 

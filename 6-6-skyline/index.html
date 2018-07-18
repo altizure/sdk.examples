@@ -45,7 +45,7 @@
             {lng: 116.32462514375021, lat: 42.55410253584618, alt: 87.82058331126802},
             {lng: 116.34160411359991, lat: 42.546632372674885, alt: 86.67171156577324},
             {lng: 116.354268710125, lat: 42.54903831604285, alt: 93.40062798509614}
-          ].map((lla) => { return new altizure.LngLatAlt(lla.lng, lla.lat, 0) }),
+          ].map(function(lla) { return new altizure.LngLatAlt(lla.lng, lla.lat, 0) }),
           top: 10,
           bottom: 0.1,
           opacity: 0.07,
@@ -72,7 +72,7 @@
           position: {lng: 116.35926312130725, lat: 42.564267891757254, alt: 0}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         altmarker = m
         setUpUI()
       })
@@ -135,7 +135,7 @@
         farDistance: 0,
         fov: 40,
         tagScale: 5,
-        computeHeightLimit: () => {
+        computeHeightLimit: function() {
           // skyline
           let time0 = Date.now()
           calculator.computeSkyline()
@@ -187,7 +187,7 @@
           }
           index = 0
           contactInfos = []
-          tagMarkers.map((tag) => {if (tag) tag.destruct()})
+          tagMarkers.map(function(tag) {if (tag) tag.destruct()})
           tagMarkers = []
           let heightMap = calculator.computeHeightLimitMap()
           if (heightLimitMarker !== null) {
@@ -200,7 +200,7 @@
             lineWidth: 2
           })
           heightLimitMarker.interactable = true
-          heightLimitMarker.on('click', (e) => {
+          heightLimitMarker.on('click', function(e) {
             let info = heightLimitMarker.cast(e)
             contactInfos.push(info)
             if (!info) return
@@ -234,7 +234,7 @@
         changingViewPointLngLat: false
       }
       let currentPt = viewPoint
-      document.addEventListener('click', (event) => {
+      document.addEventListener('click', function(event){
         if (settings.changingViewPointLngLat) {
           let pt = sandbox.window.toLngLatAlt(event)
           if (pt) {
@@ -259,42 +259,42 @@
         gui = new dat.GUI({autoplace: false, width: 400})
         gui.add(settings, 'computeHeightLimit')
         var paraFolder = gui.addFolder('Parameters')
-        paraFolder.add(settings, 'skylineLength', 10, 1024, 1).onChange((value) => {
+        paraFolder.add(settings, 'skylineLength', 10, 1024, 1).onChange(function(value) {
           settings.skylineLength = value
           calculator.skylineLength = value
         }).listen()
-        paraFolder.add(settings, 'polygonSampleResolution', 10, 100, 1).onChange((value) => {
+        paraFolder.add(settings, 'polygonSampleResolution', 10, 100, 1).onChange(function(value) {
           settings.polygonSampleResolution = value
           calculator.polygonSampleResolution = value
         }).listen()
         paraFolder.add(settings, 'changingViewPointLngLat').listen()
-        paraFolder.add(settings, 'viewPointTagPinLength', 0, 300, 1).onChange((value) => {
+        paraFolder.add(settings, 'viewPointTagPinLength', 0, 300, 1).onChange(function(value) {
           settings.viewPoint = {lng: currentPt.lng, lat: currentPt.lat, alt: currentPt.alt + value}
           settings.viewPointTagPinLength = value
           calculator.viewPoint = settings.viewPoint
           tagInViewPoint.pinLength = value
         }).listen()
         var cameraFolder = gui.addFolder('Camera Parameters')
-        cameraFolder.add(settings, 'fov', 10, 60, 1).name('fov (degree)').onChange((v) => {
+        cameraFolder.add(settings, 'fov', 10, 60, 1).name('fov (degree)').onChange(function(v) {
           settings.fov = v
           calculator.fov = v
         }).listen()
-        cameraFolder.add(settings, 'heightResolution', 0.1, 2, 0.1).name('height resolution (m)').onChange((v) => {
+        cameraFolder.add(settings, 'heightResolution', 0.1, 2, 0.1).name('height resolution (m)').onChange(function(v) {
           settings.heightResolution = v
           calculator.heightResolution = v
         }).listen()
-        cameraFolder.add(settings, 'nearDistance', 0, 10000, 1).name('near (m)').onChange((v) => {
+        cameraFolder.add(settings, 'nearDistance', 0, 10000, 1).name('near (m)').onChange(function(v) {
           settings.nearDistance = v
           calculator.nearDistance = v
         }).listen()
-        cameraFolder.add(settings, 'farDistance', 0, 10000, 1).name('far (m)').onChange((v) => {
+        cameraFolder.add(settings, 'farDistance', 0, 10000, 1).name('far (m)').onChange(function(v) {
           settings.farDistance = v
           calculator.farDistance = v
         }).listen()
         var visualizeFolder = gui.addFolder('Visualize Parameters')
-        visualizeFolder.add(settings, 'tagScale', 0.1, 20, 0.1).name('tag scale').onChange((v) => {
+        visualizeFolder.add(settings, 'tagScale', 0.1, 20, 0.1).name('tag scale').onChange(function(v) {
           settings.tagScale = v
-          tagMarkers.map((tag) => {if (tag) tag.scale = v})
+          tagMarkers.map(function(tag) {if (tag) tag.scale = v})
         }).listen()
       }
       function addContactInformation (info, tag, i) {
@@ -302,7 +302,7 @@
         let folder = gui.addFolder(name)
         let contactinfos = {
           height: tag.pinLength,
-          remove: () => {
+          remove: function() {
             tagMarkers[i].destruct()
             contactinfos[i] = undefined
             tagMarkers[i] = undefined

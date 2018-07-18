@@ -94,7 +94,7 @@
           this.minLat = '22.33'
           this.maxLng = '114.27'
           this.maxLat = '22.34'
-          this.visualizeBoundary = () => {
+          this.visualizeBoundary = function() {
             if (!this._validateBoundary()) return
             let minLng = parseFloat(this.minLng)
             let minLat = parseFloat(this.minLat)
@@ -102,7 +102,7 @@
             let maxLat = parseFloat(this.maxLat)
             visualizeBBOX([minLng, maxLng], [minLat, maxLat])
           }
-          this.queryAndVisualize = () => {
+          this.queryAndVisualize = function() {
             if (!this._validateBoundary()) return
             let minLng = parseFloat(this.minLng)
             let minLat = parseFloat(this.minLat)
@@ -113,12 +113,12 @@
                 max: {lng: maxLng, lat: maxLat}
             }
             visualizeBBOX([minLng, maxLng], [minLat, maxLat])
-            altizure.GeoJson.getGeoJson({bbox}).then((res) => {
-                polygonMarkers.map((polygon) => {polygon.destruct()})
+            altizure.GeoJson.getGeoJson(bbox).then(function(res) {
+                polygonMarkers.map(function(polygon) {polygon.destruct()})
                 polygonMarkers = []
                 features = []
                 console.log(res.geojson)
-                res.geojson.features.map((feature) => {
+                res.geojson.features.map(function(feature) {
                     if (feature.geometry.type === 'Polygon') {
                         features.push(feature)
                     }
@@ -129,18 +129,18 @@
                     color: 0xffffff * Math.random(),
                     opacity: 0.2
                 })
-                polygonMarkers.map((polygon, i) => {
+                polygonMarkers.map(function(polygon, i) {
                     polygon.color = 0xffffff * Math.random()
                     polygon.interactable = true
-                    polygon.on('click', (e) => {
+                    polygon.on('click', function(e) {
                         refreshMessage(features[i].properties)
-                        polygonMarkers.map((polygon) => {polygon.opacity = 0.2})
+                        polygonMarkers.map(function(polygon) {polygon.opacity = 0.2})
                         polygon.opacity = polygon.opacity === 0.2 ? 0.8 : 0.2
                     })
                 })
             })
           }
-          this._validateBoundary = () => {
+          this._validateBoundary = function() {
             let minLng = parseFloat(this.minLng)
             let minLat = parseFloat(this.minLat)
             let maxLng = parseFloat(this.maxLng)
@@ -180,7 +180,7 @@
           if (onChangeFunc) {
             controller.onFinishChange(onChangeFunc)
           } else {
-            controller.onFinishChange((value) => {
+            controller.onFinishChange(function(value) {
               setting[key] = value
               setting.visualizeBoundary()
             })

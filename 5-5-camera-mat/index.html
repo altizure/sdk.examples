@@ -45,11 +45,11 @@
       ]
 
       let play = true
-      document.addEventListener('mousedown', () => { play = false })
+      document.addEventListener('mousedown', function()  { play = false })
 
-      setTimeout(() => {
+      setTimeout(function()  {
         flyPath(ms) // resolves when flight ends
-          .catch((err)=>{
+          .catch(function(err){
             console.error(err)
           })
       }, 8000)
@@ -69,7 +69,7 @@
       
       function infiniteFly () {
         return flyPath(ms)
-          .then( res => {
+          .then(function(res) {
             if (play) {
               return infiniteFly()
             } else {

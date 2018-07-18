@@ -29,9 +29,9 @@
       let sandbox = new altizure.Sandbox('page-content', options)
 
       let altmarker0, altmarker1, altmarker2
-      Promise.all([{id: '5849104597b73e0b090c01e8'}, {id: '58428f1d97b73e0b090675cd'}, {id: '572e2668ad5ed4204d2f8e5a'}].map((obj) => {
+      Promise.all([{id: '5849104597b73e0b090c01e8'}, {id: '58428f1d97b73e0b090675cd'}, {id: '572e2668ad5ed4204d2f8e5a'}].map(function(obj) {
         return sandbox.add('AltizureProjectMarker', {pid: obj.id})
-      })).then((values) => {
+      })).then(function(values)  {
         altmarker0 = values[0]
         altmarker1 = values[1]
         altmarker2 = values[2]
@@ -62,7 +62,7 @@
             {lng: 113.94453377411432, lat: 22.542449777483725, alt: 0},
             {lng: 113.94337091245552, lat: 22.542380402518752, alt: 0},
             {lng: 113.94296517658995, lat: 22.542562824052045, alt: 0}
-          ].map((pt) => {
+          ].map(function(pt) {
             return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
           }),
           top: 40,
@@ -90,7 +90,7 @@
           {lng: 114.24997688309988, lat: 22.322119767514707, alt: 0},
           {lng: 114.25014812262552, lat: 22.321195292402127, alt: 0},
           {lng: 114.25412951455897, lat: 22.321010301358054, alt: 0}
-        ].map((pt) => {
+        ].map(function(pt) {
           return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
         }),
         color: 0x00ffff,
@@ -121,11 +121,18 @@
       function setUpUI () {
         text = {
           marker: 'altmarker0',
-          altmarker0, altmarker1, altmarker2, objmarker, polygonmarker, polylinemarker, texttagmarker,
-
+          /**
+          altmarker0, 
+          altmarker1, 
+          altmarker2, 
+          objmarker, 
+          polygonmarker, 
+          polylinemarker, 
+          texttagmarker,
+*/
           north: 0,
           tilt: 0,
-          compute: () => {
+          compute: function() {
             sandbox.camera.lookAt(text[text.marker], text.north, text.tilt, undefined)
           }
         }
@@ -139,15 +146,15 @@
           PolygonMarker: 'polygonmarker',
           PolyLineMarker: 'polylinemarker',
           TextTagMarker: 'texttagmarker'
-        }).onChange((v) => {
+        }).onChange(function(v) {
           sandbox.camera.lookAt(text[v], text.north, text.tilt, undefined)
           text.marker = v
         })
-        gui.add(text, 'north', 0, 360, 1).onFinishChange((v) => {
+        gui.add(text, 'north', 0, 360, 1).onFinishChange(function(v) {
           sandbox.camera.lookAt(text[text.marker], v, text.tilt, undefined)
           text.north = v
         })
-        gui.add(text, 'tilt', 0, 89, 1).onFinishChange((v) => {
+        gui.add(text, 'tilt', 0, 89, 1).onFinishChange(function(v) {
           sandbox.camera.lookAt(text[text.marker], text.north, v, undefined)
           text.tilt = v
         })

@@ -47,21 +47,21 @@
         position: {lng: 113.93920875334851, lat: 22.53672047469201, alt: 0.01}
       }
     })
-    .then((m) => {
+    .then(function(m) {
       // altizure project created, m is the arker
       marker = m
       return m.initialized
     })
-    .then((m) => {
+    .then(function(m) {
       return m.loadCropMask() // [optional] download crop mask configured in Altizure
     })
-    .then((m) => {
+    .then(function(m)  {
       // altizure project initialized
       // setup the cropping tools
       showGUI(m)
       return Promise.resolve(m)
     })
-    .catch((err) => {
+    .catch(function(err)  {
       console.error(err)
       return err
     })
@@ -78,7 +78,7 @@
     let finalDataObjects = {
       points: []
     }
-    let leftClickFunc = (e) => {
+    let leftClickFunc = function(e) {
       if (!globalGuiSettings.drawing) return
       // left click to draw line
       let pt = sandbox.window.toLngLatAlt(e)
@@ -95,7 +95,7 @@
       }
       finalDataObjects.points.push(pt)
     }
-    let moveFunc = (e) => {
+    let moveFunc = function(e)  {
       // editing line
       if (!globalGuiSettings.drawing) return
       let pt = sandbox.window.toLngLatAlt(e)
@@ -104,15 +104,15 @@
         drawingLine.setPoint(drawingLine.pointsNumber - 2, pt)
       }
     }
-    let rightClickFunc = (e) => {
+    let rightClickFunc = function(e) {
       // right click to finish
       // console.log(e.button)
       if (!globalGuiSettings.drawing) return
 
       let points = finalDataObjects.points
       if (points.length >= 3) {
-        let lnglatpoints = points.map((pt) => {return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)}) // for tags
-        let tags = lnglatpoints.map((pt) => {
+        let lnglatpoints = points.map(function(pt) {return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)}) // for tags
+        let tags = lnglatpoints.map(function(pt) {
           let tag = new altizure.TagMarker({
             sandbox: sandbox,
             position: pt,
@@ -131,9 +131,9 @@
         globalGuiSettings.drawingMarker = {
           tags: tags, line: finalLine
         }
-        tags.map((tag, i) => {
+        tags.map(function(tag, i)  {
           tag.interactable = true
-          tag.on('mousedrag', (e) => {
+          tag.on('mousedrag', function(e)  {
             let pt = sandbox.window.toLngLatAlt(e)
             if (pt) {
               tag.position = pt
@@ -157,10 +157,10 @@
     }
 
     let lastDownEvent
-    sandbox.renderer.domElement.addEventListener('mousedown', (e) => {
+    sandbox.renderer.domElement.addEventListener('mousedown', function(e)  {
       lastDownEvent = e
     })
-    sandbox.renderer.domElement.addEventListener('mouseup', (e) => {
+    sandbox.renderer.domElement.addEventListener('mouseup', function(e) {
       if (e.button === lastDownEvent.button && Math.abs(e.x - lastDownEvent.x) <= 3 && Math.abs(e.y - lastDownEvent.y) <= 3) {
         if (e.button === 0) {
           leftClickFunc(e)
@@ -169,7 +169,7 @@
         }
       }
     })
-    sandbox.renderer.domElement.addEventListener('mousemove', (e) => {
+    sandbox.renderer.domElement.addEventListener('mousemove', function(e) {
       moveFunc(e)
     })
 
@@ -200,7 +200,7 @@
 
       let selectedType = 'none'
       let guiSettings = {
-        keep: () => {
+        keep: function()  {
           if (selectedType !== 'none') return
           selectedType = 'keep'
           refreshAll()
@@ -208,7 +208,7 @@
           globalGuiSettings.cropInner = false
           gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = 'gray'
         },
-        remove: () => {
+        remove: function()  {
           if (selectedType !== 'none') return
           selectedType = 'remove'
           refreshAll()
@@ -216,9 +216,9 @@
           globalGuiSettings.cropInner = true
           gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = 'gray'
         },
-        apply: () => {
+        apply: function()  {
           if (finalDataObjects.points && finalDataObjects.points.length > 2) {
-            let pts = finalDataObjects.points.map((pt) => {
+            let pts = finalDataObjects.points.map(function(pt) {
               return new altizure.LngLatAlt(pt.lng, pt.lat, 0)
             })
             pts.push(pts[0])
@@ -230,7 +230,7 @@
           gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = ''
           selectedType = 'none'
         },
-        reset: () => {
+        reset: function() {
           refreshAll()
           marker.uncrop()
           gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = ''

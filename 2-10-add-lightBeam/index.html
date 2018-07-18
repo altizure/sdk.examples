@@ -59,7 +59,7 @@
 
     var fixBeamPose = false
 
-    window.addEventListener('mousemove', (e) => {
+    window.addEventListener('mousemove', function(e)  {
       if (fixBeamPose) return
       let pt = sandbox.window.toLngLatAlt({
         x: window.innerWidth / 2,
@@ -84,16 +84,16 @@
 
     var property1 = new LightBeamProperty(beam1)
 
-    lightBeamFolder1.add(property1, 'radius', 0.1, 30).onChange((value) => {
+    lightBeamFolder1.add(property1, 'radius', 0.1, 30).onChange(function(value) {
       property1.beam.radius = value // TextTagMarker change text: marker.text = newText
     })
-    lightBeamFolder1.add(property1, 'height', 1, 100).onChange((value) => {
+    lightBeamFolder1.add(property1, 'height', 1, 100).onChange(function(value) {
       property1.beam.height = value // TextTagMarker change text: marker.text = newText
     })
-    lightBeamFolder1.addColor(property1, 'color').onChange((value) => {
+    lightBeamFolder1.addColor(property1, 'color').onChange(function(value) {
       property1.beam.color = value // TextTagMarker change text: marker.text = newText
     })
-    lightBeamFolder1.add(property1, 'fixed').onChange((value) => {
+    lightBeamFolder1.add(property1, 'fixed').onChange(function(value) {
       fixBeamPose = value
     })
   </script>
