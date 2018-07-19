@@ -411,10 +411,18 @@
       }
 
       function generateCardUI(name, position) {
+        /**
         let content =
-          '<div class="card" style="width: ${cardWidth}px; height: ${cardHeight}px; position: absolute; left: ${position.x}px; top: ${position.y}px; text-align: center;">
+          `<div class="card" style="width: ${cardWidth}px; height: ${cardHeight}px; position: absolute; left: ${position.x}px; top: ${position.y}px; text-align: center;">
               <p class="card-text" style="margin: auto auto">${name}</p>
-          </div>'
+          </div>`*/
+
+          let content =
+          '<div class="card" style="width: ' + cardWidth+'px; height: '+cardHeight+'px; position: absolute; left: '+position.x+'px; top: '+position.y+'px; text-align: center;"><p class="card-text" style="margin: auto auto">'+name+'</p></div>'
+        
+        
+        
+        
         let cardDom = document.createElement("div")
         cardDom.className = 'cardContainer'
         cardDom.innerHTML = content
@@ -423,7 +431,8 @@
       }
     }
 
-    function changeCardPosition(card, position, time = 95) {
+    function changeCardPosition(card, position, time ) {
+      time=95
       card.position = position
       // card.ui.style.left = left
       // card.ui.style.top = top
