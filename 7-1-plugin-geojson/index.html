@@ -94,26 +94,27 @@
           this.minLat = '22.33'
           this.maxLng = '114.27'
           this.maxLat = '22.34'
+          var bd=this
           this.visualizeBoundary = function() {
-            if (!this._validateBoundary()) return
-            let minLng = parseFloat(this.minLng)
-            let minLat = parseFloat(this.minLat)
-            let maxLng = parseFloat(this.maxLng)
-            let maxLat = parseFloat(this.maxLat)
+            if (!bd._validateBoundary()) return
+            let minLng = parseFloat(bd.minLng)
+            let minLat = parseFloat(bd.minLat)
+            let maxLng = parseFloat(bd.maxLng)
+            let maxLat = parseFloat(bd.maxLat)
             visualizeBBOX([minLng, maxLng], [minLat, maxLat])
           }
           this.queryAndVisualize = function() {
-            if (!this._validateBoundary()) return
-            let minLng = parseFloat(this.minLng)
-            let minLat = parseFloat(this.minLat)
-            let maxLng = parseFloat(this.maxLng)
-            let maxLat = parseFloat(this.maxLat)
+            if (!bd._validateBoundary()) return
+            let minLng = parseFloat(bd.minLng)
+            let minLat = parseFloat(bd.minLat)
+            let maxLng = parseFloat(bd.maxLng)
+            let maxLat = parseFloat(bd.maxLat)
             let bbox = {
                 min: {lng: minLng, lat: minLat},
                 max: {lng: maxLng, lat: maxLat}
             }
             visualizeBBOX([minLng, maxLng], [minLat, maxLat])
-            altizure.GeoJson.getGeoJson(bbox).then(function(res) {
+            altizure.GeoJson.getGeoJson({bbox:bbox}).then(function(res) {
                 polygonMarkers.map(function(polygon) {polygon.destruct()})
                 polygonMarkers = []
                 features = []
