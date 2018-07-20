@@ -44,8 +44,8 @@
       })
       // set tag to be interactable, then it can respond to mouse events (refer to 3-1-mouse-events for more details)
       tag1.interactable = true
-      tag1.on('mouseenter', (e) => { tag1.scale = 2 })
-      tag1.on('mouseleave', (e) => { tag1.scale = 1 })
+      tag1.on('mouseenter', function(e) { tag1.scale = 2 })
+      tag1.on('mouseleave', function(e)  { tag1.scale = 1 })
 
       // use an icon in the tag
       let tag2 = new altizure.TagMarker({
@@ -68,8 +68,8 @@
         scale: 2
       })
       tag3.interactable = true
-      tag3.on('mouseenter', (e) => { tag3.scale = 3 })
-      tag3.on('mouseleave', (e) => { tag3.scale = 2 })
+      tag3.on('mouseenter', function(e)  { tag3.scale = 3 })
+      tag3.on('mouseleave', function(e) { tag3.scale = 2 })
 
     </script>
     <script src="../third_party/dat.gui.js"></script>
@@ -81,6 +81,7 @@
 
       function setUpUIFolder (tag, folderName, open) {
         let folder = gui.addFolder(folderName)
+        /**
         let isSprite = true
         let pivotx = 0.5
         let pivoty = 0.5
@@ -89,31 +90,40 @@
         let eulerz = 0
         let pinLength = 0
         let settings = {isSprite, pivotx, pivoty, eulerx, eulery, eulerz, pinLength}
-        folder.add(settings, 'isSprite').onChange((v) => {
+        */
+        let settings = {
+          isSprite : true,
+          pivotx : 0.5,
+          pivoty : 0.5,
+          eulerx : Math.PI / 2,
+          eulery : 0,
+          eulerz : 0,
+          pinLength : 0}
+        folder.add(settings, 'isSprite').onChange(function(v) {
           tag.isSprite = v
           settings.isSprite = v
         })
-        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange((v) => {
+        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange(function(v) {
           tag.pivot = {x: v}
           settings.pivotx = v
         })
-        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange((v) => {
+        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange(function(v) {
           tag.pivot = {y: v}
           settings.pivoty = v
         })
-        folder.add(settings, 'eulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+        folder.add(settings, 'eulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange(function(v) {
           tag.tagQuaternion = {x: v, y: settings.eulery, z: settings.eulerz, order: 'XYZ', isEuler: true}
           settings.eulerx = v
         })
-        folder.add(settings, 'eulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+        folder.add(settings, 'eulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange(function(v) {
           tag.tagQuaternion = {x: settings.eulerx, y: v, z: settings.eulerz, order: 'XYZ', isEuler: true}
           settings.eulery = v
         })
-        folder.add(settings, 'eulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+        folder.add(settings, 'eulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange(function(v) {
           tag.tagQuaternion = {x: settings.eulerx, y: settings.eulery, z: v, order: 'XYZ', isEuler: true}
           settings.eulerz = v
         })
-        folder.add(settings, 'pinLength', 0, 20, 1).onChange((v) => {
+        folder.add(settings, 'pinLength', 0, 20, 1).onChange(function(v) {
           tag.pinLength = v
           settings.pinLength = v
         })

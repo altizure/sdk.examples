@@ -55,16 +55,16 @@
   
         let altmarker, altmarkerpos, polygonMarkers, boundary
         sandbox.add('AltizureProjectMarker', {pid: projectMarkerID})
-        .then((m) => {
+        .then(function(m) {
           sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
           return m.initialized
         })
-        .then((m) => {
+        .then(function(m){
           altmarker = m
           altmarkerpos = m.position
   
           altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(altmarker)
-          .then((result) => {
+          .then(function(result) {
             polygonMarkers = altizure.GeoJson.polygonsFromGeoJson(result.geojson, sandbox, {top: 80, bottom: 10, color: 0x0000ff, opacity: 0.3})
             boundary = [result.bbox.min, result.bbox.max]
   
@@ -76,49 +76,50 @@
       <script>
         function setUpUI (altmarker, polygonMarkers, boundary) {
           var AlignSetting = function (altizuremarker, polygonMarkers, boundary) {
-            this.resolution = 512
-            this.rotationDegree = 0
-            this.progress = 0
-            this.computing = false
-            this.altizuremarker = altizuremarker
-            this.polygonmarkers = polygonMarkers
-            this.boundarypts = boundary
+            let scope = this
+            scope.resolution = 512
+            scope.rotationDegree = 0
+            scope.progress = 0
+            scope.computing = false
+            scope.altizuremarker = altizuremarker
+            scope.polygonmarkers = polygonMarkers
+            scope.boundarypts = boundary
   
-            this.start_time = 0
-            this.time = 0
+            scope.start_time = 0
+            scope.time = 0
   
             // automatically align 3D model to polygons
-            this.align = () => {
-              if (this.computing) return
-              this.computing = true
-              this.progress = 1
-              this.start_time = Date.now()
+            scope.align = function(){
+              if (scope.computing) return
+              scope.computing = true
+              scope.progress = 1
+              scope.start_time = Date.now()
   
-              let images = this.altizuremarker._generateImages({
-                polygonMarkers: this.polygonmarkers,
-                boundary: this.boundarypts,
-                resolution: this.resolution
+              let images = scope.altizuremarker._generateImages({
+                polygonMarkers: scope.polygonmarkers,
+                boundary: scope.boundarypts,
+                resolution: scope.resolution
               })
-              this.altizuremarker._detectOffset(images.srcImg, images.dstImg, {}, (progress) => {
+              scope.altizuremarker._detectOffset(images.srcImg, images.dstImg, {}, function(progress) {
                 if (progress.log) {
                   console.log(progress.msg)
                 } else if (typeof progress === 'number') {
-                  this.progress = progress
+                  scope.progress = progress
                 }
-                this.time = (Date.now() - this.start_time) / 1000.0
+                scope.time = (Date.now() - scope.start_time) / 1000.0
               })
-              .then((val) => {
+              .then(function(val){
                 console.log('offset is', val)
-                let pos = this.altizuremarker.position
+                let pos = scope.altizuremarker.position
                 pos.lng += val.lng
                 pos.lat += val.lat
-                this.altizuremarker.position = pos
-                this.computing = false
+                scope.altizuremarker.position = pos
+                scope.computing = false
               })
             }
   
-            this._autoAdjustPolygon = () => {
-              this.altizuremarker.autoAdjustPolygons(this.boundarypts, this.polygonmarkers, this.resolution)
+            scope._autoAdjustPolygon = function()  {
+              scope.altizuremarker.autoAdjustPolygons(scope.boundarypts, scope.polygonmarkers, scope.resolution)
             }
           }
           var setting = new AlignSetting(altmarker, polygonMarkers, boundary)
@@ -128,12 +129,12 @@
           alignFolder.open()
   
           var resolutionController = alignFolder.add(setting, 'resolution', 512, 1024, 128)
-          resolutionController.onChange((value) => {
+          resolutionController.onChange(function(value) {
             setting.resolution = value
           })
           resolutionController.listen()
           var rotationDegreeController = alignFolder.add(setting, 'rotationDegree', -5, 5, 0.1)
-          rotationDegreeController.onChange((value) => {
+          rotationDegreeController.onChange(function(value) {
             setting.rotationDegree = value
             let orientation = altmarker.orientation
             orientation.setFromAxisAngle({x: 0, y: 0, z: 1}, Math.PI / 180 * value)

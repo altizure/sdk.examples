@@ -48,7 +48,7 @@
       var gui = new dat.GUI()
 
       let tagIndex = 0
-      let insertTag = () => {
+      let insertTag = function () {
         let pt = sandbox.window.toLngLatAlt({
           x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
         })
@@ -60,18 +60,18 @@
             imgUrl: '../public/assets/img/tag/normal/tagDemo.png'
           })
           tag.interactable = true
-          tag.on('mouseenter', (e) => {
+          tag.on('mouseenter', function (e) {
             tag.scale = 4
           })
-          tag.on('mouseleave', (e) => {
+          tag.on('mouseleave', function (e) {
             tag.scale = 2
           })
           setUpUIFolder(tag, '../public/assets/img/tag/normal/tagDemo.png', 'Tag ' + tagIndex, true)
           tagIndex += 1
         }
       }
-      gui.add({insertTag}, 'insertTag')
-
+      gui.add({insertTag: insertTag}, 'insertTag')
+  
       let demoTag = new altizure.TagMarker({
         sandbox: sandbox,
         scale: 1,
@@ -81,7 +81,7 @@
         imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
         fixedSize: 50
       })
-      sandbox.on('cameraChange', () => {
+      sandbox.on('cameraChange', function () {
         let pt = sandbox.window.toLngLatAlt({
           x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
         })
@@ -100,40 +100,49 @@
         let eulerz = 0
         let pinLength = tag.pinLength
         let texture = url
-        let settings = {isSprite, pivotx, pivoty, eulerx, eulery, eulerz, pinLength, texture}
-        folder.add(settings, 'isSprite').onChange((v) => {
+        let settings = {
+          isSprite: isSprite,
+          pivotx: pivotx,
+          pivoty: pivoty,
+          eulerx: eulerx,
+          eulery: eulery,
+          eulerz: eulerz,
+          pinLength: pinLength,
+          texture: texture
+        }
+        folder.add(settings, 'isSprite').onChange( function (v) {
           tag.isSprite = v
           settings.isSprite = v
         })
-        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange((v) => {
+        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange( function (v) {
           tag.pivot = {x: v}
           settings.pivotx = v
         })
-        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange((v) => {
+        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange( function (v) {
           tag.pivot = {y: v}
           settings.pivoty = v
         })
-        folder.add(settings, 'eulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+        folder.add(settings, 'eulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange( function (v) {
           tag.tagQuaternion = {x: v, y: settings.eulery, z: settings.eulerz, order: 'XYZ', isEuler: true}
           settings.eulerx = v
         })
-        folder.add(settings, 'eulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+        folder.add(settings, 'eulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange( function (v) {
           tag.tagQuaternion = {x: settings.eulerx, y: v, z: settings.eulerz, order: 'XYZ', isEuler: true}
           settings.eulery = v
         })
-        folder.add(settings, 'eulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange((v) => {
+        folder.add(settings, 'eulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange( function (v) {
           tag.tagQuaternion = {x: settings.eulerx, y: settings.eulery, z: v, order: 'XYZ', isEuler: true}
           settings.eulerz = v
         })
-        folder.add(settings, 'pinLength', 0, 20, 1).onChange((v) => {
+        folder.add(settings, 'pinLength', 0, 20, 1).onChange( function (v) {
           tag.pinLength = v
           settings.pinLength = v
         })
-        folder.add(settings, 'texture').onFinishChange((v) => {
+        folder.add(settings, 'texture').onFinishChange( function (v) {
           tag.texture = v
           settings.texture = v
         })
-        settings.remove = () => {
+        settings.remove = function () {
           tag.destruct()
           gui.removeFolder(folderName)
         }

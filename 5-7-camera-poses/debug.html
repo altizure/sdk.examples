@@ -36,7 +36,7 @@
 
       let marker = null
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
-      .then( m => {
+      .then( function(m) {
         marker = m
         marker.importPhotos({
           showCameras: true // set to true to visualize all camera poses

@@ -53,7 +53,7 @@
           [113.9393084139167, 22.53630775602314],
           [113.93925819093029, 22.53630539546885],
           [113.93925941184116, 22.536038196392003]
-      ].map((lnglat) => {
+      ].map(function(lnglat)  {
         return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
       })
 
@@ -64,23 +64,23 @@
         [113.93945433925597, 22.53718272790738],
         [113.93945744949984, 22.536853133662152],
         [113.93868723125762, 22.536830165346906]
-      ].map((lnglat) => {
+      ].map(function(lnglat)  {
         return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
       })
   
       // crop must happend after the altizure project is initialized
       let marker = null
       sandbox.add('AltizureProjectMarker', { 
-        pid: '5849104597b73e0b090c01e8',
+        pid: '5849104597b73e0b090c01e8'       ,
         pose: {
           position: {lng: 113.93920875334851, lat: 22.53672047469201, alt: 100.01}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         // altizure project created, m is the marker
         return m.initialized
       })
-      .then((m) => {
+      .then(function(m) {
         // altizure project initialized
         marker = m
         return new Promise(function (resolve, reject) {
@@ -104,17 +104,17 @@
            * So we add a timeout to wait here so that the meshes will be rendered and get correct depth in step 3. 
           */
         })
-      }).then(() => {
-        visualizeFutureCrop1(marker, boundary).then(() => {
+      }).then(function() {
+        visualizeFutureCrop1(marker, boundary).then(function() {
           // ditch marker created
           marker.crop(boundary) // crop by boundary defined above
         })
-        visualizeFutureCrop2(marker, boundary2).then(() => {
+        visualizeFutureCrop2(marker, boundary2).then(function()  {
           // ditch marker created
           marker.crop(boundary2) // crop by boundary defined above
         })
       })
-      .catch((err) => {
+      .catch(function(err) {
         console.error(err)
         return err
       })

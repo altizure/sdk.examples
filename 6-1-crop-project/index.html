@@ -51,7 +51,7 @@
           [113.9393084139167, 22.53630775602314],
           [113.93925819093029, 22.53630539546885],
           [113.93925941184116, 22.536038196392003]
-      ].map((lnglat) => {
+      ].map(function(lnglat) {
         return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
       })
   
@@ -86,7 +86,7 @@
         [113.93945433925597, 22.53718272790738],
         [113.93945744949984, 22.536853133662152],
         [113.93868723125762, 22.536830165346906]
-      ].map((lnglat) => {
+      ].map(function(lnglat) {
         return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
       })
   
@@ -117,15 +117,15 @@
       // crop must happend after the altizure project is initialized
       let marker = null
       sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
-      .then((m) => {
+      .then(function(m) {
         // altizure project created, m is the arker
         marker = m
         return m.initialized
       })
-      .then((m) => {
+      .then(function(m) {
         return m.loadCropMask() // [optional] download crop mask configured in Altizure
       })
-      .then((m) => {
+      .then(function(m) {
         // altizure project initialized
         m.crop(boundary) // crop by boundary defined above
         m.crop(boundary2) // crop by boundary2
@@ -133,11 +133,11 @@
         showGUI(m)
         return Promise.resolve(m)
       })
-      .then(m => {
+      .then(function(m)  {
         m.uncrop(boundary) // cancel cropping of a specified region
         return Promise.resolve(m)
       })
-      .catch((err) => {
+      .catch(function(err) {
         console.error(err)
         return err
       })
@@ -148,23 +148,23 @@
   
       function showGUI (projectMarker) {
         var Settings = function () {
-          this.crop1 = () => {
+          this.crop1 = function() {
             projectMarker.uncrop() // remove effects caused by other operations
             projectMarker.crop(boundary)
           }
-          this.keep1 = () => {
+          this.keep1 = function()  {
             projectMarker.uncrop()
             projectMarker.crop(boundary, false)
           }
-          this.crop2 = () => {
+          this.crop2 = function()  {
             projectMarker.uncrop() // remove effects caused by other operations
             projectMarker.crop(boundary2)
           }
-          this.keep2 = () => {
+          this.keep2 = function() {
             projectMarker.uncrop()
             projectMarker.crop(boundary2, false)
           }
-          this.clear = () => {
+          this.clear = function()  {
             projectMarker.uncrop()
           }
         }

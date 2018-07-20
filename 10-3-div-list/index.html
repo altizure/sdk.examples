@@ -33,7 +33,7 @@
     sandbox.add('AltizureProjectMarker', {
       pid: '58428f1d97b73e0b090675cd'
     })
-      .then((m) => {
+      .then(function(m) {
         sandbox.camera.flyTo({
           lng: m.position.lng,
           lat: m.position.lat,
@@ -65,7 +65,7 @@
           [114.2639228695482, 22.33808247966067],
           [114.26390453796425, 22.338094541028923],
           [114.26389393487725, 22.338119102782738]
-        ].map((lnglat) => {
+        ].map(function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 134,
@@ -93,7 +93,7 @@
           [114.26989107566953, 22.337034154791112],
           [114.26971262710704, 22.336991829503738],
           [114.26951995192896, 22.33695485108905]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 25,
@@ -122,7 +122,7 @@
           [114.26484037186643, 22.338967018404148],
           [114.26486894352294, 22.338833520641934],
           [114.26486701724113, 22.338384650487036]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 140,
@@ -158,7 +158,7 @@
           [114.26199967090072, 22.33493425531558],
           [114.2621236860415, 22.335043859270897],
           [114.26240932407124, 22.335088654999804]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 160,
@@ -182,7 +182,7 @@
           [114.2636598648849, 22.33740217672001],
           [114.26428705476395, 22.33740077725161],
           [114.26430363723762, 22.337586183049194]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 175,
@@ -205,7 +205,7 @@
           [114.26321125964168, 22.339152912812867],
           [114.2630864097108, 22.33908281757001],
           [114.26297335837081, 22.339268805999154]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 145,
@@ -235,7 +235,7 @@
           [114.2638685466663, 22.334550581784686],
           [114.26377755213099, 22.334704643748694],
           [114.26377178203023, 22.33474254230985]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 145,
@@ -260,7 +260,7 @@
           [114.26619356045896, 22.33415409860226],
           [114.26648050043445, 22.33372763277779],
           [114.26599022685109, 22.33336927060381]
-        ].map((lnglat) => {
+        ].map( function(lnglat)  {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 196,
@@ -284,7 +284,7 @@
           [114.26719858251673, 22.33306650318172],
           [114.26697710677558, 22.333228060646768],
           [114.26687653669458, 22.33331639610923]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 206,
@@ -309,7 +309,7 @@
           [114.26353842515793, 22.333744925559525],
           [114.26354916876855, 22.334039567384036],
           [114.26354916876855, 22.334039567384036]
-        ].map((lnglat) => {
+        ].map( function(lnglat) {
           return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
         }),
         top: 150,
@@ -356,7 +356,7 @@
     }
 
     // generate polygon markers in the sandbox
-    polygonsOptions.map((p) => {
+    polygonsOptions.map(function(p)  {
       let tmp = new altizure.PolygonMarker(p)
       // tmp.interactable = true
       // tmp.on('click', (e) => { console.log(tmp.name) })
@@ -371,7 +371,7 @@
     let updatePositionDebounced = Debounce(updatePosition, 100)
     sandbox.on('cameraChange', updatePositionDebounced)
 
-    window.addEventListener('resize', () => {
+    window.addEventListener('resize', function() {
       setupCanvas()
       updatePosition()
     })
@@ -390,31 +390,39 @@
         // set color and mouse event
         $(card.ui).css('background-color', card.polygon.color.getStyle())
           .css('opacity', 0.5)
-          .on('mouseover', () => {
+          .on('mouseover', function() {
             card.polygon.opacity = 0.6
             $(card.ui).css('opacity', 0.9)
           })
-          .on('mouseleave', () => {
+          .on('mouseleave', function() {
             card.polygon.opacity = 0.3
             $(card.ui).css('opacity', 0.5)
           })
 
         card.polygon.interactable = true
-        card.polygon.on('mouseenter', () => {
+        card.polygon.on('mouseenter', function() {
           card.polygon.opacity = 0.6
           $(card.ui).css('opacity', 0.9)
         })
-        card.polygon.on('mouseleave', () => {
+        card.polygon.on('mouseleave', function()  {
           card.polygon.opacity = 0.3
           $(card.ui).css('opacity', 0.5)
         })
       }
 
       function generateCardUI(name, position) {
+        /**
         let content =
           `<div class="card" style="width: ${cardWidth}px; height: ${cardHeight}px; position: absolute; left: ${position.x}px; top: ${position.y}px; text-align: center;">
               <p class="card-text" style="margin: auto auto">${name}</p>
-          </div>`
+          </div>`*/
+
+          let content =
+          '<div class="card" style="width: ' + cardWidth+'px; height: '+cardHeight+'px; position: absolute; left: '+position.x+'px; top: '+position.y+'px; text-align: center;"><p class="card-text" style="margin: auto auto">'+name+'</p></div>'
+        
+        
+        
+        
         let cardDom = document.createElement("div")
         cardDom.className = 'cardContainer'
         cardDom.innerHTML = content
@@ -423,7 +431,8 @@
       }
     }
 
-    function changeCardPosition(card, position, time = 95) {
+    function changeCardPosition(card, position, time) {
+      if (time === undefined) time = 95
       card.position = position
       // card.ui.style.left = left
       // card.ui.style.top = top
@@ -439,7 +448,7 @@
       let timer
       return function () {
         clearTimeout(timer)
-        timer = setTimeout(() => {
+        timer = setTimeout(function()  {
           if (func) func()
         }, delay)
       }
@@ -505,12 +514,12 @@
       let clusters = kmeans(clusterInput, 2)
       // console.log(clusters)
       let _sum = 0
-      clusters[0].map((p) => {
+      clusters[0].map(function(p) {
         _sum += p.x
       })
       let center0 = _sum / clusters[0].length
       _sum = 0
-      clusters[1].map((p) => {
+      clusters[1].map(function(p) {
         _sum += p.x
       })
       let center1 = _sum / clusters[1].length

@@ -1,5 +1,9 @@
 # Changelog of Altizure Sandbox 3D SDK
 
+### 0.2.24
+__Release data:__
+
+
 ### 0.1.62
 
 __Release data:__
