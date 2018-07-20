@@ -431,8 +431,8 @@
       }
     }
 
-    function changeCardPosition(card, position, time ) {
-      time=95
+    function changeCardPosition(card, position, time) {
+      if (time === undefined) time = 95
       card.position = position
       // card.ui.style.left = left
       // card.ui.style.top = top

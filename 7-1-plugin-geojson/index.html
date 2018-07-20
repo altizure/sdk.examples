@@ -94,21 +94,21 @@
           this.minLat = '22.33'
           this.maxLng = '114.27'
           this.maxLat = '22.34'
-          var bd=this
+          var scope=this
           this.visualizeBoundary = function() {
-            if (!bd._validateBoundary()) return
-            let minLng = parseFloat(bd.minLng)
-            let minLat = parseFloat(bd.minLat)
-            let maxLng = parseFloat(bd.maxLng)
-            let maxLat = parseFloat(bd.maxLat)
+            if (!scope._validateBoundary()) return
+            let minLng = parseFloat(scope.minLng)
+            let minLat = parseFloat(scope.minLat)
+            let maxLng = parseFloat(scope.maxLng)
+            let maxLat = parseFloat(scope.maxLat)
             visualizeBBOX([minLng, maxLng], [minLat, maxLat])
           }
           this.queryAndVisualize = function() {
-            if (!bd._validateBoundary()) return
-            let minLng = parseFloat(bd.minLng)
-            let minLat = parseFloat(bd.minLat)
-            let maxLng = parseFloat(bd.maxLng)
-            let maxLat = parseFloat(bd.maxLat)
+            if (!scope._validateBoundary()) return
+            let minLng = parseFloat(scope.minLng)
+            let minLat = parseFloat(scope.minLat)
+            let maxLng = parseFloat(scope.maxLng)
+            let maxLat = parseFloat(scope.maxLat)
             let bbox = {
                 min: {lng: minLng, lat: minLat},
                 max: {lng: maxLng, lat: maxLat}
@@ -142,10 +142,10 @@
             })
           }
           this._validateBoundary = function() {
-            let minLng = parseFloat(this.minLng)
-            let minLat = parseFloat(this.minLat)
-            let maxLng = parseFloat(this.maxLng)
-            let maxLat = parseFloat(this.maxLat)
+            let minLng = parseFloat(scope.minLng)
+            let minLat = parseFloat(scope.minLat)
+            let maxLng = parseFloat(scope.maxLng)
+            let maxLat = parseFloat(scope.maxLat)
             if (Math.abs(maxLat - minLat) > 0.02 || Math.abs(maxLng - minLng) > 0.02) {
               console.warn('the Longtitude and the Latitude differences should be smaller or equal to 0.2')
               return false
