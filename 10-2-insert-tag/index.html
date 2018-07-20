@@ -28,8 +28,12 @@
       }
 
       let sandbox = new altizure.Sandbox('page-content', options)
-
-      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+let marker=null
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'}).then(
+       function(m){marker=m
+       setUI(marker)
+       } 
+      )
     </script>
     <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
     <script>
@@ -48,7 +52,38 @@
       var gui = new dat.GUI()
 
       let tagIndex = 0
-      let insertTag = function() {
+      
+      function setUI(marker){
+      function con() {
+        this.insertTag=function(){
+        let pt = sandbox.window.toLngLatAlt({
+          x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
+        })
+        if (pt) {
+          let tag = new altizure.TagMarker({
+            sandbox: sandbox,
+            scale: 2,
+            position: pt,
+            imgUrl: '../public/assets/img/tag/normal/tagDemo.png'
+          })
+          tag.interactable = true
+          tag.on('mouseenter', function(e) {
+            tag.scale = 4
+          })
+          tag.on('mouseleave', function(e) {
+            tag.scale = 2
+          })
+          setUpUIFolder(tag, '../public/assets/img/tag/normal/tagDemo.png', 'Tag ' + tagIndex, true)
+          tagIndex += 1
+        }
+      }}
+     var c1=new con()
+     gui.add(c1, 'insertTag')
+      }
+  
+
+      /**original code
+      var insertTag = function () {
         let pt = sandbox.window.toLngLatAlt({
           x: Math.floor(window.innerWidth / 2), y: Math.floor(window.innerHeight / 2)
         })
@@ -70,8 +105,8 @@
           tagIndex += 1
         }
       }
-      gui.add(insertTag, 'insertTag')
-
+      gui.add({insertTag}, 'insertTag')
+*/
       let demoTag = new altizure.TagMarker({
         sandbox: sandbox,
         scale: 1,
