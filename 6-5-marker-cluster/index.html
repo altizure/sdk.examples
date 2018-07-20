@@ -7,6 +7,7 @@
   <body>
     <div id="page-content"></div>
     <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
     <script>
       let options = {
         altizureApi:{
@@ -41,7 +42,7 @@
       .then(function(m){
         sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
-        sandbox.queryGeoJsonForAltizureProjectMarker(projectMarker)
+        altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(projectMarker)
         .then(function(result) {
           visualizeGeoJSONData(result.geojson)
           sandbox.positionsAltitude(positions).map(function(alt, i) {
