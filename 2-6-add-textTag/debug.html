@@ -101,22 +101,22 @@
 
         var folder = gui.addFolder(name)
 
-        var textController = folder.add(property, 'text').onChange((value) => {
+          var textController = folder.add(property, 'text').onChange(function(value) {
           property.textTagMarker.text = value // TextTagMarker change text: marker.text = newText
           property.text = value
         })
 
-        var textColorController = folder.addColor(property, 'textColor').onChange((value) => {
+          var textColorController = folder.addColor(property, 'textColor').onChange(function(value) {
           property.textTagMarker.textStyle = {fillStyle: value} // TextTagMarker change fillStyle: marker.textStyle = {fillStyle: newStyle}
           property.textColor = value
         })
 
-        var outlineColorController = folder.addColor(property, 'outlineColor').onChange((value) => {
+          var outlineColorController = folder.addColor(property, 'outlineColor').onChange(function(value) {
           property.textTagMarker.textStyle = {outlineStyle: value} // TextTagMarker change outlineStyle: marker.textStyle = {outlineStyle: newStyle}
           property.outlineColor = value
         })
 
-        var outlineWidthController = folder.add(property, 'outlineWidth', 0, 4, 0.01).onChange((value) => {
+          var outlineWidthController = folder.add(property, 'outlineWidth', 0, 4, 0.01).onChange(function(value) {
           property.outlineWidth = value
           property.textTagMarker.textStyle = {outlineWidth: value} // TextTagMarker change outlineWidth: marker.textStyle = {outlineWidth: newStyle}
         })
@@ -128,7 +128,7 @@
           'SimHei', 'Microsoft Yahei', 'PingFang SC', 'STLiti', 'Hannotate SC', 'HanzipenSC',
           'New Times Roman',  'FangSong', 'STXinwei'
         ]
-        fontList.map((font) => {
+          fontList.map(function(font) {
           let supported = fontDetector.detect(font)
           if (supported) {
             let f = '24px ' + font
@@ -138,7 +138,7 @@
           }
         })
 
-        var fontController = folder.add(property, 'font', fontValue).onChange((value) => {
+          var fontController = folder.add(property, 'font', fontValue).onChange(function(value) {
           property.font = value
           property.textTagMarker.textStyle = {font: value} // TextTagMarker change font: marker.textStyle = {font: newFont}
         })

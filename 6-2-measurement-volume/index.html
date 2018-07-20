@@ -161,6 +161,7 @@
     <script>
       function setUpUI (altmarker) {
         var PolyMeasureText = function(altmarker, polygon) {
+          let scope = this
           this.polygon = polygon
           this.refPlane = 64
           this.cut = 0
@@ -170,15 +171,15 @@
           this.highest = 0
           this.lowest = 0
           this.Recompute = function() {
-            this.refPlane = this.polygon.top
-            let ref = this.refPlane
-            let measureInfo = altmarker.getRegionVolume(this.polygon, ref)
-            this.cut = measureInfo.cut
-            this.fill = measureInfo.fill
-            this.area = measureInfo.area
-            this.surface = measureInfo.surface
-            this.highest = measureInfo.highest
-            this.lowest = measureInfo.lowest
+            scope.refPlane = scope.polygon.top
+            let ref = scope.refPlane
+            let measureInfo = altmarker.getRegionVolume(scope.polygon, ref)
+            scope.cut = measureInfo.cut
+            scope.fill = measureInfo.fill
+            scope.area = measureInfo.area
+            scope.surface = measureInfo.surface
+            scope.highest = measureInfo.highest
+            scope.lowest = measureInfo.lowest
           }
         }
         var gui = new dat.GUI()

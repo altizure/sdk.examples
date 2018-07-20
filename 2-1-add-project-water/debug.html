@@ -77,10 +77,10 @@
     
         var property1 = new WaterProperty(w)
     
-        waterFolder.add(property1, 'level', -100, 100).onChange((value) => { property1.water.level = value })
-        waterFolder.add(property1, 'speed', 0, 5).onChange((value) => { property1.water.speed = value })
-        waterFolder.addColor(property1, 'color').onChange((value) => { property1.water.color = value })
-        waterFolder.add(property1, 'wave', 0, 5).onChange((value) => { property1.water.wave = value })
+        waterFolder.add(property1, 'level', -100, 100).onChange(function(value)  { property1.water.level = value })
+        waterFolder.add(property1, 'speed', 0, 5).onChange(function(value) { property1.water.speed = value })
+        waterFolder.addColor(property1, 'color').onChange(function(value)  { property1.water.color = value })
+        waterFolder.add(property1, 'wave', 0, 5).onChange(function(value){ property1.water.wave = value })
       }
     </script>
   </body>

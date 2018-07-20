@@ -94,31 +94,32 @@
           this.minLat = '22.33'
           this.maxLng = '114.27'
           this.maxLat = '22.34'
-          this.visualizeBoundary = () => {
-            if (!this._validateBoundary()) return
-            let minLng = parseFloat(this.minLng)
-            let minLat = parseFloat(this.minLat)
-            let maxLng = parseFloat(this.maxLng)
-            let maxLat = parseFloat(this.maxLat)
+          var scope=this
+          this.visualizeBoundary = function() {
+            if (!scope._validateBoundary()) return
+            let minLng = parseFloat(scope.minLng)
+            let minLat = parseFloat(scope.minLat)
+            let maxLng = parseFloat(scope.maxLng)
+            let maxLat = parseFloat(scope.maxLat)
             visualizeBBOX([minLng, maxLng], [minLat, maxLat])
           }
-          this.queryAndVisualize = () => {
-            if (!this._validateBoundary()) return
-            let minLng = parseFloat(this.minLng)
-            let minLat = parseFloat(this.minLat)
-            let maxLng = parseFloat(this.maxLng)
-            let maxLat = parseFloat(this.maxLat)
+          this.queryAndVisualize = function() {
+            if (!scope._validateBoundary()) return
+            let minLng = parseFloat(scope.minLng)
+            let minLat = parseFloat(scope.minLat)
+            let maxLng = parseFloat(scope.maxLng)
+            let maxLat = parseFloat(scope.maxLat)
             let bbox = {
                 min: {lng: minLng, lat: minLat},
                 max: {lng: maxLng, lat: maxLat}
             }
             visualizeBBOX([minLng, maxLng], [minLat, maxLat])
-            altizure.GeoJson.getGeoJson({bbox}).then((res) => {
-                polygonMarkers.map((polygon) => {polygon.destruct()})
+            altizure.GeoJson.getGeoJson({bbox:bbox}).then(function(res) {
+                polygonMarkers.map(function(polygon) {polygon.destruct()})
                 polygonMarkers = []
                 features = []
                 console.log(res.geojson)
-                res.geojson.features.map((feature) => {
+                res.geojson.features.map(function(feature) {
                     if (feature.geometry.type === 'Polygon') {
                         features.push(feature)
                     }
@@ -129,22 +130,22 @@
                     color: 0xffffff * Math.random(),
                     opacity: 0.2
                 })
-                polygonMarkers.map((polygon, i) => {
+                polygonMarkers.map(function(polygon, i) {
                     polygon.color = 0xffffff * Math.random()
                     polygon.interactable = true
-                    polygon.on('click', (e) => {
+                    polygon.on('click', function(e) {
                         refreshMessage(features[i].properties)
-                        polygonMarkers.map((polygon) => {polygon.opacity = 0.2})
+                        polygonMarkers.map(function(polygon) {polygon.opacity = 0.2})
                         polygon.opacity = polygon.opacity === 0.2 ? 0.8 : 0.2
                     })
                 })
             })
           }
-          this._validateBoundary = () => {
-            let minLng = parseFloat(this.minLng)
-            let minLat = parseFloat(this.minLat)
-            let maxLng = parseFloat(this.maxLng)
-            let maxLat = parseFloat(this.maxLat)
+          this._validateBoundary = function() {
+            let minLng = parseFloat(scope.minLng)
+            let minLat = parseFloat(scope.minLat)
+            let maxLng = parseFloat(scope.maxLng)
+            let maxLat = parseFloat(scope.maxLat)
             if (Math.abs(maxLat - minLat) > 0.02 || Math.abs(maxLng - minLng) > 0.02) {
               console.warn('the Longtitude and the Latitude differences should be smaller or equal to 0.2')
               return false
@@ -180,7 +181,7 @@
           if (onChangeFunc) {
             controller.onFinishChange(onChangeFunc)
           } else {
-            controller.onFinishChange((value) => {
+            controller.onFinishChange(function(value) {
               setting[key] = value
               setting.visualizeBoundary()
             })

@@ -54,14 +54,14 @@
 
       var objects = []
       var tags = []
-      positions.forEach((pos) => {
+      positions.forEach(function(pos) {
         objects.push(new altizure.OBJMarker({
           position: pos,
           sandbox: sandbox,
           name: 'XXX',
           shape: 'CUSTOMIZE',
           objUrl: '../public/assets/object/optimus/optimus.obj',
-          mtlUrl: '',
+          mtlUrl: '../public/assets/object/optimus/optimus.obj.mtl',
           upDir: {x: 0, y: 1, z: 0},
           scale: 5
         }))
@@ -80,20 +80,20 @@
         }))
       })
 
-      objects.forEach((obj) => {
+      objects.forEach(function(obj) {
         obj.interactable = true
         let startTime = undefined 
-        obj.on('mouseenter', (e) => {
+        obj.on('mouseenter', function(e) {
           obj.bboxColor = 0xff0000
         })
-        obj.on('mouseleave', (e) => {
+        obj.on('mouseleave', function(e) {
           obj.scale = 5
           obj.bboxColor = 0xffff00
-          obj.animate = (options) => {}
+          obj.animate = function(options) {}
           startTime = undefined 
         })
-        obj.on('mouseover', (e) => {
-          obj.animate = (options) => {
+        obj.on('mouseover', function(e) {
+          obj.animate = function(options) {
             if (startTime === undefined) {
               startTime = options.currentTime
             } else {
@@ -101,28 +101,28 @@
               if (timeDiff <= 5) {
                 obj.scale = 5 + timeDiff*2
               } else {
-                obj.animate = (options) => {}
+                obj.animate = function(options) {}
               }
             }
           }
         })
-        obj.on('click', (e) => {
+        obj.on('click', function(e) {
           obj.bboxColor = Math.floor(Math.random() * 0xffffff)
         })
       })
 
-      tags.forEach((tag) => {
+      tags.forEach(function(tag) {
         tag.interactable = true
-        tag.on('mouseenter', (e) => {
+        tag.on('mouseenter', function(e) {
           tag.scale = 3
         })
-        tag.on('mouseleave', (e) => {
+        tag.on('mouseleave', function(e) {
           tag.scale = 0.5
         })
         // tag.on('mouseover', (e) => {
         // })
 
-        tag.on('click', (e) => {
+        tag.on('click', function(e) {
           if (tag.imgUrl === '../public/assets/img/tag/normal/tagDemo.png') {
             tag.texture = '../public/assets/img/tag/select/tagDemo.png'
           } else {
@@ -139,7 +139,7 @@
       })
       .then(function (amarker) {
         amarker.interactable = true
-        amarker.on('click', (e) => {
+        amarker.on('click', function(e) {
           console.log('altizure marker clicked', amarker)
         })
       })
@@ -151,7 +151,7 @@
         [127.54478921643462, 45.020521817167525],
         [127.54478921643462, 45.025521817167525]
       ]
-      let pts = lnglats.map((lnglat) => {
+      let pts = lnglats.map(function(lnglat) {
         return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
       })
       let volume = {
@@ -168,10 +168,10 @@
         interactable: true
       })
       let defaultColor = poly.color
-      poly.on('mouseenter', (e) => {
+      poly.on('mouseenter', function(e) {
         poly.color = 0xaa0000
       })
-      poly.on('mouseleave', (e) => {
+      poly.on('mouseleave', function(e) {
         poly.color = defaultColor
       })
       poly.on('click', function (event) {

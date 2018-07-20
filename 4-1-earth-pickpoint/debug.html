@@ -62,7 +62,8 @@
 
         let tt = new altizure.TextTagMarker({
           // text string
-          text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
+          //text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
+          text: pt.lng.toPrecision(9) + pt.lat.toPrecision(9) + pt.alt.toPrecision(7),
           // text style
           textStyle: {
             fillStyle: 'rgb(255, 255, 255)',
@@ -82,7 +83,6 @@
           scale: 1 // icon size
         })
       }
-
     </script>
   </body>
 </html>

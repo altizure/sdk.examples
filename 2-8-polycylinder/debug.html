@@ -1,11 +1,9 @@
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <title> Altizure 2.8 Poly Cylinder </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
-
 <body style="margin: 0px; padding: 0px;">
   <div id="page-content"></div>
   <script type="text/javascript" src="../build/altizure.js"></script>
@@ -45,7 +43,7 @@
       [113.93953118282849, 22.536759090893902, 8.255721520829152],
       [113.93952084758165, 22.537225748645717, 8.006473519889875],
       [113.93988007740502, 22.537234146256576, 9.469526442609505]
-    ].map((lnglatalt) => {
+      ].map(function(lnglatalt)  {
       return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
     })
     let pl1 = new altizure.PolyCylinderLineMarker({
@@ -61,7 +59,7 @@
       [113.93848826229001, 22.53611480048765, 8.43784681316338],
       [113.93845330361665, 22.537226275970312, 7.353449881118547],
       [113.93916733429155, 22.53725230512713, 8.165762920905182]]
-      .map((lnglatalt) => {
+        .map(function(lnglatalt)  {
         return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
       })
     let pl2 = new altizure.PolyCylinderLineMarker({
@@ -78,7 +76,7 @@
       [113.93948096227913, 22.536774790964845, 8.07877871224377],
       [113.93946847564925, 22.537257065188992, 7.9259919311032805],
       [113.93937849508251, 22.537250183225215, 9.203476070513277]]
-      .map((lnglatalt) => {
+        .map(function(lnglatalt)  {
         return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
       })
     let pl3 = new altizure.PolyCylinderLineMarker({
@@ -91,28 +89,28 @@
 
     let pl1color = pl1.color
     pl1.interactable = true
-    pl1.on('mouseenter', (event) => {
+      pl1.on('mouseenter', function(event) {
       pl1.color = 0xffffff
     })
-    pl1.on('mouseleave', (event) => {
+      pl1.on('mouseleave',function (event) {
       pl1.color = pl1color
     })
 
     let pl2color = pl2.color
     pl2.interactable = true
-    pl2.on('mouseenter', (event) => {
+      pl2.on('mouseenter', function(event) {
       pl2.color = 0xffffff
     })
-    pl2.on('mouseleave', (event) => {
+      pl2.on('mouseleave', function(event){
       pl2.color = pl2color
     })
 
     let pl3color = pl3.color
     pl3.interactable = true
-    pl3.on('mouseenter', (event) => {
+      pl3.on('mouseenter', function(event) {
       pl3.color = 0xffffff
     })
-    pl3.on('mouseleave', (event) => {
+      pl3.on('mouseleave', function(event) {
       pl3.color = pl3color
     })
 
@@ -151,5 +149,4 @@
     }
   </script>
 </body>
-
 </html>

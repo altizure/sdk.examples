@@ -28,7 +28,7 @@
       let pid = '572e2668ad5ed4204d2f8e5a' // science park
       let altmarker
       sandbox.add('AltizureProjectMarker', {pid: pid})
-      .then((m) => {
+      .then(function(m) {
         sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
         console.log(m)
         altmarker = m
@@ -77,7 +77,7 @@
       let pose4 = {lng: 114.21214144156328, lat: 22.42758345849436, alt: 587.109175482169, north: 235.93493288952598, tilt: 51.27251051185841}
       let index = 0
       let poses = [pose1, pose2, pose3, pose4]
-      let flying = () => {
+      let flying = function() {
         sandbox.camera.flyTo(poses[index])
         index = (index+1) % poses.length
         setTimeout(flying, 8000)
@@ -101,30 +101,30 @@
         imgUrl: '../public/assets/img/meta_description.png'
       })
       var gui = new dat.GUI({autoplace: false, width: 300})
-      gui.add(setting, 'tagScale', 0.1, 5, 0.1).name('tag scale').onChange((value) => {
+      gui.add(setting, 'tagScale', 0.1, 5, 0.1).name('tag scale').onChange(function(value){
         zoneMarker.tagScale = value
       })
-      gui.add(setting, 'tagOrientation', {HORIZONTAL: 'HORIZONTAL', VERTICAL: 'VERTICAL'}).name('tag orientation').onChange((value) => {
+      gui.add(setting, 'tagOrientation', {HORIZONTAL: 'HORIZONTAL', VERTICAL: 'VERTICAL'}).name('tag orientation').onChange(function(value) {
         if (value === 'HORIZONTAL') {
           zoneMarker.tagOrientation = altizure.ZoneMarker.TAG_ORIENTATION.HORIZONTAL
         } else if (value === 'VERTICAL') {
           zoneMarker.tagOrientation = altizure.ZoneMarker.TAG_ORIENTATION.VERTICAL
         }
       })
-      gui.addColor(setting, 'color').onChange((value) => {
+      gui.addColor(setting, 'color').onChange(function(value) {
         zoneMarker.color = value
       })
-      gui.add(setting, 'opacity', 0.0, 1.0, 0.1).onChange((value) => {
+      gui.add(setting, 'opacity', 0.0, 1.0, 0.1).onChange(function(value) {
         zoneMarker.opacity = value
       })
-      gui.add(setting, 'useImgUrl').onChange((value) => {
+      gui.add(setting, 'useImgUrl').onChange(function(value) {
         if (value) {
           zoneMarker.imgUrl = setting.imgUrl
         } else {
           zoneMarker.textOptions = Object.assign({}, zoneMarker.textOptions, {text: setting.text})
         }
       })
-      gui.add(setting, 'text').onChange((value) => {
+      gui.add(setting, 'text').onChange(function(value) {
         if (!setting.useImgUrl) {
           zoneMarker.textOptions = Object.assign({}, zoneMarker.textOptions, {text: value})
         }

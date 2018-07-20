@@ -31,12 +31,12 @@
 
       let marker = null
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
-      .then(m => {
+      .then(function(m)  {
         marker = m
         return m.initialized
       })
-      .then((m) => {
-        cameraMarkers.map((marker) => {
+      .then(function(m)  {
+        cameraMarkers.map(function(marker)  {
           // initialize the CameraMarkers to have the same settings as your current camera
           marker.fov = sandbox.earthView.camera.fov
           marker.aspect = sandbox.earthView.camera.aspect
@@ -56,7 +56,7 @@
       ]
       let invisibleMarker = null
       let selectedCamera = null
-      let cameraMarkers = ms.map((mat, index) => {
+      let cameraMarkers = ms.map(function(mat, index)  {
         let marker = new altizure.CameraMarker({
           sandbox: sandbox,
           camToEarth: mat,
@@ -70,11 +70,11 @@
           visDecay: 0.1
         })
         marker.interactable = true
-        marker.on('mouseenter', (event) => {marker.color = 0x00ff00})
-        marker.on('mouseleave', (event) => {
+        marker.on('mouseenter', function(event)  {marker.color = 0x00ff00})
+        marker.on('mouseleave', function(event)  {
           if (selectedCamera !== marker) marker.color = 0xff0000
         })
-        marker.on('click', (event) => {
+        marker.on('click', function(event)  {
           if (selectedCamera) {
             selectedCamera.showFar = false
             selectedCamera.color = 0xff0000
