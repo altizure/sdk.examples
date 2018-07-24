@@ -1,40 +1,16 @@
 # Browser compatibility report
 ## Background
-According to the needs and feedback of the customers, our <a href="https://developers.altizure.com/demo"> demo</a> should have the ability to run on different browsers, so we did some tests on the compatibility of our demo.
+According to the needs and feedback of the customers, our  [demo]("https://developers.altizure.com/demo")  should have the ability to run on different browsers, so we did some tests on the compatibility of our demo.
 
 The following tables are the statistics of browser market share of world and China in June 2018.
-<p>Global browser market share <a href="https://netmarketshare.com/browser-market-share.aspx?options=%7B%22filter%22%3A%7B%22%24and%22%3A%5B%7B%22deviceType%22%3A%7B%22%24in%22%3A%5B%22Desktop%2Flaptop%22%5D%7D%7D%5D%7D%2C%22dateLabel%22%3A%22Trend%22%2C%22attributes%22%3A%22share%22%2C%22group%22%3A%22browser%22%2C%22sort%22%3A%7B%22share%22%3A-1%7D%2C%22id%22%3A%22browsersDesktop%22%2C%22dateInterval%22%3A%22Monthly%22%2C%22dateStart%22%3A%222017-07%22%2C%22dateEnd%22%3A%222018-06%22%2C%22segments%22%3A%22-1000%22%7D"> link</a></p>
-<table>
-<thead>
-<tr>
-<th>Browser</th>
-<th>Chrome</th>
-<th>IE</th>
-<th>Firefox</th>
-<th>Edge</th>
-<th>Safari</th>
-<th>Sogou</th>
-<th>QQ</th>
-<th>Opera</th>
-<th>UC</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Share</td>
-<td>61.20%</td>
-<td>12.14%</td>
-<td>11.27%</td>
-<td>4.19%</td>
-<td>3.76%</td>
-<td>1.65%</td>
-<td>1.52%</td>
-<td>1.52%</td>
-<td>0.72%</td>
-</tbody>
-</table>
+Global browser market share [link]("https://netmarketshare.com/browser-market-share.aspx?options=%7B%22filter%22%3A%7B%22%24and%22%3A%5B%7B%22deviceType%22%3A%7B%22%24in%22%3A%5B%22Desktop%2Flaptop%22%5D%7D%7D%5D%7D%2C%22dateLabel%22%3A%22Trend%22%2C%22attributes%22%3A%22share%22%2C%22group%22%3A%22browser%22%2C%22sort%22%3A%7B%22share%22%3A-1%7D%2C%22id%22%3A%22browsersDesktop%22%2C%22dateInterval%22%3A%22Monthly%22%2C%22dateStart%22%3A%222017-07%22%2C%22dateEnd%22%3A%222018-06%22%2C%22segments%22%3A%22-1000%22%7D") 
 
-<p>China browser market share <a href="http://tongji.baidu.com/data/browser"> link</a></p>
+Browser|Chrome|IE|Firefox|Edge|Safari|Sogou|QQ|Opera|UC
+----|----|----|----|----|----|----|----|----|----
+Share|62.77%|12.22%|10.12%|4.25%|3.70%|1.58%|1.49%|1.45%|0.59%
+
+
+China browser market share  [link]("http://tongji.baidu.com/data/browser")
 <table>
 <thead>
 <tr>
@@ -263,7 +239,7 @@ Among the multiple versions of IE, we only tested and fixed the compatibility is
 <tr>
 <td>2.5 Obj Model</td>
 <td bgcolor="ForestGreen"></td>
-<td bgcolor="ForestGreen"></td>
+<td bgcolor=#b50804></td>
 <td bgcolor="ForestGreen"></td>
 <td bgcolor="ForestGreen"></td>
 <td bgcolor="ForestGreen"></td>
