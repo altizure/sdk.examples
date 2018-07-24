@@ -1,53 +1,39 @@
 # Browser compatibility report
 ## Background
-According to the needs and feedback of the customers, our  [demo]("https://developers.altizure.com/demo")  should have the ability to run on different browsers, so we did some tests on the compatibility of our demo.
+* According to the needs and feedback of the customers, our  [demo]("https://developers.altizure.com/demo")  should have the ability to run on different browsers, so we did some tests on the compatibility of our demo.
 
-The following tables are the statistics of browser market share of world and China in June 2018.
-Global browser market share [link]("https://netmarketshare.com/browser-market-share.aspx?options=%7B%22filter%22%3A%7B%22%24and%22%3A%5B%7B%22deviceType%22%3A%7B%22%24in%22%3A%5B%22Desktop%2Flaptop%22%5D%7D%7D%5D%7D%2C%22dateLabel%22%3A%22Trend%22%2C%22attributes%22%3A%22share%22%2C%22group%22%3A%22browser%22%2C%22sort%22%3A%7B%22share%22%3A-1%7D%2C%22id%22%3A%22browsersDesktop%22%2C%22dateInterval%22%3A%22Monthly%22%2C%22dateStart%22%3A%222017-07%22%2C%22dateEnd%22%3A%222018-06%22%2C%22segments%22%3A%22-1000%22%7D") 
+* The following tables are the statistics of browser market share of world and China in June 2018.
+* Global browser market share [link]("https://netmarketshare.com/browser-market-share.aspx?options=%7B%22filter%22%3A%7B%22%24and%22%3A%5B%7B%22deviceType%22%3A%7B%22%24in%22%3A%5B%22Desktop%2Flaptop%22%5D%7D%7D%5D%7D%2C%22dateLabel%22%3A%22Trend%22%2C%22attributes%22%3A%22share%22%2C%22group%22%3A%22browser%22%2C%22sort%22%3A%7B%22share%22%3A-1%7D%2C%22id%22%3A%22browsersDesktop%22%2C%22dateInterval%22%3A%22Monthly%22%2C%22dateStart%22%3A%222017-07%22%2C%22dateEnd%22%3A%222018-06%22%2C%22segments%22%3A%22-1000%22%7D") 
 
 Browser|Chrome|IE|Firefox|Edge|Safari|Sogou|QQ|Opera|UC
 ----|----|----|----|----|----|----|----|----|----
 Share|62.77%|12.22%|10.12%|4.25%|3.70%|1.58%|1.49%|1.45%|0.59%
 
 
-China browser market share  [link]("http://tongji.baidu.com/data/browser")
-<table>
-<thead>
-<tr>
-<th>Browser</th>
-<th>Chrome</th>
-<th>IE9.0</th>
-<th>QQ</th>
-<th>IE8.0</th>
-<th>2345</th>
-<th>IE11.0</th>
-<th>Sogou</th>
-<th>IE7.0</th>
-<th>Firefox</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Share</td>
-<td>46.93%</td>
-<td>9.02%</td>
-<td>6.07%</td>
-<td>5.74%</td>
-<td>5.58%</td>
-<td>5.44%</td>
-<td>4.47%</td>
-<td>2.39%</td>
-<td>2.37%</td>
-</tbody>
-</table>
+* China browser market share  [link]("http://tongji.baidu.com/data/browser")
+
+Browser|Chrome|IE9.0|QQ|IE8.0|2345|IE11.0|Sogou|IE7.0|Firefox
+----|----|----|----|----|----|----|----|----|----
+Share|46.93%|9.02%|6.07%|5.74%|5.58%|5.44%|4.47%|2.39%|2.37%
 
 
-Basic on the tables above, 11 browsers with the highest market share were selected for compatibility testing.
+* Basic on the tables above, 11 browsers with the highest market share were selected for compatibility testing.
 
-Among the multiple versions of IE, we only tested and fixed the compatibility issues with IE11.0.
+* Among the multiple versions of IE, we only tested and fixed the compatibility issues with IE11.0.
 
 ## Browser compatibility
-<table border="1" bordercolor="white">
+
+
+Browser|Chrome |IE11.0 |Firefox|Edge   |Safari |UC     |Opera|QQ|Sogou|360|2345
+----|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:
+Share|![chrome](./public/assets/img/browser_icon/chrome.ico)|![IE11.0](./public/assets/img/browser_icon/IE.ico)|![Firefox](./public/assets/img/browser_icon/firefox.ico)|![edge](./public/assets/img/browser_icon/edge.ico)|![safari](./public/assets/img/browser_icon/safari.ico)|![UC](./public/assets/img/browser_icon/UC.ico)|![opera](./public/assets/img/browser_icon/opera.ico)|![QQ](./public/assets/img/browser_icon/QQ.ico)|![sogou](./public/assets/img/browser_icon/sogou.ico)|![360](./public/assets/img/browser_icon/360.ico)|![2345](./public/assets/img/browser_icon/2345.ico)
+1.1 Altizure Earth|![red](./public/assets/img/browser_icon/red.png)|![yellow](./public/assets/img/browser_icon/yellow.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![grey](./public/assets/img/browser_icon/grey.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)
+1.1 Altizure Earth|![red](./public/assets/img/browser_icon/red.png)|![yellow](./public/assets/img/browser_icon/yellow.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![grey](./public/assets/img/browser_icon/grey.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)
+1.1 Altizure Earth|![red](./public/assets/img/browser_icon/red.png)|![yellow](./public/assets/img/browser_icon/yellow.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![grey](./public/assets/img/browser_icon/grey.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)
+1.1 Altizure Earth|![red](./public/assets/img/browser_icon/red.png)|![yellow](./public/assets/img/browser_icon/yellow.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![grey](./public/assets/img/browser_icon/grey.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)|![green](./public/assets/img/browser_icon/green.png)
+
+
+<table border="1" bordercolor="black">
 <thead>
 <tr>
 <th style="text-align:center" ></th>
@@ -840,6 +826,6 @@ Among the multiple versions of IE, we only tested and fixed the compatibility is
 </tbody>
 </table>
 
-Due to the limited browser performance and the interface provided, the complex and high-level parts of this demo cannot be run smoothly and correctly in IE11.0 and Safari.
+* Due to the limited browser performance and the interface provided, the complex and high-level parts of this demo cannot be run smoothly and correctly in IE11.0 and Safari.
 
-In addition, the right mouse button drag event can be used to convert the view angle in the demo, but some browsers default right mouse button drag events are forward or backward of the web page, so the display effect may be affected in some browsers. These browsers are: UC, QQ, Sogou, 360 and 2345.
+* In addition, the right mouse button drag event can be used to convert the view angle in the demo, but some browsers default right mouse button drag events are forward or backward of the web page, so the display effect may be affected in some browsers. These browsers are: UC, QQ, Sogou, 360 and 2345.
