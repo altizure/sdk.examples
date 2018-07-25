@@ -3,9 +3,20 @@
     <meta charset="utf-8">
     <title> Altizure 2.9 Add Canvas Tag </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+    #drawing-canvas {
+      position: absolute;
+      background-color: #000000;
+      top: 0px;
+      right: 0px;
+      z-index: 3000;
+      cursor: crosshair;
+    }
+  </style>
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
+    <canvas id="drawing-canvas" height="256" width="256"></canvas>
     <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
     <script>
       let options = {
@@ -61,21 +72,62 @@
         earth: earth,
         scale: 0.5 // icon size
       })
-
-      function drawRect () {
-        let ctx = canvasTag.context
-        let size = canvasTag.size
-        ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, size.width, size.height)
-        ctx.fillStyle = 'red'
-        ctx.fillRect(0, 0, size.width / 2, size.height / 2)
-        canvasTag.takeEffects()
+      //set startpoint of the original canvas
+      var drawStartPos={
+        x:null,
+        y:null,
       }
+      setupCanvasDrawing()
+      function setupCanvasDrawing() {
+				// drawingContext is work on the original canvas, drawingContext2 is work on the canvasTag(target canvas)
+				var drawingCanvas = document.getElementById( 'drawing-canvas' )
+				var drawingContext = drawingCanvas.getContext( '2d' )
+        var drawingContext2 = canvasTag.context
+				// draw white background on two canvas, pay attention to the size of the original canvas, that is "256".
+				drawingContext.fillStyle = 'white'
+				drawingContext.fillRect( 0, 0, 256, 256 )
+				drawingContext2 .fillStyle = 'white'
+        drawingContext2 .fillRect(0, 0, canvasTag.size.width, canvasTag.size.height)
+        canvasTag.takeEffects()
+      // use mouse event to draw 
+				var paint = false
+				drawingCanvas.addEventListener( 'mousedown', function( e ) {
+					paint = true
+					drawStartPos.x= e.offsetX 
+          drawStartPos.y= e.offsetY 
+				} );
+				drawingCanvas.addEventListener( 'mousemove', function( e ) {
+					if( paint ) draw( drawingContext, drawingContext2, e.offsetX, e.offsetY )
+				} )
+				drawingCanvas.addEventListener( 'mouseup', function( e ) {
+					paint = false
+				} )
+				drawingCanvas.addEventListener( 'mouseleave', function( e ) {
+					paint = false
+				} )
+			}
+			function draw( drawContext, drawContext2, x, y ) {
+        //relative position in the canvasTag, if the size of the original canvas change, the "256" should also be change
+        let xe=x/256*canvasTag.size.width//end x in the canvasTag
+        let ye=y/256*canvasTag.size.height
+        let xs=drawStartPos.x/256*canvasTag.size.width//start x in the canvasTag
+        let ys=drawStartPos.y/256*canvasTag.size.height
 
-      document.addEventListener('click', function(event) {
-        console.log('click: rectangle drawn!')
-        drawRect()
-      })
+				drawContext.moveTo( drawStartPos.x, drawStartPos.y )
+				drawContext.strokeStyle = 'red'
+				drawContext.lineTo( x, y )
+				drawContext.stroke()
+        drawContext2.moveTo( xs,ys )
+				drawContext2.strokeStyle = 'red'
+				drawContext2.lineTo( xe, ye )
+				drawContext2.stroke()
+        drawStartPos.x=x
+        drawStartPos.y=y 
+        xs=xe
+        ys=ye
+        canvasTag.takeEffects()//canvasTag need update after operation, the original canvas doesn't need
+			}
+     
     </script>
   </body>
 </html>
