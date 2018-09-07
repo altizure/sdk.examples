@@ -44,6 +44,11 @@
           position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 0}
         }
       })
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
     </script>
   </body>
 </html>
