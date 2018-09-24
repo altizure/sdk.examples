@@ -35,7 +35,9 @@
         Click on the Polygon to get message of it
       </div>
       <div id="page-content"></div>
-      <script type="text/javascript" src="../build/altizure.js"></script>
+      <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+      <script type="text/javascript" src="../../build/three.js"></script>
+      <script type="text/javascript" src="../../build/altizure-core.js"></script>
       <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
     <script>
         let options = {
@@ -85,7 +87,10 @@
         }
         let features = []
         let polygonMarkers = []
-
+        if (Stats) {
+          sandbox.earthView._stats = new Stats()
+          sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+        }
       </script>
       <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>      
       <script>

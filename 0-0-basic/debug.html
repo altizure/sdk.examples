@@ -1,79 +1,57 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title> Where everything starts </title>
-  <link rel="stylesheet" href="../public/css/viewer.css">
-  <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../public/css/font-awesome-4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="../public/css/myslider.css">
-  <link rel="stylesheet" href="../public/css/myscrollbar.css">
-  <link rel="stylesheet" href="../public/css/mybtngroup.css">
-  <link rel="stylesheet" href="../public/css/myselect.css">
-  <style>
-  #content-container {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    background-color: black
-  }
-  #page-content {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 100vh;
-    z-index: 0;
-  }
-  .custome-tooltip {
-    color: white !important;
-    background-color: black !important;
-  }
-  .place-bottom:after {
-    border-bottom-color: black !important;
-    border-bottom-style: solid !important;
-    border-bottom-width: 6px !important;
-  }
-  </style>
+  <title> Altizure 1.1 Earth </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
+
 <body style="margin: 0px; padding: 0px;">
-  <div id="content-container">
-    <div id="page-content" />
-    <div id="toolbox-content" />
-  </div>
+  <div id="page-content"></div>
+  <script type="text/javascript" src="../build/three.js"></script>
+  <script type="text/javascript" src="../build/altizure-core.js"></script>
+  <script>
 
-  <script src="../public/js/jquery-2.1.1.min.js"></script>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="../build/altizure.js"></script>
-    <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: {
+          alt: 600,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078
+        },
+        flyTo: {
+          alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624
+        }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      }
+    }
 
-      let options = {
-        altizureApi:{
-          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
-        },
-         camera: {
-          poseTo: { alt: 600,
-            lat: 22.5364271949327,
-            lng: 113.93977612840078 },
-          flyTo: { alt: 319.02169601663104,
-            lat: 22.5364271949327,
-            lng: 113.93977612840078,
-            north: 56.82289356559219,
-            tilt: 56.19205822511624 }
-        },
-        renderItems: {
-          earth: true,
-          earthUseTexture: false,
-          featureInView: false,
-          orbitRing: true
+    let earth = new altizure.Sandbox('page-content', options)
+
+    let m = new altizure.Marker({
+      sandbox: earth,
+      pose: {
+        position: {
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          alt: 0
         }
       }
+    })
 
-      let earth = new altizure.Sandbox('page-content', options)
+  </script>
+</body>
 
-      earth.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
-
-    </script>
-    <script src="../build/client.min.js"></script>
-  </body>
 </html>

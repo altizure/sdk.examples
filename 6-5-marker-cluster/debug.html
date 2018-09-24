@@ -6,7 +6,9 @@
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
     <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
     <script>
       let options = {
@@ -106,6 +108,11 @@
         cluster.clustering().then(function(clusters) {
           cluster.enable({})
         })
+      }
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
       }
     </script>
   </body>
