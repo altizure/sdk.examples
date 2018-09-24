@@ -4,7 +4,7 @@ client.min.js
 client.min.js.map
 OBJParser.js
 OBJParser.js.map
-./build/
+build/
 lab-fusion
 ps/
 wankun/

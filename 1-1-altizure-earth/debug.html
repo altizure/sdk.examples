@@ -1,22 +1,31 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title> Altizure 1.1 Earth </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  </head>
-  <body style="margin: 0px; padding: 0px;">
-    <div id="page-content"></div>
-    <script type="text/javascript" src="../build/altizure.js"></script>
-    <script>
-      let options = {
-        altizureApi:{
-          // altizure sdk developer key. Contact Altizure to get your own key.
-          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
-        }
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 1.1 Earth </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script src="../public/js/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        // altizure sdk developer key. Contact Altizure to get your own key.
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
       }
+    }
 
-      let sandbox = new altizure.Sandbox('page-content', options)
+    let sandbox = new altizure.Sandbox('page-content', options)
 
-    </script>
-  </body>
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+  </script>
+</body>
+
 </html>
