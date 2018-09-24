@@ -6,7 +6,9 @@
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="../build/altizure.js"></script>
+    <script src="../public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -63,7 +65,7 @@
         let tt = new altizure.TextTagMarker({
           // text string
           //text: `(${pt.lng.toPrecision(9)}, ${pt.lat.toPrecision(9)}, ${pt.alt.toPrecision(7)})`,
-          text: pt.lng.toPrecision(9) + pt.lat.toPrecision(9) + pt.alt.toPrecision(7),
+          text: pt.lng.toPrecision(9) + ',' + pt.lat.toPrecision(9) + ',' + pt.alt.toPrecision(7),
           // text style
           textStyle: {
             fillStyle: 'rgb(255, 255, 255)',
@@ -83,6 +85,10 @@
           scale: 1 // icon size
         })
       }
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
     </script>
   </body>
 </html>

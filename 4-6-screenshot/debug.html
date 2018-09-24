@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 </head>
 <body style="margin: 0px; padding: 0px;">
-  <div id="page-content" />
+  <div id="page-content"></div>
   
   <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="getScreenshot()">
@@ -37,7 +37,9 @@
   </div>
 
   <!-- Set up altizure scene -->
-  <script type="text/javascript" src="../build/altizure.js"></script>
+  <script src="../public/js/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
   <script>
     let options = {
       altizureApi:{
@@ -141,6 +143,10 @@
       interactable: true
     })
 
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
   </script>
   <!-- js file for Modal -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

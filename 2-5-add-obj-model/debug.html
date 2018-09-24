@@ -51,6 +51,12 @@
         upDir: {x: 0,y: 1,z: 0},
         "scale": 1
       })
+
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
     </script>
   </body>
 </html>

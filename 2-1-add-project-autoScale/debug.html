@@ -1,124 +1,128 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title> Altizure 2.1.2 Project autoScale </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  </head>
-  <body>
-    <div id="page-content"></div>
-    <script src="../public/js/stats.min.js"></script>
-    <script type="text/javascript" src="../../build/three.js"></script>
-    <script type="text/javascript" src="../../build/altizure-core.js"></script>
-    <!-- <script type="text/javascript" src="../build/altizure.js"></script> -->
-    <script>
-      let options = {
-        altizureApi:{
-          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
-        },
-        camera: {
-          poseTo: {"lng":114.06831918710746,"lat":22.694643964482005,"alt":93657.95146055218,"north":105.76016594918826,"tilt":49.076824921620045,"up":0},
-          flyTo: {"lng":114.06831918710746,"lat":22.694643964482005,"alt":93657.95146055218,"north":105.76016594918826,"tilt":49.076824921620045,"up":0}
-        },
-        renderItems: {
-          earth: false,
-          earthUseTexture: true,
-          featureInView: false,
-          orbitRing: true
-        }
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 2.1.2 Project autoScale </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+  <div id="page-content"></div>
+  <script src="../public/js/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { "lng": 114.06831918710746, "lat": 22.694643964482005, "alt": 93657.95146055218, "north": 105.76016594918826, "tilt": 49.076824921620045, "up": 0 },
+        flyTo: { "lng": 114.06831918710746, "lat": 22.694643964482005, "alt": 93657.95146055218, "north": 105.76016594918826, "tilt": 49.076824921620045, "up": 0 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: true,
+        featureInView: false,
+        orbitRing: true
       }
+    }
 
-      let sandbox = new altizure.Sandbox('page-content', options)
+    let sandbox = new altizure.Sandbox('page-content', options)
 
 
-      let pList = ["599eef7963d82c4bfa479d5e",
+    let pList = ["599eef7963d82c4bfa479d5e",
 
-        "599eefaa63d82c4bfa479dce",
+      "599eefaa63d82c4bfa479dce",
 
-        "599eefde63d82c4bfa479e32",
+      "599eefde63d82c4bfa479e32",
 
-        "599ef00963d82c4bfa479e70",
+      "599ef00963d82c4bfa479e70",
 
-        "599ef03263d82c4bfa479ed3",
+      "599ef03263d82c4bfa479ed3",
 
-        "599ef0b163d82c4bfa47ab96",
+      "599ef0b163d82c4bfa47ab96",
 
-        "599eeeb163d82c4bfa479cfc",
+      "599eeeb163d82c4bfa479cfc",
 
-        "599ef05463d82c4bfa47a354",
+      "599ef05463d82c4bfa47a354",
 
-        "599ef08d63d82c4bfa47aa5d",
-        
-        "5849104597b73e0b090c01e8"]
+      "599ef08d63d82c4bfa47aa5d"]
 
-      let lngs = 113.9438
-      let alts = 22.5361
-      let gap = 0.05
+    let lngs = 113.9438
+    let alts = 22.5361
+    let gap = 0.05
 
-      let pMarkerList = []
+    let pMarkerList = []
 
-      pList.forEach(function(pid, ind)  {
-        sandbox.add('AltizureProjectMarker', {
-          pid: pid,
-          pose: {
-            position: {lng: lngs, lat: 22.5361 + ind * gap, alt: 0}
-          },
-          autoScale: 600
-        })
-          .then(function(m){
-            console.log(m)
-            addNameTag(m)
-            pMarkerList.push(m)
-            return m.initialized
-          })
-          .catch(function(err) {
-            console.error(pid, err)
-            return Promise.resolve()
-          })
-      })
-
-      function addNameTag (projectMarker) {
-        let textTag = new altizure.TextTagMarker({
-          // text string
-          text: projectMarker._apiInfo.name,
-          // text style
-          textStyle: {
-            fillStyle: 'rgb(255, 255, 255)',
-            font: '500 24px Arial',
-            outlineWidth: 0.1,
-            outlineStyle: 'rgb(0, 0, 0)'
-          },
-
-          // icon position
-          position: {
-            "lng": projectMarker.position.lng,
-            "lat": projectMarker.position.lat,
-            "alt": projectMarker.position.alt
-          },
-          // scene
-          sandbox: sandbox,
-          scale: 150, // icon size,
-          pinLength: 20000
-        })
-      }
-      
-      document.addEventListener('click', function(event){
-        console.log(sandbox.window.toLngLatAlt(event))
-      })
-    </script>
-    <script src="../third_party/dat.gui.js"></script>
-    <script>
-      var settings = {
+    pList.forEach(function (pid, ind) {
+      sandbox.add('AltizureProjectMarker', {
+        pid: pid,
+        pose: {
+          position: { lng: lngs, lat: 22.5361 + ind * gap, alt: 0 }
+        },
         autoScale: 600
-      }
-      var gui = new dat.GUI()
-      gui.add(settings, 'autoScale', 10, 2000, 1).onChange(function(v){
-        settings.autoScale = v
-        pMarkerList.map(function(altizureProjectMarker)  {
-          altizureProjectMarker.autoScale = v
-        })
       })
-    </script>    
+        .then(function (m) {
+          console.log(m)
+          addNameTag(m)
+          pMarkerList.push(m)
+          return m.initialized
+        })
+        .then(function (m) {
+          sandbox.render(m, 'phong') // [essential] choose rendering mode for the marker
+          sandbox.lights.ambient.intensity = 0.01 // ambient light intensity
+        })
+    })
 
+    function addNameTag(projectMarker) {
+      let textTag = new altizure.TextTagMarker({
+        // text string
+        text: projectMarker._apiInfo.name,
+        // text style
+        textStyle: {
+          fillStyle: 'rgb(255, 255, 255)',
+          font: '500 24px Arial',
+          outlineWidth: 0.1,
+          outlineStyle: 'rgb(0, 0, 0)'
+        },
+
+        // icon position
+        position: {
+          "lng": projectMarker.position.lng,
+          "lat": projectMarker.position.lat,
+          "alt": projectMarker.position.alt
+        },
+        // scene
+        sandbox: sandbox,
+        scale: 150, // icon size,
+        pinLength: 20000
+      })
+    }
+
+    document.addEventListener('click', function (event) {
+      console.log(sandbox.window.toLngLatAlt(event))
+    })
+
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
   </script>
-  </body>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+    var settings = {
+      autoScale: 600
+    }
+    var gui = new dat.GUI()
+    gui.add(settings, 'autoScale', 10, 2000, 1).onChange(function (v) {
+      settings.autoScale = v
+      pMarkerList.map(function (altizureProjectMarker) {
+        altizureProjectMarker.autoScale = v
+      })
+    })
+  </script>
+</body>
+
 </html>

@@ -154,6 +154,12 @@
       poly4.color = Math.random()*0xffffff
     })
 
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+
   </script>
   <script src="../third_party/dat.gui.js"></script>
   <script>

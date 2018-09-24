@@ -132,6 +132,11 @@
       canvasTag.takeEffects()//canvasTag need update after operation, the original canvas doesn't need
     }
 
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
   </script>
 </body>
 

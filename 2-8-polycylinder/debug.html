@@ -116,6 +116,12 @@
       pl3.color = pl3color
     })
 
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+
   </script>
   <script src="../third_party/dat.gui.js"></script>
   <script>
