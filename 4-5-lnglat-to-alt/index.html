@@ -56,8 +56,16 @@
       ).then(function(marker) {
         // get the altizure project marker
         altmarker = marker
+        return altmarker.initialized
+      })
+      .then(function(marker) {
         // initialze
         init()
+        // obtain `alt` for all `{lng, lat}` positions
+        // update depth after 2 second
+        setTimeout(updateDepth, 2000)
+        // update depth after 4 second
+        setTimeout(updateDepth, 4000)
         // move the target tagmarker every 0.1 seconds
         setTimeout(moveTargetMarker, 100)
       })
@@ -68,6 +76,14 @@
         marker_sequence_number = marker_sequence_number % positionArray.length
         setTargetMarkersAlt(marker_sequence_number)
         setTimeout(moveTargetMarker, 100)
+      }
+      // update depth for positionArray
+      function updateDepth () {
+        // obtain `alt` for all `{lng, lat}` positions
+        let altArray = altmarker.pickDepthMap(positionArray)
+        altArray.map(function(alt, i) {
+          positionArray[i].alt = alt
+        })
       }
 
       function init () {
@@ -108,7 +124,6 @@
       }
       // pick the depth of the marker_sequence_number th LngLat and get the alt
       function setTargetMarkersAlt (marker_sequence_number) {
-        pickAlt(marker_sequence_number)
         targetmarker.setPose(positionArray[marker_sequence_number], undefined, undefined)
       }   
 
