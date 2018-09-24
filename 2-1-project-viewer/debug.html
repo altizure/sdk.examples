@@ -1,0 +1,111 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 2.1 Add project </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script src="../public/js/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: {
+          lat: 22.5,
+          lng: 114,
+          alt: 1000,
+          tilt: 45
+        },
+        flyTo: {
+          lat: 22.5,
+          lng: 114,
+          alt: 1000,
+          tilt: 45
+        }
+      },
+      renderItems: {
+        earth: false,
+        earthUseTexture: true,
+        featureInView: false,
+        orbitRing: true
+      }
+    }
+    let sandbox = new altizure.Sandbox('page-content', options)
+    const control = sandbox.control
+
+    let marker
+    sandbox.add('AltizureProjectMarker', {
+      pid: '5b94a402fdcbb879b3bd8df1',
+      // pid: '5b963f71d1e2037bf80738bd',
+      // pid: '5b97a561c1ac675fae3caa7e',
+      // pid: '5b97cdd8c1ac675fae3dc76d',
+      // pid: '5b974573d1e2037bf8094dd2',
+      // pid: '5b96ab4fd1e2037bf808322b',
+      autoScale: 500,
+      pose: {
+        // always fix the position because the viewr care nothing about earth
+        position: { lng: 114, lat: 22.5, alt: 0 }
+      }
+    })
+      .then(projectMarker => {
+        marker = projectMarker
+        marker.dim()
+        // sandbox.camera.lookAt(projectMarker)
+        return projectMarker.initialized
+      })
+      .then(() => {
+        return marker.loadCropMask()
+      })
+      .then( () => { // overview
+        addAnnotations()
+        return sandbox.camera.lookAt(marker, 1)
+      })
+      .then(() => { // the preset view
+        return marker.focus({time: 1000})
+      })
+      .then(() => { // handle tilt details
+        // tilt up the project if the looking direction is too horizontal
+        let {tilt} = sandbox.camera.pose
+        if (tilt >= 70) {
+          const up = Math.max(10, Math.min(tilt - 70, 20))
+          // wait for the rendering
+          setTimeout(() => {
+            control.putCenterAnchor()
+            control.swirlUp(up)
+          }, 1000)
+        }
+      })
+    function addAnnotations() {
+      if (marker._apiInfo.annotations) {
+        let nodes = marker._apiInfo.annotations.edges
+        nodes.map((n) => {
+          let node = n.node
+          let pos = marker.LngLatAltFromXYZ(node.modelx, node.modely, node.modelz)
+          let m = new altizure.TagMarker({
+            imgUrl: '../public/assets/img/logo-1024.png',
+            position: pos,
+            sandbox: marker.earth,
+            fixedSize: 30
+          })
+        })
+      } else {
+        console.warn('project has no annotation info')
+      }
+    }
+
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+  </script>
+</body>
+
+</html>
