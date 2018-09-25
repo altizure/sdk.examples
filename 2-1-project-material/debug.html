@@ -1,0 +1,76 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 6.8 Material </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script src="../public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {"lng":113.95138549963004,"lat":22.536672803444016,"alt":1526.7010653415475,"north":335.45932697365856,"tilt":71.29612879077732,"up":0}
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      // add project: https://www.altizure.com/project/58428f1d97b73e0b090675cd/model
+      // at the default GPS position
+      // Note: your developer key must have access to the project, and the project must have valid GPS information.
+      // sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      // // with an arbitrary position (longitude, latitude, altitude)
+      // sandbox.add('AltizureProjectMarker', {
+      //   pid: '5849104597b73e0b090c01e8',
+      //   pose: {
+      //     position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 0}
+      //   }
+      // })
+   
+      // different materials
+      let materials = [
+        'texture',
+        'flat',
+        'wireframe',
+        'crop',
+        'shadowmap',
+        'visibility',
+        'phong'
+      ]
+      const gap = 0.005
+      materials.forEach((mode, index) => {
+        sandbox.add('AltizureProjectMarker', {
+          pid: '5849104597b73e0b090c01e8',
+          pose: {
+            position: {lng: 113.94420 + gap * index, lat: 22.5367, alt: 0}
+          }
+        })
+        .then(marker => {
+          return marker.initialized
+        })
+        .then(marker => {
+          sandbox.render(marker, mode)
+          return Promise.resolve()
+        })
+      })
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+  </body>
+</html>
