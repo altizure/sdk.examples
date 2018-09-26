@@ -46,24 +46,48 @@
         'flat',
         'wireframe',
         'crop',
-        'shadowmap',
         'visibility',
+        'transparent',
         'phong'
       ]
       const gap = 0.005
       materials.forEach((mode, index) => {
+        const position = {lng: 113.94420 + gap * index, lat: 22.5367, alt: 0}
         sandbox.add('AltizureProjectMarker', {
           pid: '5849104597b73e0b090c01e8',
           pose: {
-            position: {lng: 113.94420 + gap * index, lat: 22.5367, alt: 0}
+            position
           }
         })
         .then(marker => {
+          let nameTag = new altizure.TextTagMarker({
+            text: mode,
+            // text style
+            textStyle: {
+              fillStyle: 'rgb(255, 255, 255)',
+              font: 'normal 500 24px Arial',
+              outlineWidth: 2,
+              outlineStyle: 'rgb(0, 0, 0)'
+            },
+            position,
+            sandbox,
+            scale: 5,
+            pinLength: 100
+          })
           return marker.initialized
         })
         .then(marker => {
           sandbox.render(marker, mode)
-          return Promise.resolve()
+          console.log(mode, marker)
+          marker._tree.tempName = mode + ':' + marker._tree.name
+          if (mode === 'crop') {
+            return marker.loadCropMask()
+            // console.log('crop', marker)
+            // marker._tree.material._updateOrthoInfo()
+            // return Promise.resolve()
+          } else {
+            return Promise.resolve()
+          }
         })
       })
 
