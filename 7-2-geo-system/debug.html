@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
     <script type="text/javascript" src="../../build/three.js"></script>
     <script type="text/javascript" src="../../build/altizure-core.js"></script>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geosystem"></script>
+    <script type="text/javascript" src="https://unpkg.com/altizure-plugin-geosystem"></script>
     <script>
       // The position to lay the model
       let centerPosition = {lng : 114,lat : 23,alt : -200} // will not be able to change after initialization
@@ -116,18 +116,6 @@
             project.marker = marker
             marker.dim() // hide the blue square around the marker
             return marker.initialized
-          })
-          .then(function(res) {
-            let mat = res._tree.root.mesh.material
-            if (mat instanceof Array) {
-              mat.forEach(function(matt) {
-                matt.flatShading = true
-                // matt.shading = FlatShading
-              })
-            } else {
-              mat.flatShading = true
-            }
-            sandbox.render(res, 'phong') // [essential] choose rendering mode for the marker
           })
         })
         return tList

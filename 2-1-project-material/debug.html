@@ -26,19 +26,6 @@
       }
 
       let sandbox = new altizure.Sandbox('page-content', options)
-
-      // add project: https://www.altizure.com/project/58428f1d97b73e0b090675cd/model
-      // at the default GPS position
-      // Note: your developer key must have access to the project, and the project must have valid GPS information.
-      // sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
-
-      // // with an arbitrary position (longitude, latitude, altitude)
-      // sandbox.add('AltizureProjectMarker', {
-      //   pid: '5849104597b73e0b090c01e8',
-      //   pose: {
-      //     position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 0}
-      //   }
-      // })
    
       // different materials
       let materials = [
@@ -50,6 +37,7 @@
         'transparent',
         'phong'
       ]
+      let markers = {}
       const gap = 0.005
       materials.forEach((mode, index) => {
         const position = {lng: 113.94420 + gap * index, lat: 22.5367, alt: 0}
@@ -60,6 +48,8 @@
           }
         })
         .then(marker => {
+          markers[mode] = marker
+          // display material name as a tag
           let nameTag = new altizure.TextTagMarker({
             text: mode,
             // text style
@@ -77,14 +67,10 @@
           return marker.initialized
         })
         .then(marker => {
+          // change the display mode
           sandbox.render(marker, mode)
-          console.log(mode, marker)
-          marker._tree.tempName = mode + ':' + marker._tree.name
           if (mode === 'crop') {
             return marker.loadCropMask()
-            // console.log('crop', marker)
-            // marker._tree.material._updateOrthoInfo()
-            // return Promise.resolve()
           } else {
             return Promise.resolve()
           }
