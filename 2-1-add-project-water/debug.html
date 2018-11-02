@@ -49,6 +49,14 @@
       sandbox.add('AltizureProjectMarker', {pid: '5993d8e65cbfaf1d4eba995d'})
         .then(function (marker) {
           m = marker
+          // wait for marker initialization
+          return marker.initialized
+        })
+        .then(function () {
+          // apply crop from altizure
+          return m.loadCropMask()
+        })
+        .then(function (marker) {
           // import water from altizure
           return marker.water.import()
         })
