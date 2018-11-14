@@ -29,6 +29,7 @@
 
       let marker = null
       let selectedCamera = null
+      let visibilityManage = null
       let cameraState = 'positioning' // 'positioning', 'eulering', 'none' 
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
       .then(function(m) {
@@ -44,15 +45,13 @@
           showFar: true,
           showNear: true,
           color: 0xff0000, // the color of the camera
-          fov: 45,
-          visColor: 0x00ff00, // the color of the casting light
-          visIntensity: 50,
-          visPenumbra: 0,
-          visDecay: 0.1
+          fov: 45
         })
-        // selectedCamera.near = 5
+        selectedCamera.near = 5 / sandbox.Constants.EARTH_RADIUS * sandbox.Constants.scale
+        selectedCamera.far = 100 / sandbox.Constants.EARTH_RADIUS * sandbox.Constants.scale
         selectedCamera.showFar = true
-        sandbox.visibilityCamera = selectedCamera
+        // sandbox.visibilityCamera = selectedCamera
+        visibilityManage = marker.showVisibility(selectedCamera)
         syncCam()
       })
 
@@ -66,6 +65,11 @@
         if (selectedCamera) {
           if (cameraState === 'eulering') {
             selectedCamera.lookAt(pt) // change the orientation of the camera
+            if (visibilityManage !== null) {
+              visibilityManage.update({
+                cameraMarker: selectedCamera
+              })
+            }
           }
         }
       }
@@ -77,6 +81,11 @@
           if (cameraState === 'positioning') {
             pt.alt += 5
             selectedCamera.position = pt // change the position of the camera
+            if (visibilityManage !== null) {
+              visibilityManage.update({
+                cameraMarker: selectedCamera
+              })
+            }
             cameraState = 'eulering'
             params.message = 'move to orient'
           } else if (cameraState === 'eulering') {
@@ -97,11 +106,7 @@
       var params = {
         Enable: true,
         message: 'click model to position',
-        visColor: 0x00ff00,
-        visIntensity: 1,
-        fov: 45,
-        visPenumbra: 0,
-        visDecay: 0.1
+        fov: 45
       }
 
       gui = new dat.GUI();
@@ -109,11 +114,7 @@
       function syncCam () {
         if (!selectedCamera) return
         let cam = selectedCamera
-        params.visColor = cam.visColor
-        params.visIntensity = cam.visIntensity
         params.fov = cam.fov
-        params.visPenumbra = cam.visPenumbra
-        params.visDecay = cam.visDecay
         // Iterate over all controllers
         for (var i in gui.__controllers) {
           gui.__controllers[i].updateDisplay();
@@ -126,33 +127,26 @@
               // start the visibility analysis mode
               sandbox.render(marker, 'visibility')
               if (selectedCamera) {
-                sandbox.visibilityCamera = selectedCamera
+                visibilityManage = marker.showVisibility(selectedCamera)
               }
             } else {
               // return to the normal texture mode
               sandbox.render(marker, 'texture')
+              visibilityManage = null
             }
           }
         );
         gui.add(params, 'message')
 
         let frustum = gui.addFolder('Frustum');
-				frustum.addColor( params, 'visColor' ).onChange( function ( val ) {
-          if (selectedCamera) selectedCamera.visColor = val
-        } );
-        // Change visIntensity to 100 for more obvious green
-				frustum.add( params, 'visIntensity', 1, 100 ).onChange( function ( val ) {
-          if (selectedCamera) selectedCamera.visIntensity = val
-				} );
 				frustum.add( params, 'fov', 20, 70 ).onChange( function ( val ) {
 					if (selectedCamera) selectedCamera.fov = val;
+          if (visibilityManage !== null) {
+            visibilityManage.update({
+              cameraMarker: selectedCamera
+            })
+          }
 				} );
-				frustum.add( params, 'visPenumbra', 0, 1 ).onChange( function ( val ) {
-					if (selectedCamera) selectedCamera.visPenumbra = val;
-				} );
-				frustum.add( params, 'visDecay', 0.1, 1 ).onChange( function ( val ) {
-					if (selectedCamera) selectedCamera.visDecay = val;
-        } );
 				gui.open();
 			}
     </script>
