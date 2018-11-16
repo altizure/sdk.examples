@@ -36,11 +36,12 @@
         return m.initialized
       })
       .then(function(m)  {
-        cameraMarkers.map(function(marker)  {
+        sandbox.render(marker, 'visibility')
+        cameraMarkers.map(function(cameraMarker)  {
           // initialize the CameraMarkers to have the same settings as your current camera
-          marker.fov = sandbox.earthView.camera.fov
-          marker.aspect = sandbox.earthView.camera.aspect
-          marker.near = marker.near * 2 / 3
+          cameraMarker.fov = sandbox.earthView.camera.fov
+          cameraMarker.aspect = sandbox.earthView.camera.aspect
+          cameraMarker.near = cameraMarker.near * 2 / 3
         })
         buildGui()
       })
@@ -56,52 +57,44 @@
       ]
       let invisibleMarker = null
       let selectedCamera = null
+      let visibilityManage = null
       let cameraMarkers = ms.map(function(mat, index)  {
-        let marker = new altizure.CameraMarker({
+        let cameraMarker = new altizure.CameraMarker({
           sandbox: sandbox,
           camToEarth: mat,
           showFar: false,
           showNear: true,
           color: 0xff0000, // the color of the camera
-          fov: 45,
-          visColor: 0x00ff00, // the color of the casting light
-          visIntensity: 50,
-          visPenumbra: 0,
-          visDecay: 0.1
+          fov: 45
         })
-        marker.interactable = true
-        marker.on('mouseenter', function(event)  {marker.color = 0x00ff00})
-        marker.on('mouseleave', function(event)  {
-          if (selectedCamera !== marker) marker.color = 0xff0000
+        cameraMarker.interactable = true
+        cameraMarker.on('mouseenter', function(event)  {cameraMarker.color = 0x00ff00})
+        cameraMarker.on('mouseleave', function(event)  {
+          if (selectedCamera !== cameraMarker) cameraMarker.color = 0xff0000
         })
-        marker.on('click', function(event)  {
+        cameraMarker.on('click', function(event)  {
           if (selectedCamera) {
             selectedCamera.showFar = false
             selectedCamera.color = 0xff0000
           }
-          selectedCamera = marker
+          selectedCamera = cameraMarker
           // show far plane
           selectedCamera.showFar = true
-          // Important: bind the visibility analysis to the camera
-          sandbox.visibilityCamera = marker
+          if (visibilityManage && visibilityManage.ID !== marker.ID + '-' + cameraMarker.ID) visibilityManage.remove()
+          visibilityManage = marker.showVisibility(selectedCamera)
           // pass the settings to the GUI
           syncCam()
         })
-        return marker
+        return cameraMarker
       })
-
     </script>
-    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script src="../third_party/dat.gui.js"></script>
     <script>
       var params = {
-        Enable: false,
+        Enable: true,
         message: 'click a camera',
-        visColor: 0x000000,
-        visIntensity: 1,
         farInMeter: 1,
-        fov: 45,
-        visPenumbra: 0,
-        visDecay: 0.1
+        fov: 45
       }
 
       gui = new dat.GUI();
@@ -109,12 +102,8 @@
       function syncCam () {
         if (!selectedCamera) return
         let cam = selectedCamera
-        params.visColor = cam.visColor
-        params.visIntensity = cam.visIntensity
         params.farInMeter = cam.farInMeter
         params.fov = cam.fov
-        params.visPenumbra = cam.visPenumbra
-        params.visDecay = cam.visDecay
         // Iterate over all controllers
         for (var i in gui.__controllers) {
           gui.__controllers[i].updateDisplay();
@@ -126,6 +115,8 @@
             if (val) {
               // start the visibility analysis mode
               sandbox.render(marker, 'visibility')
+              if (visibilityManage) visibilityManage.remove()
+              visibilityManage = marker.showVisibility(selectedCamera)
             } else {
               // return to the normal texture mode
               sandbox.render(marker, 'texture')
@@ -134,24 +125,21 @@
         );
         gui.add(params, 'message')
 
-				gui.addColor( params, 'visColor' ).onChange( function ( val ) {
-          if (selectedCamera) selectedCamera.visColor = val
-        } );
-        // Change visIntensity to 100 for more obvious green
-				gui.add( params, 'visIntensity', 1, 100 ).onChange( function ( val ) {
-          if (selectedCamera) selectedCamera.visIntensity = val
-				} );
 				gui.add( params, 'farInMeter', 1, 500 ).onChange( function ( val ) {
 					if (selectedCamera) selectedCamera.farInMeter = val;
+          if (visibilityManage) {
+            visibilityManage.update({
+              cameraMarker: selectedCamera
+            })
+          }
 				} );
 				gui.add( params, 'fov', 20, 70 ).onChange( function ( val ) {
 					if (selectedCamera) selectedCamera.fov = val;
-				} );
-				gui.add( params, 'visPenumbra', 0, 1 ).onChange( function ( val ) {
-					if (selectedCamera) selectedCamera.visPenumbra = val;
-				} );
-				gui.add( params, 'visDecay', 0.1, 1 ).onChange( function ( val ) {
-					if (selectedCamera) selectedCamera.visDecay = val;
+          if (visibilityManage) {
+            visibilityManage.update({
+              cameraMarker: selectedCamera
+            })
+          }
 				} );
 				gui.open();
 			}

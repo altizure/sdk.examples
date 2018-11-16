@@ -115,22 +115,9 @@
             marker.dim() // hide the blue square around the marker
             return marker.initialized
           })
-          .then(function(res) {
-            let mat = res._tree.root.mesh.material
-            if (mat instanceof Array) {
-              mat.forEach(function(matt) {
-                matt.flatShading = true
-                // matt.shading = FlatShading
-              })
-            } else {
-              mat.flatShading = true
-            }
-            sandbox.render(res, 'phong') // [essential] choose rendering mode for the marker
-          })
         })
         return tList
       }
-
     </script>
 
   <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
