@@ -58,6 +58,14 @@
       color: 0xffaa00
     })
 
+    beam1.interactable = true
+    beam1.on('mouseenter', function (e) {
+      beam1.color = 0xffffff
+    })
+    beam1.on('mouseleave', function (e) {
+      beam1.color = property1.color
+    })
+
     var fixBeamPose = false
 
     window.addEventListener('mousemove', function(e)  {
@@ -87,6 +95,7 @@
       this.radius = beam.radius
       this.height = beam.height
       this.color = beam.color.getHex()
+      this.opacity = beam.opacity
       this.fixed = fixBeamPose
     }
 
@@ -100,6 +109,9 @@
     })
     lightBeamFolder1.addColor(property1, 'color').onChange(function(value) {
       property1.beam.color = value // TextTagMarker change text: marker.text = newText
+    })
+    lightBeamFolder1.add(property1, 'opacity', 0, 1, 0.05).onChange(function(value) {
+      property1.beam.opacity = value // TextTagMarker change text: marker.text = newText
     })
     lightBeamFolder1.add(property1, 'fixed').onChange(function(value) {
       fixBeamPose = value
