@@ -1,11 +1,22 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 2.2.2
+__发布时间:__
+2018年11月26日
+
+__改进:__
+* 增加了`PolyFenceLineMarker`的透明通道 alphaChannel, 範例2.4更新。
+
+__新功能:__
++ LightBeamMarker 範例2.10 更新。
+
+___
+
 ### 2.2.1
 __发布时间:__
 2018年11月23日
 
 __新功能:__
-
 + LightBeamMarker 增加 opacity 和交互事件。（altizure issue #228）
 
 ___
