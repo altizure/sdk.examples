@@ -140,6 +140,7 @@
         this.animation = linemarker.style.animation
         this.speed = linemarker.speed
         this.texture = linemarker.style.texture
+        this.channel = linemarker.style.channel === undefined ? 'green' : linemarker.style.channel
         this.mapping = linemarker.style.mapping
         this.fenceHeight = linemarker.fenceHeight
         this.update = function()  {
@@ -148,6 +149,7 @@
           this.animation = this.linemarker.style.animation
           this.speed = this.linemarker.speed
           this.texture = this.linemarker.style.texture
+          this.channel = this.linemarker.style.channel === undefined ? 'green' : linemarker.style.channel
           this.mapping = this.linemarker.style.mapping
           this.fenceHeight = this.linemarker.fenceHeight
         }
@@ -189,6 +191,12 @@
         let textureController = folder.add(text, 'texture', {arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
         textureController.onChange(function(v) {
           marker.style = {texture: v}
+          text.update()
+        }).listen()
+
+        let channelController = folder.add(text, 'channel', {'red': 'red', 'green': 'green', 'blue': 'blue', 'alpha': 'alpha'})
+        channelController.onChange(function(v) {
+          marker.style = {channel: v}
           text.update()
         }).listen()
 

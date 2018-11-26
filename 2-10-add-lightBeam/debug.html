@@ -95,7 +95,7 @@
       this.radius = beam.radius
       this.height = beam.height
       this.color = beam.color.getHex()
-      this.opacity = beam.opacity
+      this.opacity = beam.opacity === undefined ? 1.0 : beam.opacity
       this.fixed = fixBeamPose
     }
 
