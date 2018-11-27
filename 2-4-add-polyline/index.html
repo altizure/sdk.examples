@@ -140,7 +140,7 @@
         this.animation = linemarker.style.animation
         this.speed = linemarker.speed
         this.texture = linemarker.style.texture
-        this.channel = linemarker.style.channel === undefined ? 'green' : linemarker.style.channel
+        this.alphaChannel = linemarker.style.alphaChannel === undefined ? 'green' : linemarker.style.alphaChannel
         this.mapping = linemarker.style.mapping
         this.fenceHeight = linemarker.fenceHeight
         this.update = function()  {
@@ -149,7 +149,7 @@
           this.animation = this.linemarker.style.animation
           this.speed = this.linemarker.speed
           this.texture = this.linemarker.style.texture
-          this.channel = this.linemarker.style.channel === undefined ? 'green' : linemarker.style.channel
+          this.alphaChannel = this.linemarker.style.alphaChannel === undefined ? 'green' : linemarker.style.alphaChannel
           this.mapping = this.linemarker.style.mapping
           this.fenceHeight = this.linemarker.fenceHeight
         }
@@ -194,9 +194,9 @@
           text.update()
         }).listen()
 
-        let channelController = folder.add(text, 'channel', {'red': 'red', 'green': 'green', 'blue': 'blue', 'alpha': 'alpha'})
+        let channelController = folder.add(text, 'alphaChannel', {'red': 'red', 'green': 'green', 'blue': 'blue', 'alpha': 'alpha'})
         channelController.onChange(function(v) {
-          marker.style = {channel: v}
+          marker.style = {alphaChannel: v}
           text.update()
         }).listen()
 
