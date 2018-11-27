@@ -1,0 +1,93 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 7.3 Video Fusion </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script>
+      let options = {
+        // camera 
+        camera: {
+          poseTo: {
+            lng: 113.99831039216899, lat: 22.25419799259433, alt: 268.3404527113844, north: 140.1290097758582, tilt: 22.452253051669516
+          },
+          flyTo: {
+            lng: 113.99831039216899, lat: 22.25419799259433, alt: 268.3404527113844, north: 140.1290097758582, tilt: 22.452253051669516
+          }
+        },
+        // render items
+        renderItems: { featureInView: false, earth: true },
+        // show mouse tip
+        develop: true,
+        // altizure api: contact altizure to get your developer key
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+      }
+
+      let sandbox = new altizure.Solution('page-content', options)
+
+      let videoProjectorMarker, projector
+      sandbox.add('AltizureProjectMarker', {
+        pid: '58428f1d97b73e0b090675cd',
+        pose: {
+          position: {lng: 114, lat: 22.25, alt: 0.1}
+        },
+        showXYZ: 100
+      })
+      .then((m) => {
+        return m.initialized
+      })
+      .then((m) => {
+        sandbox.render(m, 'video')
+        videoProjectorMarker = new altizure.VideoProjectorMarker({
+          sandbox: sandbox,
+          projectMarker: m,
+
+          fov: 73.7,
+          aspect: 5472/3648,
+          nearInMeter: 12,
+          farInMeter: 100,
+
+          camToEarth: [0.1275224182398958, 0.41221948678689196, 0.9021159169194392, 0, 0.7067606988485644, -0.6758942247762516, 0.20894092820028975, 0, 0.6958644605160821, 0.6109354234510068, -0.3775321985783475, 0, 0.8445442913916138, 0.37864011968407674, -0.3759785447172339, 1],
+          // position: {lng: 113.9987092398892, lat: 22.254508551497736, alt: 161.00168181238095},
+          // orientation: {x: -0.008224943283974849, y: 0.11686842761529904, z: 0.9598722651332716, w: 0.25479276983977656},
+
+          videoSrcUrl: '../../../altizure.gl-engine2/examples/public/img/hkustNorth.mp4',
+          videoType: 'video/mp4',
+
+          showNear: true,
+          showFar: true
+        })
+        setTimeout(function () {videoProjectorMarker.updateDepthTexture()}, 2000)
+        addUIForProjector(videoProjectorMarker)
+      })
+
+    </script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      var gui = new dat.GUI({autoplace: false, width: 500})
+      function addUIForProjector (projector) {
+        if (!projector) return
+        gui.add(projector, 'fov', 10, 100, 1).onChange((v) => {
+          projector.fov = v
+        })
+        gui.add(projector, 'aspect', 0.1, 8, 0.1).onChange((v) => {
+          projector.aspect = v
+        })
+        gui.add(projector, 'nearInMeter', 0.1, 400, 0.1).onChange((v) => {
+          projector.nearInMeters = v
+        })
+        gui.add(projector, 'farInMeter', 0.1, 400, 0.1).onChange((v) => {
+          projector.farInMeters = v
+        })
+
+        gui.add(projector, 'updateDepthTexture')
+      }
+
+    </script>
+  </body>
+</html>
