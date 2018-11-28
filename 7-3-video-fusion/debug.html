@@ -14,10 +14,10 @@
         // camera 
         camera: {
           poseTo: {
-            lng: 113.99831039216899, lat: 22.25419799259433, alt: 268.3404527113844, north: 140.1290097758582, tilt: 22.452253051669516
+            lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           },
           flyTo: {
-            lng: 113.99831039216899, lat: 22.25419799259433, alt: 268.3404527113844, north: 140.1290097758582, tilt: 22.452253051669516
+            lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           }
         },
         // render items
@@ -34,9 +34,9 @@
 
       let videoProjectorMarker, projector
       sandbox.add('AltizureProjectMarker', {
-        pid: '58428f1d97b73e0b090675cd',
+        pid: '5bd187838690672169fc3761',
         pose: {
-          position: {lng: 114, lat: 22.25, alt: 0.1}
+          position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
         },
         showXYZ: 100
       })
@@ -53,18 +53,17 @@
           aspect: 5472/3648,
           nearInMeter: 12,
           farInMeter: 100,
+          camToEarth:  [0.6033466881308296, -0.7398925025545825, 0.2975430365259394, 0, -0.12898863652192616, -0.4587333516108402, -0.8791618984965737, 0, 0.7869782116232786, 0.49205974920064577, -0.3722129735068672, 0, 0.7843725797837694, 0.5074214080907662, -0.3530742566080696, 1],
+          // position: {lng: 114.23473224705329, lat: 30.510488411649817, alt: 1326.835852997861},
+          // orientation: {x: -2.1195461630660274e-12, y: 1.0938613239644895e-12, z: 0.873767608945985, w: -0.4863436702135807},
 
-          camToEarth: [0.1275224182398958, 0.41221948678689196, 0.9021159169194392, 0, 0.7067606988485644, -0.6758942247762516, 0.20894092820028975, 0, 0.6958644605160821, 0.6109354234510068, -0.3775321985783475, 0, 0.8445442913916138, 0.37864011968407674, -0.3759785447172339, 1],
-          // position: {lng: 113.9987092398892, lat: 22.254508551497736, alt: 161.00168181238095},
-          // orientation: {x: -0.008224943283974849, y: 0.11686842761529904, z: 0.9598722651332716, w: 0.25479276983977656},
-
-          videoSrcUrl: '../../../altizure.gl-engine2/examples/public/img/hkustNorth.mp4',
+          videoSrcUrl: '../public/assets/6.mp4',
           videoType: 'video/mp4',
 
           showNear: true,
           showFar: true
         })
-        setTimeout(function () {videoProjectorMarker.updateDepthTexture()}, 2000)
+        setTimeout(function () {videoProjectorMarker.updateDepthTexture()}, 5000)
         addUIForProjector(videoProjectorMarker)
       })
 
@@ -72,6 +71,7 @@
         sandbox.earthView._stats = new Stats()
         sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
       }
+
     </script>
     <script src="../third_party/dat.gui.js"></script>
     <script>
