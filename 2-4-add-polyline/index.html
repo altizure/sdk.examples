@@ -93,7 +93,7 @@
       fenceHeight: 10
     })
     pl3.style = {
-      alphaMap: 'arrow',
+      texture: 'arrow',
       mapping: 'repeat'
     }
     pl3.speed = 1.0
@@ -139,6 +139,7 @@
         this.color = linemarker.color
         this.animation = linemarker.style.animation
         this.speed = linemarker.speed
+        this.texture = linemarker.style.texture
         this.alphaMap = linemarker.style.alphaMap
         this.alphaChannel = linemarker.style.alphaChannel === undefined ? 'green' : linemarker.style.alphaChannel
         this.mapping = linemarker.style.mapping
@@ -188,7 +189,13 @@
           marker.speed = v
         }).listen()
 
-        let alphaMapController = folder.add(text, 'alphaMap', {arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
+        let textureController = folder.add(text, 'texture', {none: 'none', arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
+        textureController.onChange(function(v) {
+          marker.style = {texture: v}
+          text.update()
+        }).listen()
+
+        let alphaMapController = folder.add(text, 'alphaMap', {none: 'none', arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
         alphaMapController.onChange(function(v) {
           marker.style = {alphaMap: v}
           text.update()

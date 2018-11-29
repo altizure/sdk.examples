@@ -1,0 +1,140 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 2.13 Add Planar Patch </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script src="../public/js/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { lng: 113.94017552129206, lat: 22.537174742645348, alt: 113.93295829066045, north: 58.50561675851725, tilt: 56.317457938157894 },
+        flyTo: { lng: 113.94017552129206, lat: 22.537174742645348, alt: 113.93295829066045, north: 58.50561675851725, tilt: 56.317457938157894 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: false
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    let altmarker
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+    .then(function(m)  {
+      altmarker = m
+    })
+
+    let pts = [
+      {lng: 113.93999528604849, lat: 22.536883806118844, alt: 32.545294099856044},
+      {lng: 113.94006710416231, lat: 22.53689551717023, alt: 32.59944331528895},
+      {lng: 113.94011132746986, lat: 22.536903823042767, alt: 32.470726075182},
+      {lng: 113.94011221658269, lat: 22.536902886864787, alt: 23.80259394762481},
+      {lng: 113.94010781359162, lat: 22.53690095505019, alt: 13.374583892768529},
+      {lng: 113.94005179629208, lat: 22.53689093637903, alt: 13.127803576710175},
+      {lng: 113.93999750112916, lat: 22.536880688002025, alt: 13.16006534735103},
+      {lng: 113.9399983146598, lat: 22.536883653992405, alt: 23.192287763948748},
+      {lng: 113.93999528604849, lat: 22.536883806118844, alt: 32.545294099856044}
+    ].map(function (pt) {
+      return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
+    })
+    let planar = new altizure.PlanarPatchMarker({
+      sandbox: sandbox,
+      points: pts,
+      offset: 0.1, // offset along normal
+      color: 0x6565C3, // color
+      opacity: 1.0, // opacity
+      wireframe: false,
+      showNormal: true
+    })
+
+    let pts1 = [
+      {lng: 113.94014194802652, lat: 22.536905080025264, alt: 23.510954741328515},
+      {lng: 113.94023924305671, lat: 22.53690738439708, alt: 32.538104367998116},
+      {lng: 113.94032706295074, lat: 22.53690953124122, alt: 23.517355227113278},
+      {lng: 113.94033169824908, lat: 22.536906942779467, alt: 13.942327262183314},
+      {lng: 113.94030865629392, lat: 22.536793359660393, alt: 7.6154481991907845},
+      {lng: 113.94024076197752, lat: 22.536784011468495, alt: 7.75919834337948},
+      {lng: 113.94016067530887, lat: 22.536781513147407, alt: 7.725875896580791},
+      {lng: 113.94014558989461, lat: 22.53690295324095, alt: 11.281516139762255},
+      {lng: 113.94014194802652, lat: 22.536905080025264, alt: 23.510954741328515}
+    ].map(function (pt) {
+      return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
+    })
+    let planar1 = new altizure.PlanarPatchMarker({
+      sandbox: sandbox,
+      points: pts1,
+      offset: 0.5, // offset along normal
+      color: 0x6565C3, // color
+      opacity: 1.0, // opacity
+      wireframe: false,
+      showNormal: true
+    })
+
+    let pts2 = [
+      {lng: 113.9404097713308, lat: 22.536980998948337, alt: 29.864965841119545},
+      {lng: 113.94040576333896, lat: 22.537102330840785, alt: 29.36299224493973},
+      {lng: 113.94058699979236, lat: 22.53701766591163, alt: 7.334838719262815},
+      {lng: 113.94058281911958, lat: 22.536887613227062, alt: 7.2285236136458915},
+      {lng: 113.9404097713308, lat: 22.536980998948337, alt: 29.864965841119545}
+    ].map(function (pt) {
+      return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
+    })
+    let planar2 = new altizure.PlanarPatchMarker({
+      sandbox: sandbox,
+      points: pts2,
+      offset: 0, // offset along normal
+      color: 0x6565C3, // color
+      opacity: 1.0, // opacity
+      wireframe: false,
+      showNormal: true
+    })
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+
+  </script>
+  <script src="../third_party/dat.gui.js"></script>
+  <script>
+    let gui = new dat.GUI()
+    addplarnarfolder(planar, 'vertical')
+    addplarnarfolder(planar1, 'bended')
+    addplarnarfolder(planar2, 'slope')
+    function addplarnarfolder (planarmarker, name, open = true) {
+      let folder = gui.addFolder(name)
+      folder.add(planarmarker, 'area')
+      folder.add(planarmarker, 'boundaryLength')
+      folder.addColor(planarmarker, 'color').onChange(function (v) {
+        planarmarker.color = v
+      })
+      folder.add(planarmarker, 'opacity').onChange(function (v) {
+        planarmarker.opacity = v
+      })
+      folder.add(planarmarker, 'wireframe').onChange(function (v) {
+        planarmarker.wireframe = v
+      })
+      folder.add(planarmarker, 'showNormal').onChange(function (v) {
+        planarmarker.showNormal = v
+      })
+      folder.add(planarmarker, 'offset').onChange(function (v) {
+        planarmarker.offset = v
+      })
+      if (open) folder.open()
+    }
+  </script>
+</body>
+
+</html>
