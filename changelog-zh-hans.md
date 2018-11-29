@@ -5,14 +5,14 @@ __发布时间:__
 2018年11月29日
 
 __改进:__
-* 厘清 PolyFenceMarker 中 texture, alphaMap, color 这三个的逻辑关系 (altizure issue #230)。texture 为彩色纹理，alphaMap 为透明掩码，color 为底色。 範例2.4更新。
+* 厘清 `PolyFenceMarker` 中 `texture`, `alphaMap`, `color` 这三个的逻辑关系 (altizure issue #230)`。texture` 为彩色纹理，`alphaMap` 为透明掩码，`color` 为底色。 `範例2.4`更新。
 
 __新功能:__
-+ VideoProjectorMarker 视频投影标注。类似于CameraMarker，并携带一个视频文件，并将视频文件投影到实景模型上。
-+ 範例 7.3 video fusion 视频融合。可以将一段视频作为 LOD 实景模型的动态纹理。
++ `VideoProjectorMarker` 视频投影标注。类似于 `CameraMarker` ，并携带一个视频文件，并将视频文件投影到实景模型上。
++ `範例 7.3` video fusion 视频融合。可以将一段视频作为 LOD 实景模型的动态纹理。
 
-+ PlanarPatchMarker 多边形面片标注。每个面片的边界点存在于同一平面，面片边界不应自交。面片可以有任意倾斜角度。
-+ 範例 2.13 测量任意倾斜角度（包括立面）多边形的周长与面积。
++ `PlanarPatchMarker` 多边形面片标注。每个面片的边界点存在于同一平面，面片边界不应自交。面片可以有任意倾斜角度。
++ `範例 2.13` 测量任意倾斜角度（包括立面）多边形的`周长`与`面积`。
 
 ___
 
