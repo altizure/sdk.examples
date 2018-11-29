@@ -1,0 +1,103 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 7.3 Video Fusion </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script>
+      let options = {
+        // camera 
+        camera: {
+          poseTo: {
+            lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
+          },
+          flyTo: {
+            lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
+          }
+        },
+        // render items
+        renderItems: { featureInView: false, earth: true },
+        // show mouse tip
+        develop: true,
+        // altizure api: contact altizure to get your developer key
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+      }
+
+      let sandbox = new altizure.Solution('page-content', options)
+
+      let videoProjectorMarker, projector
+      sandbox.add('AltizureProjectMarker', {
+        pid: '5bd187838690672169fc3761',
+        pose: {
+          position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
+        }
+      })
+      .then((m) => {
+        return m.initialized
+      })
+      .then((m) => {
+        sandbox.render(m, 'video')
+        let camToEarth = m.composeCamToEarth(
+          new THREE.Vector3(-304, 168, 96), new THREE.Vector3(2, -1.24, 0), new THREE.Vector3(-304, 168, 96 - 40)
+        ).elements
+        videoProjectorMarker = new altizure.VideoProjectorMarker({
+          sandbox: sandbox,
+          projectMarker: m,
+
+          fov: 73.7,
+          aspect: 5472/3648,
+          nearInMeter: 12,
+          farInMeter: 100,
+
+          camToEarth: camToEarth,
+          // camToEarth:  [0.6033466881308296, -0.7398925025545825, 0.2975430365259394, 0, -0.12898863652192616, -0.4587333516108402, -0.8791618984965737, 0, 0.7869782116232786, 0.49205974920064577, -0.3722129735068672, 0, 0.7843725797837694, 0.5074214080907662, -0.3530742566080696, 1],
+          // position: {lng: 114.23473224705329, lat: 30.510488411649817, alt: 1326.835852997861},
+          // orientation: {x: -2.1195461630660274e-12, y: 1.0938613239644895e-12, z: 0.873767608945985, w: -0.4863436702135807},
+
+          videoSrcUrl: '../public/assets/6.mp4',
+          videoType: 'video/mp4',
+
+          showNear: true,
+          showFar: true
+        })
+        setTimeout(function () {videoProjectorMarker.updateDepthTexture()}, 5000)
+        addUIForProjector(videoProjectorMarker)
+      })
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      var gui = new dat.GUI({autoplace: false, width: 500})
+      function addUIForProjector (projector) {
+        if (!projector) return
+        gui.add(projector, 'fov', 10, 100, 1).onChange((v) => {
+          projector.fov = v
+        })
+        gui.add(projector, 'aspect', 0.1, 8, 0.1).onChange((v) => {
+          projector.aspect = v
+        })
+        gui.add(projector, 'nearInMeter', 0.1, 400, 0.1).onChange((v) => {
+          projector.nearInMeters = v
+        })
+        gui.add(projector, 'farInMeter', 0.1, 400, 0.1).onChange((v) => {
+          projector.farInMeters = v
+        })
+
+        gui.add(projector, 'updateDepthTexture')
+      }
+
+    </script>
+  </body>
+</html>

@@ -93,7 +93,7 @@
       fenceHeight: 10
     })
     pl3.style = {
-      texture: 'arrow',
+      alphaMap: 'arrow',
       mapping: 'repeat'
     }
     pl3.speed = 1.0
@@ -139,7 +139,7 @@
         this.color = linemarker.color
         this.animation = linemarker.style.animation
         this.speed = linemarker.speed
-        this.texture = linemarker.style.texture
+        this.alphaMap = linemarker.style.alphaMap
         this.alphaChannel = linemarker.style.alphaChannel === undefined ? 'green' : linemarker.style.alphaChannel
         this.mapping = linemarker.style.mapping
         this.fenceHeight = linemarker.fenceHeight
@@ -148,7 +148,7 @@
           this.color = this.linemarker.color
           this.animation = this.linemarker.style.animation
           this.speed = this.linemarker.speed
-          this.texture = this.linemarker.style.texture
+          this.alphaMap = this.linemarker.style.alphaMap
           this.alphaChannel = this.linemarker.style.alphaChannel === undefined ? 'green' : linemarker.style.alphaChannel
           this.mapping = this.linemarker.style.mapping
           this.fenceHeight = this.linemarker.fenceHeight
@@ -188,9 +188,9 @@
           marker.speed = v
         }).listen()
 
-        let textureController = folder.add(text, 'texture', {arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
-        textureController.onChange(function(v) {
-          marker.style = {texture: v}
+        let alphaMapController = folder.add(text, 'alphaMap', {arrow: 'arrow', fence: 'fence', 'meta_description': '../public/assets/img/meta_description.png'})
+        alphaMapController.onChange(function(v) {
+          marker.style = {alphaMap: v}
           text.update()
         }).listen()
 
