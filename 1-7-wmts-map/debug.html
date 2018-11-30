@@ -1,0 +1,47 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 1.7 WMTS Map </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script src="../public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        // render items
+        renderItems: {
+          planet: function(level, column, row) {
+            return '//cartodb-basemaps-c.global.ssl.fastly.net/light_all/' + level + '/' + column + '/' + row + '.png'
+          },
+          //// tencent map
+          // planet: function(level, column, row) {
+          //   var sum = level + row + column
+          //   var idx = sum % 4
+          //   var server = ['0', '1', '2', '3'][idx]
+          //   let x = column
+          //   let y = Math.pow(2, level) - 1 - row
+          //   let para1 = Math.floor(x / 16)
+          //   let para2 = Math.floor(y / 16)
+          //   var url = 'http://p' + server + '.map.gtimg.com/sateTiles/' + level + '/' + para1 + '/' + para2 + '/' + x + '_' + y + '.jpg?version=117'
+          //   return url
+          // },
+          featureInView: false, // altizure featured projects
+          orbitRing: false // orbit ring
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+  </body>
+</html>
