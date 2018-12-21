@@ -1,5 +1,26 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+___
+
+### 2.4.6
+__发布时间:__
+2018年12月21日
+
+__改进:__
+* 优化CPU使用，altizure binary 解压全部转移至子线程。
+* `PlanarPatchMarker` 两面都可接受交互事件。
+
+__缺陷修复:__
+* 清理部分内存泄露。
+- NASA 月球卫星图资源失效，暂时取消範例1.4。可使用自有月球资源实现相同效果，参考範例1.7。
+
+### 2.4.5
+__发布时间:__
+2018年12月10日
+
+__缺陷修复:__
+* `CanvasTagMarker` lost interaction after the sandbox is destructed and re-created.
+
 ### 2.4.3
 __发布时间:__
 2018年12月10日
@@ -43,7 +64,6 @@ __新功能:__
 + `VideoProjectorMarker` 视频投影标注。类似于 `CameraMarker` ，并携带一个视频文件，并将视频文件投影到实景模型上。
 + `範例 7.3` video fusion 视频融合。可以将一段视频作为 LOD 实景模型的动态纹理。
 
-___
 
 ### 2.2.3
 __发布时间:__
