@@ -1,5 +1,13 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 2.4.7
+__发布时间:__
+2018年12月24日
+
+__改进:__
+* 增加了对导入模型的 `emissive map`, `specular map` 的支持。
+* 减小56KB`sdk`冗余。
+
 ___
 
 ### 2.4.6
