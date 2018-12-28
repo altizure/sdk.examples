@@ -40,12 +40,14 @@
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
 
       // with an arbitrary position (longitude, latitude, altitude)
+      let marker
       sandbox.add('AltizureProjectMarker', {
-        pid: '5849104597b73e0b090c01e8',
+        pid: '5b546b2855f6b50f28736051',
         pose: {
           position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 0}
         }
       })
+        .then(m => marker = m)
 
       if (Stats) {
         sandbox.earthView._stats = new Stats()
