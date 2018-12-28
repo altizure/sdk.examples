@@ -13,14 +13,10 @@
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { alt:100000,
-            lat:22.538388886344876,
-            lng:113.94255600866971 },
-          flyTo: { alt:1020.0739295752213,
-            lat:22.538388886344876,
-            lng:113.94255600866971,
-            north:-27.271585092584015,
-            tilt:74.7023627906978 }
+          poseTo: { alt:1020,
+            lng: 113.9411, // this should be close to your added marker's position
+            lat: 22.5374
+          }
         },
         renderItems: {
           earth: true,
@@ -37,13 +33,17 @@
       // Note: your developer key must have access to the project, and the project must have valid GPS information.
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
 
-      // with an arbitrary position (longitude, latitude, altitude)
-      sandbox.add('AltizureProjectMarker', {
+      
+      let marker
+      sandbox.add('AltizureProjectMarker', { // This is an async function. It resolves the marker
         pid: '5849104597b73e0b090c01e8',
         pose: {
-          position: {lng: 113.94420875334851, lat: 22.53672047469201, alt: 0}
+          position: {lng: 113.9442, lat: 22.5367, alt: 0} // with an arbitrary position (longitude, latitude, altitude)
         }
       })
+        .then(function(m) {
+          marker = m // get the marker
+        })
     </script>
   </body>
 </html>
