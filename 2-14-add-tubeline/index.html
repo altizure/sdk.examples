@@ -1,0 +1,232 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 2.14 Add Tube Line </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078 },
+        flyTo: { alt: 319.02169601663104,
+          lat: 22.5364271949327,
+          lng: 113.93977612840078,
+          north: 56.82289356559219,
+          tilt: 56.19205822511624 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    let altmarker
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+    .then(function(m)  {
+      altmarker = m
+    })
+
+    // endpoints (longitude, latitude, altitude)
+    let pts1 = [
+      [113.93834209426927, 22.536084688323886, 8.461150482780916],
+      [113.93851613266197, 22.536088502225557, 8.348457394521445],
+      [113.9384919149267, 22.536730475456427, 7.72568611917734],
+      [113.93867773729961, 22.536714170702645, 7.7477876550475],
+      [113.93953118282849, 22.536759090893902, 8.255721520829152],
+      [113.93952084758165, 22.537225748645717, 8.006473519889875],
+      [113.93988007740502, 22.537234146256576, 9.469526442609505]
+    ].map(function(lnglatalt)  {
+      return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
+    })
+    let pl1 = new altizure.PolyTubeLineMarker({
+      name: 'pl1',
+      sandbox: sandbox,
+      points: pts1,
+      color: 0xb73026, // line color
+      lineWidth: 1
+    })
+
+    let pts2 = [
+      [113.93832449874549, 22.53610406245406, 8.426873391081612],
+      [113.93848826229001, 22.53611480048765, 8.43784681316338],
+      [113.93845330361665, 22.537226275970312, 7.353449881118547],
+      [113.93916733429155, 22.53725230512713, 8.165762920905182]]
+      .map(function(lnglatalt)  {
+        return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
+      })
+    let pl2 = new altizure.PolyTubeLineMarker({
+      name: 'pl2',
+      sandbox: sandbox,
+      points: pts2,
+      color: 0x2654b7,
+      lineWidth: 2
+    })
+
+    let pts3 = [[113.94004434545403, 22.536430666836896, 8.529936080552108],
+      [113.93989197826778, 22.53642506074514, 8.37267703295911],
+      [113.93992379693061, 22.536772011456577, 14.698098228363094],
+      [113.93948096227913, 22.536774790964845, 8.07877871224377],
+      [113.93946847564925, 22.537257065188992, 7.9259919311032805],
+      [113.93937849508251, 22.537250183225215, 9.203476070513277]]
+      .map(function(lnglatalt) {
+        return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
+      })
+    let pl3 = new altizure.PolyTubeLineMarker({
+      name: 'pl3',
+      sandbox: sandbox,
+      points: pts3,
+      color: 0x26b74f,
+      lineWidth: 4
+    })
+    pl3.style = {
+      texture: 'dash',
+      mapping: 'repeat'
+    }
+    pl3.speed = 1.0
+
+    let pl1color = pl1.color
+    pl1.interactable = true
+    pl1.on('mouseenter', function(event)  {
+      pl1color = pl1.color
+      pl1.color = 0xffffff
+    })
+    pl1.on('mouseleave', function(event)  {
+      pl1.color = pl1color
+    })
+
+    let pl2color = pl2.color
+    pl2.interactable = true
+    pl2.on('mouseenter', function(event)  {
+      pl2color = pl2.color
+      pl2.color = 0xffffff
+    })
+    pl2.on('mouseleave', function(event)  {
+      pl2.color = pl2color
+    })
+
+    let pl3color = pl3.color
+    pl3.interactable = true
+    pl3.on('mouseenter', function(event) {
+      pl3color = pl3.color
+      pl3.color = 0xffffff
+    })
+    pl3.on('mouseleave', function(event) {
+      pl3.color = pl3color
+    })
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+
+  </script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+    setUpUI()
+    function setUpUI () {
+      var LineMarkerProperty = function(linemarker) {
+        this.linemarker = linemarker
+        this.opacity = linemarker.opacity
+        this.color = linemarker.color
+        this.animation = linemarker.style.animation
+        this.speed = linemarker.speed
+        this.texture = linemarker.style.texture
+        this.alphaMap = linemarker.style.alphaMap
+        this.alphaChannel = linemarker.style.alphaChannel === undefined ? 'green' : linemarker.style.alphaChannel
+        this.mapping = linemarker.style.mapping
+        this.lineWidth = linemarker.lineWidth
+        this.update = function()  {
+          this.opacity = this.linemarker.opacity
+          this.color = this.linemarker.color
+          this.animation = this.linemarker.style.animation
+          this.speed = this.linemarker.speed
+          this.alphaMap = this.linemarker.style.alphaMap
+          this.alphaChannel = this.linemarker.style.alphaChannel === undefined ? 'green' : linemarker.style.alphaChannel
+          this.mapping = this.linemarker.style.mapping
+          this.lineWidth = this.linemarker.lineWidth
+        }
+      } 
+      var gui = new dat.GUI()
+      gui.add({hide: false}, 'hide').name('Hide Project').onChange(function(v) {
+        altmarker.visible = !v
+      })
+      addFolder('red style', pl1)
+      addFolder('purple style', pl2)
+      addFolder('green style', pl3, true)      
+
+      function addFolder (name, marker, open) {
+        var folder = gui.addFolder(name)
+        var text = new LineMarkerProperty(marker)
+
+        let colorController = folder.addColor(text, 'color')
+        colorController.onChange(function(v) {
+          marker.color = v
+        }).listen()
+
+        let opacityController = folder.add(text, 'opacity', 0.0, 1.0, 0.01)
+        opacityController.onChange(function (value) {
+          marker.opacity = value
+        })
+        opacityController.listen()
+
+        let animationController = folder.add(text, 'animation', {horizontal: 'horizontal', vertical: 'vertical', none: 'none'})
+        animationController.onChange(function(v) {
+          marker.style = {animation: v}
+          text.update()
+        }).listen()
+
+        let speedController = folder.add(text, 'speed', -1, 1, 0.01)
+        speedController.onChange(function(v) {
+          marker.speed = v
+        }).listen()
+
+        let textureController = folder.add(text, 'texture', {none: 'none', dash: 'dash', 'meta_description': '../public/assets/img/meta_description.png'})
+        textureController.onChange(function(v) {
+          marker.style = {texture: v}
+          text.update()
+        }).listen()
+
+        let alphaMapController = folder.add(text, 'alphaMap', {none: 'none', dash: 'dash', 'meta_description': '../public/assets/img/meta_description.png'})
+        alphaMapController.onChange(function(v) {
+          marker.style = {alphaMap: v}
+          text.update()
+        }).listen()
+
+        let channelController = folder.add(text, 'alphaChannel', {'red': 'red', 'green': 'green', 'blue': 'blue', 'alpha': 'alpha'})
+        channelController.onChange(function(v) {
+          marker.style = {alphaChannel: v}
+          text.update()
+        }).listen()
+
+        let mappingController = folder.add(text, 'mapping', {linear: 'linear', repeat: 'repeat'})
+        mappingController.onChange(function(v) {
+          marker.style = {mapping: v}
+          text.update()
+        }).listen()
+
+        let lineWidthController = folder.add(text, 'lineWidth', 0.1, 10)
+        lineWidthController.onChange(function(v) {
+          marker.lineWidth = v
+        }).listen()
+
+        if (open) folder.open()
+      }     
+    }
+  </script>
+</body>
+
+</html>
