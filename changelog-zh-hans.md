@@ -1,5 +1,13 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 2.4.12
+__发布时间:__
+2018年1月23日
+
+__缺陷修复:__
+* `ObjMarker` 默认 `diffuse` 颜色由蓝色调为白色。当 `map_Kd` 与 `Kd` 同时存在，`Kd` 不生效。
+* VisibilityMaterial 在使用 Material Array 的模型中显示不正常。
+
 ### 2.4.11
 __发布时间:__
 2018年1月9日
