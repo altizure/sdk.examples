@@ -1,0 +1,65 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.15 Point Cloud </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script src="../public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:1020,
+            lng: 113.9411, // this should be close to your added marker's position
+            lat: 22.5374
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let marker
+      sandbox.add('AltizureProjectMarker', { // This is an async function. It resolves the marker
+        pid: '5c1b6d0541078e193a11a32d', // '5c69d27e6ae17c7b2fbd581f',
+        pose: {
+          position: {lng: 113.9402, lat: 22.5367, alt: 0} // with an arbitrary position (longitude, latitude, altitude)
+        }
+      })
+        .then(function(m) {
+          marker = m // get the marker
+          if (m.modelType !== 'PTLOD') {
+            console.warn('This project is not marked as a point cloud project. Please contact Altizure if you think it is wrong.')
+          }
+        })
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      var settings = {
+        pointSize: 2
+      }
+      var gui = new dat.GUI()
+      gui.add(settings, 'pointSize', 1, 20, 1).onChange(function (v) {
+        settings.pointSize = v
+        if (marker) marker.pointSize = v
+      })
+    </script>
+  </body>
+</html>
