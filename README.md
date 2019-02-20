@@ -51,9 +51,9 @@ Please create an issue on [issue page](https://github.com/altizure/sdk.examples/
 
 ### References ###
 
+* [Altizure Development Platform](https://developers.altizure.com/)
 * [Altizure开发平台-快速入门教程](https://www.jianshu.com/p/53e2c72fec0d)
 * [altizure.github.io/dev-docs-site](https://altizure.github.io/dev-docs-site/)
-* [Altizure Development Platform](https://developers.altizure.com/)
 
 ### Contributors ###
 
