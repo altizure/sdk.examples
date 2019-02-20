@@ -50,6 +50,9 @@ Three versions are provided:
 
 Please write on [issue page](https://github.com/altizure/sdk.examples/issues) or send emails to [Altizure team](mailto:developers@altizure.com).
 
+### Contributors ###
+[Jingbo Liu](https://bitbucket.org/jingbo/), Shenlai Gao, Yasong Guo, Yihang Qu
+
 ### Changelog ###
 
 * [English](changelog-en.md)
