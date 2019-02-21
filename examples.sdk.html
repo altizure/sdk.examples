@@ -1,515 +1,515 @@
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <title>Altizure Examples</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <style>
-    body {
-      overflow: hidden;
-    }
-
-    #toc_toggle {
-      display: flex;
-      visibility: hidden;
-      width: 0px;
-      height: 0px;
-    }
-
-    #content {
-      position: absolute;
-      top: 0px;
-      left: 200px;
-      width: calc(100% - 200px);
-      height: 100%;
-    }
-
-    #content iframe {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      width: 100%;
-      height: 100%;
-      border: 0px;
-    }
-
-    #table_of_contents {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      height: 100%;
-      width: 200px;
-      overflow-y: auto;
-      border-right-style: solid;
-      border-right-width: 1px;
-      border-right-color: black;
-    }
-
-    #table_of_contents ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      width: 200px;
-      background-color: #f1f1f1;
-    }
-
-    #table_of_contents ul li a {
-      display: block;
-      color: #000;
-      padding: 8px 0 8px 16px;
-      text-decoration: none;
-      border-bottom: 1px solid #efefef;
-    }
-
-    #table_of_contents ul li a:hover:not(.active),
-    #table_of_contents ul li.section>a:hover:not(.active) {
-      background-color: #555;
-      color: white;
-    }
-
-    #table_of_contents ul a.active {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    #table_of_contents ul li.section>a {
-      background-color: #ddd;
-    }
-
-    #table_of_contents ul li.section>a>i {
-      min-width: 16px;
-    }
-
-    #table_of_contents ul li.section>ul {
-      display: none;
-    }
-
-    #table_of_contents ul li.section.is_active>ul {
-      display: block;
-    }
-
-    @media only screen and (max-width: 768px) {
-      #table_of_contents {
-        visibility: hidden;
-        z-index: 1;
+  <head>
+    <meta charset="utf-8">
+    <title>Altizure Examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+      body {
+        overflow: hidden;
       }
-      #content {
-        z-index: 0;
-        left: 0px;
-        width: calc(100%);
-      }
+
       #toc_toggle {
-        z-index: 10;
-        visibility: visible;
+        display: flex;
+        visibility: hidden;
+        width: 0px;
+        height: 0px;
+      }
+
+      #content {
         position: absolute;
-        color: black;
-        background: #aaa;
-        /* top: 0px; */
-        bottom: 0px;
-        right: 0px;
-        width: 160px;
-        height: 30px;
-        margin-top: 12px;
-        margin-bottom: 12px;
-        margin-left: 12px;
-        margin-right: 12px;
-        padding: 0px;
-        border: 1px;
-        text-align: center;
-        border-color: #333;
-        border-style: solid;
+        top: 0px;
+        left: 200px;
+        width: calc(100% - 200px);
+        height: 100%;
       }
-      #toc_toggle_text {
-        margin-top: auto;
-        margin-bottom: auto;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-        font-size: 16px;
-      }
-    }
-  </style>
-</head>
 
-<body style="margin: 0px; padding: 0px;">
-  <div id='table_of_contents'></div>
-  <div id='toc_toggle'>
-    <div id='toc_toggle_text'>Toggle Sample List</div>
-  </div>
-  <div id='content'></div>
-  <script type="text/javascript">
-    function loadWebPage(path) {
-      // alert(path)
-      let contentdiv = document.getElementById("content")
-      for (let i = 0; i < contentdiv.children.length; ++i) {
-        contentdiv.removeChild(contentdiv.children[i])
+      #content iframe {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        border: 0px;
       }
-      frame = document.createElement("iframe")
-      frame.src = path
-      contentdiv.appendChild(frame)
-    }
-  </script>
-  <script type="text/javascript">
-    function createExampleLink(info) {
-      let example = document.createElement("li")
-      let link = document.createElement("a")
 
-      link.onclick = function () {
-        loadWebPage(info.path)
-        // clear the color of current li item
-        let list = document.getElementById('table_of_contents').children[0]
-        for (let i = 0; i < list.children.length; ++i) {
-          var childrenNode = list.children[i].children[1].children
-          for (let j = 0; j < childrenNode.length; ++j) {
-            childrenNode[j].style.backgroundColor = ""
+      #table_of_contents {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 200px;
+        overflow-y: auto;
+        border-right-style: solid;
+        border-right-width: 1px;
+        border-right-color: black;
+      }
+
+      #table_of_contents ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #f1f1f1;
+      }
+
+      #table_of_contents ul li a {
+        display: block;
+        color: #000;
+        padding: 8px 0 8px 16px;
+        text-decoration: none;
+        border-bottom: 1px solid #efefef;
+      }
+
+      #table_of_contents ul li a:hover:not(.active),
+      #table_of_contents ul li.section>a:hover:not(.active) {
+        background-color: #555;
+        color: white;
+      }
+
+      #table_of_contents ul a.active {
+        background-color: #4CAF50;
+        color: white;
+      }
+
+      #table_of_contents ul li.section>a {
+        background-color: #ddd;
+      }
+
+      #table_of_contents ul li.section>a>i {
+        min-width: 16px;
+      }
+
+      #table_of_contents ul li.section>ul {
+        display: none;
+      }
+
+      #table_of_contents ul li.section.is_active>ul {
+        display: block;
+      }
+
+      @media only screen and (max-width: 768px) {
+        #table_of_contents {
+          visibility: hidden;
+          z-index: 1;
+        }
+        #content {
+          z-index: 0;
+          left: 0px;
+          width: calc(100%);
+        }
+        #toc_toggle {
+          z-index: 10;
+          visibility: visible;
+          position: absolute;
+          color: black;
+          background: #aaa;
+          /* top: 0px; */
+          bottom: 0px;
+          right: 0px;
+          width: 160px;
+          height: 30px;
+          margin-top: 12px;
+          margin-bottom: 12px;
+          margin-left: 12px;
+          margin-right: 12px;
+          padding: 0px;
+          border: 1px;
+          text-align: center;
+          border-color: #333;
+          border-style: solid;
+        }
+        #toc_toggle_text {
+          margin-top: auto;
+          margin-bottom: auto;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+
+  <body style="margin: 0px; padding: 0px;">
+    <div id='table_of_contents'></div>
+    <div id='toc_toggle'>
+      <div id='toc_toggle_text'>Toggle Sample List</div>
+    </div>
+    <div id='content'></div>
+    <script type="text/javascript">
+      function loadWebPage(path) {
+        // alert(path)
+        let contentdiv = document.getElementById("content")
+        for (let i = 0; i < contentdiv.children.length; ++i) {
+          contentdiv.removeChild(contentdiv.children[i])
+        }
+        frame = document.createElement("iframe")
+        frame.src = path
+        contentdiv.appendChild(frame)
+      }
+    </script>
+    <script type="text/javascript">
+      function createExampleLink(info) {
+        let example = document.createElement("li")
+        let link = document.createElement("a")
+
+        link.onclick = function () {
+          loadWebPage(info.path)
+          // clear the color of current li item
+          let list = document.getElementById('table_of_contents').children[0]
+          for (let i = 0; i < list.children.length; ++i) {
+            var childrenNode = list.children[i].children[1].children
+            for (let j = 0; j < childrenNode.length; ++j) {
+              childrenNode[j].style.backgroundColor = ""
+            }
+          }
+          // set the color of current li item
+          example.style.backgroundColor = "#999";
+        }
+        link.innerText = info.name
+        link.href = 'javascript:void(0);'
+        example.appendChild(link)
+        return example
+      }
+
+      function createExampleSection(info) {
+        let section = document.createElement('li')
+        section.classList.add('section')
+        let link = document.createElement("a")
+        let childrenList = document.createElement('ul')
+        info.children.map(function (child) {
+          childrenList.appendChild(createExampleLink(child))
+        })
+        link.onclick = function () {
+          if (section.classList.contains('is_active')) {
+            section.classList.remove('is_active')
+            link.children[0].classList.remove('fa-angle-down')
+            link.children[0].classList.add('fa-angle-left')
+          } else {
+            section.classList.add('is_active')
+            link.children[0].classList.remove('fa-angle-left')
+            link.children[0].classList.add('fa-angle-down')
           }
         }
-        // set the color of current li item
-        example.style.backgroundColor = "#999";
+        var iNode = document.createElement('i')
+        iNode.classList.add('fa')
+        iNode.classList.add('fa-angle-right')
+        link.appendChild(iNode)
+        var nameNode = document.createTextNode(info.name)
+        link.appendChild(nameNode)
+        link.href = 'javascript:void(0);'
+        section.appendChild(link)
+        section.appendChild(childrenList)
+        return section
       }
-      link.innerText = info.name
-      link.href = 'javascript:void(0);'
-      example.appendChild(link)
-      return example
-    }
 
-    function createExampleSection(info) {
-      let section = document.createElement('li')
-      section.classList.add('section')
-      let link = document.createElement("a")
-      let childrenList = document.createElement('ul')
-      info.children.map(function (child) {
-        childrenList.appendChild(createExampleLink(child))
-      })
-      link.onclick = function () {
-        if (section.classList.contains('is_active')) {
-          section.classList.remove('is_active')
-          link.children[0].classList.remove('fa-angle-down')
-          link.children[0].classList.add('fa-angle-left')
+      let table_of_contents = document.getElementById('table_of_contents')
+      let toggleButton = document.getElementById('toc_toggle').children[0]
+      function toggleTOC() {
+        if (toggleButton === null) {
+          return
+        }
+        if (table_of_contents.style.visibility !== 'visible') {
+          table_of_contents.style.visibility = 'visible'
         } else {
-          section.classList.add('is_active')
-          link.children[0].classList.remove('fa-angle-left')
-          link.children[0].classList.add('fa-angle-down')
+          table_of_contents.style.visibility = 'hidden'
         }
       }
-      var iNode = document.createElement('i')
-      iNode.classList.add('fa')
-      iNode.classList.add('fa-angle-right')
-      link.appendChild(iNode)
-      var nameNode = document.createTextNode(info.name)
-      link.appendChild(nameNode)
-      link.href = 'javascript:void(0);'
-      section.appendChild(link)
-      section.appendChild(childrenList)
-      return section
-    }
-
-    let table_of_contents = document.getElementById('table_of_contents')
-    let toggleButton = document.getElementById('toc_toggle').children[0]
-    function toggleTOC() {
-      if (toggleButton === null) {
-        return
+      function addExamples(infos) {
+        let list = document.createElement("ul")
+        infos.map(function (info) {
+          list.appendChild(createExampleSection(info))
+        })
+        table_of_contents.appendChild(list)
+        toggleButton.addEventListener('click', toggleTOC)
       }
-      if (table_of_contents.style.visibility !== 'visible') {
-        table_of_contents.style.visibility = 'visible'
-      } else {
-        table_of_contents.style.visibility = 'hidden'
-      }
-    }
-    function addExamples(infos) {
-      let list = document.createElement("ul")
-      infos.map(function (info) {
-        list.appendChild(createExampleSection(info))
-      })
-      table_of_contents.appendChild(list)
-      toggleButton.addEventListener('click', toggleTOC)
-    }
-  </script>
-  <script type="text/javascript">
-    let examples = [
-      {
-        name: 'Sandbox',
-        children: [
-          {
-            name: '1.1 Altizure Earth',
-            path: './1-1-altizure-earth/index.html'
-          },
-          {
-            name: '1.2 Openning',
-            path: './1-2-open-animation/index.html'
-          },
-          {
-            name: '1.3 Render items',
-            path: './1-3-render-items/index.html'
-          },
-          {
-            name: '1.5 Background',
-            path: './1-5-background/index.html'
-          },
-          {
-            name: '1.6 Quality',
-            path: './1-6-quality/index.html'
-          },
-          {
-            name: '1.7 WMTS Map',
-            path: './1-7-wmts-map/index.html'
-          },
-        ]
-      },
-      {
-        name: 'Porject Marker',
-        children: [
-          {
-            name: '2.1 Altizure project',
-            path: './2-1-add-project/index.html'
-          },
-          {
-            name: '2.1.1 Project\'s water',
-            path: './2-1-add-project-water/index.html'
-          },
-          {
-            name: '2.1.2 Project autoScale',
-            path: './2-1-add-project-autoScale/index.html'
-          },
-          {
-            name: '2.5.1 Promoted Obj',
-            path: './2-5-add-promoted-obj/index.html'
-          },
-          {
-            name: '2.15 Point Cloud',
-            path: './2-15-point-cloud/index.html'
-          },
-          {
-            name: '6.1 Crop project',
-            path: './6-1-crop-project/index.html'
-          },
-          {
-            name: '6.3 Ditch',
-            path: './6-3-ditch/index.html'
-          },
-          {
-            name: '7.3 Video Fusion',
-            path: './7-3-video-fusion/index.html'
-          },
-        ],
-      },
-      {
-        name: 'Geometry Marker',
-        children: [
-          {
-            name: '2.2 Tag',
-            path: './2-2-add-tag/index.html'
-          },
-          {
-            name: '2.6 Text Tag',
-            path: './2-6-add-textTag/index.html'
-          },
-          {
-            name: '2.9 Canvas Tag',
-            path: './2-9-add-canvasTag/index.html'
-          },
-          {
-            name: '2.10 Light Beam',
-            path: './2-10-add-lightBeam/index.html'
-          },
+    </script>
+    <script type="text/javascript">
+      let examples = [
+        {
+          name: 'Sandbox',
+          children: [
+            {
+              name: '1.1 Altizure Earth',
+              path: './1-1-altizure-earth/index.html'
+            },
+            {
+              name: '1.2 Openning',
+              path: './1-2-open-animation/index.html'
+            },
+            {
+              name: '1.3 Render items',
+              path: './1-3-render-items/index.html'
+            },
+            {
+              name: '1.5 Background',
+              path: './1-5-background/index.html'
+            },
+            {
+              name: '1.6 Quality',
+              path: './1-6-quality/index.html'
+            },
+            {
+              name: '1.7 WMTS Map',
+              path: './1-7-wmts-map/index.html'
+            },
+          ]
+        },
+        {
+          name: 'Porject Marker',
+          children: [
+            {
+              name: '2.1 Altizure project',
+              path: './2-1-add-project/index.html'
+            },
+            {
+              name: '2.1.1 Project\'s water',
+              path: './2-1-add-project-water/index.html'
+            },
+            {
+              name: '2.1.2 Project autoScale',
+              path: './2-1-add-project-autoScale/index.html'
+            },
+            {
+              name: '2.5.1 Promoted Obj',
+              path: './2-5-add-promoted-obj/index.html'
+            },
+            {
+              name: '2.15 Point Cloud',
+              path: './2-15-point-cloud/index.html'
+            },
+            {
+              name: '6.1 Crop project',
+              path: './6-1-crop-project/index.html'
+            },
+            {
+              name: '6.3 Ditch',
+              path: './6-3-ditch/index.html'
+            },
+            {
+              name: '7.3 Video Fusion',
+              path: './7-3-video-fusion/index.html'
+            },
+          ],
+        },
+        {
+          name: 'Geometry Marker',
+          children: [
+            {
+              name: '2.2 Tag',
+              path: './2-2-add-tag/index.html'
+            },
+            {
+              name: '2.6 Text Tag',
+              path: './2-6-add-textTag/index.html'
+            },
+            {
+              name: '2.9 Canvas Tag',
+              path: './2-9-add-canvasTag/index.html'
+            },
+            {
+              name: '2.10 Light Beam',
+              path: './2-10-add-lightBeam/index.html'
+            },
 
-          {
-            name: '2.4 Polyline',
-            path: './2-4-add-polyline/index.html'
-          },
-          {
-            name: '2.8 PolyCylinder',
-            path: './2-8-polycylinder/index.html'
-          },
-          {
-            name: '2.14 PolyTubeLine',
-            path: './2-14-add-tubeline/index.html'
-          },
+            {
+              name: '2.4 Polyline',
+              path: './2-4-add-polyline/index.html'
+            },
+            {
+              name: '2.8 PolyCylinder',
+              path: './2-8-polycylinder/index.html'
+            },
+            {
+              name: '2.14 PolyTubeLine',
+              path: './2-14-add-tubeline/index.html'
+            },
 
-          {
-            name: '2.3 Polygon',
-            path: './2-3-add-polygon/index.html'
-          },
-          {
-            name: '2.13 Planar Patch',
-            path: './2-13-add-planar/index.html'
-          },
-          {
-            name: '2.11 Zone',
-            path: './2-11-add-zone/index.html'
-          },
-          {
-            name: '2.5 Obj Model',
-            path: './2-5-add-obj-model/index.html'
-          },
-          {
-            name: '2.12 Particles',
-            path: './2-12-add-particles/index.html'
-          },
-        ]
-      },
-      {
-        name: 'Interaction',
-        children: [
-          {
-            name: '3.1 Mouse Events',
-            path: './3-1-mouse-events/index.html'
-          },
-          {
-            name: '3.2 Turn off events',
-            path: './3-2-event-off/index.html'
-          },
-          {
-            name: '10.1 Draw Polygon',
-            path: './10-1-draw-polygon/index.html'
-          },
-          {
-            name: '10.4 Interactive Crop',
-            path: './10-4-interactive-crop/index.html'
-          }
-        ]
-      },
-      {
-        name: 'Positioning',
-        children: [
-          {
-            name: '4.1 Pickpoint on Earth',
-            path: './4-1-earth-pickpoint/index.html'
-          },
-          {
-            name: '4.2 Pickpoint on project',
-            path: './4-2-project-pickpoint/index.html'
-          },
-          {
-            name: '4.3 Window to LngLatAlt',
-            path: './4-3-window-to-lnglatalt/index.html'
-          },
-          {
-            name: '4.4 Window from LngLatAlt',
-            path: './4-4-window-from-lnglatalt/index.html'
-          },
-          {
-            name: '4.5 LngLat to Alt',
-            path: './4-5-lnglat-to-alt/index.html'
-          },
-          {
-            name: '4.6 Screenshot',
-            path: './4-6-screenshot/index.html'
-          },
-        ]
-      },
-      {
-        name: 'Camera',
-        children: [
-          {
-            name: '5.1 Camera pose',
-            path: './5-1-camera-pose/index.html'
-          },
-          {
-            name: '5.10 Look At',
-            path: './5-10-camera-lookat/index.html'
-          },
-          {
-            name: '5.2 Camera flight',
-            path: './5-2-camera-fly/index.html'
-          },
-          {
-            name: '5.3 Camera range',
-            path: './5-3-camera-range/index.html'
-          },
-          {
-            name: '5.4 Camera control',
-            path: './5-4-camera-control/index.html'
-          },
-          {
-            name: '5.5 Camera matrix',
-            path: './5-5-camera-mat/index.html'
-          },
-          {
-            name: '5.6 Camera visualize',
-            path: './5-6-camera-visualize/index.html'
-          },
-          {
-            name: '5.7 Camera Poses',
-            path: './5-7-camera-poses/index.html'
-          },
-        ]
-      },
-      {
-        name: 'Analysis',
-        children: [
-          {
-            name: '5.8 Visibility Analysis',
-            path: './5-8-visibility-analysis/index.html'
-          },
-          {
-            name: '5.9 Interactive Visibility',
-            path: './5-9-interactive-visibility/index.html'
-          },
-          {
-            name: '6.6 Skyline Height Limit',
-            path: './6-6-skyline/index.html'
-          },
-          {
-            name: '2.7 Label Line',
-            path: './2-7-add-label-line/index.html'
-          },
-          {
-            name: '6.2 Measure Volume',
-            path: './6-2-measurement-volume/index.html'
-          },
-          {
-            name: '6.7 Compute Overlap Area',
-            path: './6-7-compute-overlap-area/index.html'
-          },
-        ]
-      },
-      {
-        name: 'Data Management',
-        children: [
-          {
-            name: '6.5 Marker Cluster',
-            path: './6-5-marker-cluster/index.html'
-          },
-          {
-            name: '7.1 Plugin GeoJson',
-            path: './7-1-plugin-geojson/index.html'
-          },
-          {
-            name: '4.7 Auto-adjust Polygon',
-            path: './4-7-autoadjust-polygon/index.html'
-          },
-          {
-            name: '6.4 Objectation',
-            path: './6-4-objectation/index.html'
-          },
-        ]
-      },
-      {
-        name: 'Widgets',
-        children: [
-          {
-            name: '10.3 Div List',
-            path: './10-3-div-list/index.html'
-          },
-          {
-            name: '4.4 Popup',
-            path: './4-4-window-from-lnglatalt/index.html'
-          },
-          {
-            name: '10.5 Tooltip',
-            path: './10-5-tooltip/index.html'
-          },
-        ]
-      },
-    ]
-    addExamples(examples)
-    // load the first sample by default
-    loadWebPage(examples[0].children[0].path)
-    // highlight the first example by default
-    document.getElementById('table_of_contents').children[0].children[0].children[1].children[0].style.backgroundColor = "#999";
-  </script>
-</body>
+            {
+              name: '2.3 Polygon',
+              path: './2-3-add-polygon/index.html'
+            },
+            {
+              name: '2.13 Planar Patch',
+              path: './2-13-add-planar/index.html'
+            },
+            {
+              name: '2.11 Zone',
+              path: './2-11-add-zone/index.html'
+            },
+            {
+              name: '2.5 Obj Model',
+              path: './2-5-add-obj-model/index.html'
+            },
+            {
+              name: '2.12 Particles',
+              path: './2-12-add-particles/index.html'
+            },
+          ]
+        },
+        {
+          name: 'Interaction',
+          children: [
+            {
+              name: '3.1 Mouse Events',
+              path: './3-1-mouse-events/index.html'
+            },
+            {
+              name: '3.2 Turn off events',
+              path: './3-2-event-off/index.html'
+            },
+            {
+              name: '10.1 Draw Polygon',
+              path: './10-1-draw-polygon/index.html'
+            },
+            {
+              name: '10.4 Interactive Crop',
+              path: './10-4-interactive-crop/index.html'
+            }
+          ]
+        },
+        {
+          name: 'Positioning',
+          children: [
+            {
+              name: '4.1 Pickpoint on Earth',
+              path: './4-1-earth-pickpoint/index.html'
+            },
+            {
+              name: '4.2 Pickpoint on project',
+              path: './4-2-project-pickpoint/index.html'
+            },
+            {
+              name: '4.3 Window to LngLatAlt',
+              path: './4-3-window-to-lnglatalt/index.html'
+            },
+            {
+              name: '4.4 Window from LngLatAlt',
+              path: './4-4-window-from-lnglatalt/index.html'
+            },
+            {
+              name: '4.5 LngLat to Alt',
+              path: './4-5-lnglat-to-alt/index.html'
+            },
+            {
+              name: '4.6 Screenshot',
+              path: './4-6-screenshot/index.html'
+            },
+          ]
+        },
+        {
+          name: 'Camera',
+          children: [
+            {
+              name: '5.1 Camera pose',
+              path: './5-1-camera-pose/index.html'
+            },
+            {
+              name: '5.10 Look At',
+              path: './5-10-camera-lookat/index.html'
+            },
+            {
+              name: '5.2 Camera flight',
+              path: './5-2-camera-fly/index.html'
+            },
+            {
+              name: '5.3 Camera range',
+              path: './5-3-camera-range/index.html'
+            },
+            {
+              name: '5.4 Camera control',
+              path: './5-4-camera-control/index.html'
+            },
+            {
+              name: '5.5 Camera matrix',
+              path: './5-5-camera-mat/index.html'
+            },
+            {
+              name: '5.6 Camera visualize',
+              path: './5-6-camera-visualize/index.html'
+            },
+            {
+              name: '5.7 Camera Poses',
+              path: './5-7-camera-poses/index.html'
+            },
+          ]
+        },
+        {
+          name: 'Analysis',
+          children: [
+            {
+              name: '5.8 Visibility Analysis',
+              path: './5-8-visibility-analysis/index.html'
+            },
+            {
+              name: '5.9 Interactive Visibility',
+              path: './5-9-interactive-visibility/index.html'
+            },
+            {
+              name: '6.6 Skyline Height Limit',
+              path: './6-6-skyline/index.html'
+            },
+            {
+              name: '2.7 Label Line',
+              path: './2-7-add-label-line/index.html'
+            },
+            {
+              name: '6.2 Measure Volume',
+              path: './6-2-measurement-volume/index.html'
+            },
+            {
+              name: '6.7 Compute Overlap Area',
+              path: './6-7-compute-overlap-area/index.html'
+            },
+          ]
+        },
+        {
+          name: 'Data Management',
+          children: [
+            {
+              name: '6.5 Marker Cluster',
+              path: './6-5-marker-cluster/index.html'
+            },
+            {
+              name: '7.1 Plugin GeoJson',
+              path: './7-1-plugin-geojson/index.html'
+            },
+            {
+              name: '4.7 Auto-adjust Polygon',
+              path: './4-7-autoadjust-polygon/index.html'
+            },
+            {
+              name: '6.4 Objectation',
+              path: './6-4-objectation/index.html'
+            },
+          ]
+        },
+        {
+          name: 'Widgets',
+          children: [
+            {
+              name: '10.3 Div List',
+              path: './10-3-div-list/index.html'
+            },
+            {
+              name: '4.4 Popup',
+              path: './4-4-window-from-lnglatalt/index.html'
+            },
+            {
+              name: '10.5 Tooltip',
+              path: './10-5-tooltip/index.html'
+            },
+          ]
+        },
+      ]
+      addExamples(examples)
+      // load the first sample by default
+      loadWebPage(examples[0].children[0].path)
+      // highlight the first example by default
+      document.getElementById('table_of_contents').children[0].children[0].children[1].children[0].style.backgroundColor = "#999";
+    </script>
+  </body>
 
 </html>
