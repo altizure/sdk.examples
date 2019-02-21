@@ -1,5 +1,20 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 2.5.6
+__发布时间:__
+2018年2月21日
+
+__缺陷修复:__
+* 修复部分 `AltizureProjectMarker` 的 `focus` 视角和网站设置的封面图案不一致。
+* 修复部分 `AltizureProjectMarker` 的 `包围盒与模型不一致。
+
+__新功能:__
+* 增加范例 2.15： LOD 点云项目显示。
+* 增加点云 `pointSize` 接口，调整点的大小。
+
+__改进:__
+* `PlaneMarker` （以及其继承类包括 `CanvasTagMarker`, `Tagmarker` 等） 增加了 `color` 接口，用来改变图片底色； `pinColor` 接口改变图片下方指针颜色。
+
 ### 2.4.16
 __发布时间:__
 2018年1月24日
