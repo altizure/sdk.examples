@@ -1,0 +1,293 @@
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 10.5 Tooltip </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+      .tooltip {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      .tooltip.top::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+
+      .tooltip.bottom::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }
+
+      .tooltip.left::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent transparent black;
+      }
+
+      .tooltip.right::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.top_right::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        right: 100%;
+        transform: rotate(67.5deg);
+        margin-top: -18px;
+        margin-right: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.top_left::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 100%;
+        transform: rotate(112.5deg);
+        margin-top: -18px;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.bottom_right::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        right: 100%;
+        transform: rotate(157.5deg);
+        margin-bottom: -10px;
+        margin-right: -18px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.bottom_left::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 100%;
+        transform: rotate(22.5deg);
+        margin-bottom: -10px;
+        margin-left: -18px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+    </style>
+  </head>
+
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <!-- <script type="text/javascript" src="tooltip.js"></script> -->
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {
+            alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+
+      let tag1 = new altizure.TagMarker({
+        imgUrl: '../public/assets/img/tag/select/tagDemo.png',
+        // icon position
+        position: { lng: 113.9390549031058, lat: 22.53601411862488, alt: 59.03098709697936 },
+        // scene
+        sandbox: sandbox,
+        scale: 1 // icon size
+      })
+      tag1.interactable = true
+
+      let tag2 = new altizure.TagMarker({
+        imgUrl: '../public/assets/img/logo-1024.png',
+        position: { lng: 113.93931213827575, lat: 22.536964263366052, alt: 35.8978480932066 },
+        sandbox: sandbox,
+        scale: 2
+      })
+      tag2.interactable = true
+
+      let tooltip, position
+      tooltip = document.createElement('span')
+      tooltip.classList.add('tooltip')
+      document.body.appendChild(tooltip)
+      position = 'top'
+
+      function showTooltip(text, e) {
+        tooltip.innerHTML = text
+        tooltip.style.visibility = "visible"
+        document.body.style.cursor = "pointer"
+        moveTooltip(e)
+      }
+
+      function moveTooltip(e) {
+        positionDetect(e)
+        switch (position) {
+          case 'top':
+            tooltip.style.left = e.clientX - tooltip.offsetWidth / 2
+            tooltip.style.top = e.clientY - tooltip.offsetHeight - 8
+            break;
+          case 'left':
+            tooltip.style.left = e.clientX - tooltip.offsetWidth - 8
+            tooltip.style.top = e.clientY - tooltip.offsetHeight / 2
+            break;
+          case 'right':
+            tooltip.style.left = e.clientX + 8
+            tooltip.style.top = e.clientY - tooltip.offsetHeight / 2
+            break;
+          case 'bottom':
+            tooltip.style.left = e.clientX - tooltip.offsetWidth / 2
+            tooltip.style.top = e.clientY + 8
+            break;
+          case 'top_left':
+            tooltip.style.left = e.clientX - tooltip.offsetWidth - 8
+            tooltip.style.top = e.clientY - tooltip.offsetHeight - 8
+            break;
+          case 'top_right':
+            tooltip.style.left = e.clientX + 8
+            tooltip.style.top = e.clientY - tooltip.offsetHeight - 8
+            break;
+          case 'bottom_left':
+            tooltip.style.left = e.clientX - tooltip.offsetWidth - 8
+            tooltip.style.top = e.clientY + 8
+            break;
+          case 'bottom_right':
+            tooltip.style.left = e.clientX + 8
+            tooltip.style.top = e.clientY + 8
+            break;
+        }
+      }
+
+      function hideTooltip() {
+        tooltip.style.visibility = "hidden"
+        document.body.style.cursor = "default"
+      }
+
+      function positionDetect(e) {
+        let that = this
+        let cornorHeight = tooltip.offsetHeight
+        let cornorWidth = tooltip.offsetWidth
+        let bodyHeight = document.body.offsetHeight
+        let bodyWidth = document.body.offsetWidth
+        let prePosition = position
+        if (e.clientX < cornorWidth && (e.clientY < cornorHeight)) {
+          position = 'bottom_right'
+        } else if ((e.clientX > (bodyWidth - cornorWidth)) && (e.clientY < cornorHeight)) {
+          position = 'bottom_left'
+        } else if ((e.clientX < cornorWidth) && (e.clientY > bodyHeight - cornorHeight)) {
+          position = 'top_right'
+        } else if ((e.clientX > (bodyWidth - cornorWidth)) && (e.clientY > bodyHeight - cornorHeight)) {
+          position = 'top_left'
+        } else if (e.clientY < cornorHeight) {
+          position = 'bottom'
+        } else if (e.clientX < cornorWidth) {
+          position = 'right'
+        } else if (e.clientX > (bodyWidth - cornorWidth)) {
+          position = 'left'
+        } else {
+          position = 'top'
+        }
+        if (prePosition !== position) {
+          tooltip.classList.remove('bottom_right', 'bottom_left', 'top_right', 'top_left', 'bottom', 'right', 'left', 'top')
+          tooltip.classList.add(position)
+        }
+      }
+
+      tag1.tooltipInfo = 'This is a tooltip'
+      tag1.on('mouseenter', function (e) { showTooltip(tag1.tooltipInfo, e) })
+      tag1.on('mouseover', function (e) { moveTooltip(e) })
+      tag1.on('mouseleave', function (e) { hideTooltip() })
+
+      tag2.tooltipInfo = 'Altizure'
+      tag2.on('mouseenter', function (e) { showTooltip(tag2.tooltipInfo, e) })
+      tag2.on('mouseover', function (e) { moveTooltip(e) })
+      tag2.on('mouseleave', function (e) { hideTooltip() })
+
+      // let tooltip = new Tooltip()
+      // tag1.tooltipInfo = 'This is a tooltip'
+      // tag1.on('mouseenter', function (e) { tooltip.show(tag1.tooltipInfo, e) })
+      // tag1.on('mouseover', function (e) { tooltip.move(e) })
+      // tag1.on('mouseleave', function (e) { tooltip.hide() })
+      // tag2.tooltipInfo = 'Altizure'
+      // tag2.on('mouseenter', function (e) { tooltip.show(tag2.tooltipInfo, e) })
+      // tag2.on('mouseover', function (e) { tooltip.move(e) })
+      // tag2.on('mouseleave', function (e) { tooltip.hide() })
+    </script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      var gui = new dat.GUI()
+      setUpUIFolder(tag1, 'Tag Marker', true)
+      setUpUIFolder(tag2, 'Logo', true)
+
+      function setUpUIFolder(tag, folderName, open) {
+        let folder = gui.addFolder(folderName)
+        let settings = {
+          tooltipInfo: tag.tooltipInfo
+        }
+        folder.add(settings, 'tooltipInfo').onChange(function (v) {
+          tag.tooltipInfo = v
+          settings.tooltipInfo = v
+        })
+        if (open) folder.open()
+      }
+    </script>
+  </body>
+
+</html>
