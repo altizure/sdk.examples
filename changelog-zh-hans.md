@@ -14,7 +14,6 @@ __新功能:__
 * 增加 10.5 Tool-tip 范例。
 
 __改进:__
-* `PlaneMarker` （以及其继承类包括 `CanvasTagMarker`, `Tagmarker` 等） 增加了 `color` 接口，用来改变图片底色； `pinColor` 接口改变图片下方指针颜色。
 * 根据功能，重组范例列表。
 
 ### 2.4.16
