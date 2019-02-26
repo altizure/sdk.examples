@@ -1,0 +1,150 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 6.8 Water Edit </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { lng: 113.93922568914863, lat: 22.536935805838038, alt: 393.7309877171878, north: 129.75956653121534, tilt: 25.24614688161553 },
+        flyTo: { lng: 113.93922568914863, lat: 22.536935805838038, alt: 393.7309877171878, north: 129.75956653121534, tilt: 25.24614688161553 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      },
+      control:{
+        doubleTap: false // disable double tap/click to zoom
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    let boundary = [
+      {lng: 113.93932372264197, lat: 22.53800311245571, alt: 0},
+      {lng: 113.93938884232503, lat: 22.536564795125926, alt: 0},
+      {lng: 113.94060150961911, lat: 22.536613005930633, alt: 0},
+      {lng: 113.94052846052386, lat: 22.537770392044983, alt: 0}
+    ]
+    let boundary2 = [
+      {lng: 113.93765164656936, lat: 22.53669496821689, alt: 0},
+      {lng: 113.93956777767825, lat: 22.536638905806758, alt: 0},
+      {lng: 113.94038809950072, lat: 22.536152618468726, alt: 0},
+      {lng: 113.94028941210733, lat: 22.535763732866904, alt: 0},
+      {lng: 113.9378736820645, lat: 22.53567231129505, alt: 0}
+    ]
+    let polyline = new altizure.PolyFenceLineMarker({
+      sandbox: sandbox,
+      points: boundary,
+      fenceHeight: 30,
+      color: 0x05c592,
+      style: {
+        texture: 'arrow', mapping: 'repeat'
+      }
+    })
+    let polyline2 = new altizure.PolyFenceLineMarker({
+      sandbox: sandbox,
+      points: boundary2,
+      fenceHeight: 30,
+      color: 0x05c592,
+      style: {
+        texture: 'arrow', mapping: 'repeat'
+      }
+    })
+
+    // crop must happend after the altizure project is initialized
+    let marker = null
+    let waterIndex = null
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+    .then(function(m) {
+      // altizure project created, m is the arker
+      marker = m
+      return m.initialized
+    })
+    .then(function(m) {
+      return m.water.initialized
+    })
+    .then(function(m) {
+      waterIndex = m.water.createWater({level: -10})
+      // altizure water initialized
+      // by default crop the first water
+      m.water.crop(boundary)
+      m.water.crop(boundary2)
+      // m.water.crop(boundary, true, waterIndex) // crop by boundary defined above
+      // m.water.crop(boundary2, true, waterIndex) // crop by boundary2
+
+      showGUI(m.water)
+      return Promise.resolve(m)
+    })
+    .then(function(m)  {
+      m.water.uncrop(boundary) // cancel cropping of a specified region
+      return Promise.resolve(m)
+    })
+    // we put import at last because for project marker without water information,
+    // import will throw an error thus reject the promise
+    // import the stored water information at last so that other operations can be performed for project without water information
+    .then(function (m) {
+      return m.water.import()
+    })
+    .catch(function(err) {
+      console.error(err)
+      return err
+    })
+    if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+  </script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+
+    function showGUI (instance) {
+      var Settings = function () {
+          this.crop1 = function() {
+          instance.uncrop() // remove effects caused by other operations
+          instance.crop(boundary)
+        }
+          this.keep1 = function()  {
+          instance.uncrop()
+          instance.crop(boundary, false)
+        }
+          this.crop2 = function()  {
+          instance.uncrop() // remove effects caused by other operations
+          instance.crop(boundary2)
+        }
+          this.keep2 = function() {
+          instance.uncrop()
+          instance.crop(boundary2, false)
+        }
+          this.clear = function()  {
+          instance.uncrop()
+        }
+      }
+
+      var settings = new Settings()
+      var gui = new dat.GUI()
+
+      var f1 = gui.addFolder('boundary 1')
+      var crop1 = f1.add(settings, 'crop1')
+      f1.add(settings, 'keep1')
+
+      var f2 = gui.addFolder('boundary 2')
+      f2.add(settings, 'crop2')
+      f2.add(settings, 'keep2')
+
+      f2.open();
+
+      gui.add(settings, 'clear')
+    }
+  </script>
+</body>
+</html>
