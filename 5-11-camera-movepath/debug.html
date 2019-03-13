@@ -1,0 +1,130 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.11 Camera movePath </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script src="../../sdk.examples/public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: { alt:1020,
+            lng: 113.9411, // this should be close to your added marker's position
+            lat: 22.5374,
+            tilt: 75
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let points = [
+        {"lng":113.93961669510207,"lat":22.533698441620636,"alt":0},
+        {"lng":113.93852406592684,"lat":22.534045148644417,"alt":0},
+        {"lng":113.93735215558176,"lat":22.535029902992417,"alt":0},
+        {"lng":113.93641959385421,"lat":22.53741076211972,"alt":0},
+        {"lng":113.93491452388254,"lat":22.542685064390504,"alt":0},
+        {"lng":113.9365870217846,"lat":22.54762002638284,"alt":0},
+        {"lng":113.94226428064998,"lat":22.54812350566058,"alt":0},
+        {"lng":113.94597289624927,"lat":22.54856209451121,"alt":0},
+        {"lng":113.94757510022868,"lat":22.54518041696963,"alt":0},
+        {"lng":113.94737412815793,"lat":22.54085035012488,"alt":0},
+        {"lng":113.94702462152722,"lat":22.53853321271078,"alt":0},
+        {"lng":113.94499266722482,"lat":22.535439996474935,"alt":0},
+        {"lng":113.94387563064338,"lat":22.534431741928977,"alt":0},
+        {"lng":113.94206960520849,"lat":22.534094195262032,"alt":0},
+        {"lng":113.93961669510207,"lat":22.533698441620636,"alt":0}
+      ]
+      points.map(function (lla) {lla.alt=200})
+      let line = new altizure.PolyTubeLineMarker({
+        sandbox,
+        points: points.map(function (lla) {return {lng: lla.lng, lat: lla.lat, alt: 150}}),
+        lineWidth: 5
+      })
+      let fline = new altizure.PolyFenceLineMarker({
+        sandbox,
+        points: points.map(function (lla) {return {lng: lla.lng, lat: lla.lat, alt: 0}}),
+        fenceHeight: 50
+      })
+
+      function test (speed=100) {
+        t=Date.now()
+        console.log(line.length/speed)
+        sandbox.camera.movePath({curves: points.slice(),speed: speed}).then(
+          function () {
+            console.log((Date.now()-t)/1000,line.length/speed)
+          }
+        )
+      }
+      let posarr = [
+        {"lng":113.93961669510207,"lat":22.533698441620636,"alt":199.99999999957157},
+        {"lng":113.93790106223,"lat":22.534457985387625,"alt":200.00000000102122},
+        {"lng":113.93689468999152,"lat":22.535948350992655,"alt":200.0000000004386},
+        {"lng":113.93633697033421,"lat":22.537646868088288,"alt":199.99999999957157},
+        {"lng":113.93569319234435,"lat":22.539324689288428,"alt":200.0000000001542},
+        {"lng":113.93513814789694,"lat":22.541027288337343,"alt":200.0000000004386},
+        {"lng":113.93491727382258,"lat":22.542783120298395,"alt":199.99999999957157},
+        {"lng":113.93510265324568,"lat":22.54454581309158,"alt":200.0000000001542},
+        {"lng":113.93559717616434,"lat":22.546252533890947,"alt":200.0000000001542},
+        {"lng":113.93667455228014,"lat":22.547681294639247,"alt":200.00000000030087},
+        {"lng":113.9385006369531,"lat":22.54813712628337,"alt":200.00000000030087},
+        {"lng":113.94042165409869,"lat":22.548114683340998,"alt":200.0000000013057},
+        {"lng":113.9423398377139,"lat":22.548131928705573,"alt":200.00000000116796},
+        {"lng":113.94420046343659,"lat":22.548545993486908,"alt":200.0000000001542},
+        {"lng":113.946059920728,"lat":22.548511880469647,"alt":199.99999999957157},
+        {"lng":113.94707083729504,"lat":22.54702701430707,"alt":199.99999999957157},
+        {"lng":113.94754927841085,"lat":22.545305808115295,"alt":199.99999999957157},
+        {"lng":113.94766131501329,"lat":22.543541050520638,"alt":200.00000000030087},
+        {"lng":113.94748422588385,"lat":22.541776703796554,"alt":199.9999999992871},
+        {"lng":113.94731151640627,"lat":22.540013814713813,"alt":199.99999999957157},
+        {"lng":113.94692272881879,"lat":22.5382917598489,"alt":200.0000000001542},
+        {"lng":113.94600225327943,"lat":22.536746321742125,"alt":199.9999999992871},
+        {"lng":113.94488559798877,"lat":22.535315230860913,"alt":200.00000000102122},
+        {"lng":113.94339827211417,"lat":22.53427489242699,"alt":199.99999999957157},
+        {"lng":113.94150551602795,"lat":22.53399918233076,"alt":200.00000000102122},
+        {"lng":113.93961669510206,"lat":22.533698441620636,"alt":200.00000000102122}
+      ]
+      posarr.map(
+        function (p, i) {
+          return new altizure.TextTagMarker({
+            sandbox: sandbox,
+            position: p,
+            pivot: {x: 0.5, y: 1},
+            text: '' + i,
+            scale: 2
+          })
+        }
+      )
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      let gui = new dat.GUI()
+      let settings = {
+        movePath: function () {
+          test(settings.speed)
+        },
+        speed: 200
+      }
+      gui.add(settings, 'speed', 1, 1000, 1)
+      gui.add(settings, 'movePath')
+    </script>
+  </body>
+</html>

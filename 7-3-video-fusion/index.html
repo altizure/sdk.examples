@@ -40,6 +40,9 @@
       .then((m) => {
         return m.initialized
       })
+      .then(function(m) {
+        return m.loadCropMask() // [optional] download crop mask configured in Altizure
+      })
       .then((m) => {
         sandbox.render(m, 'video')
         let camToEarth = m.composeCamToEarth(
