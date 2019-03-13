@@ -1,0 +1,84 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 7.5 Plugin Shapefile </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk-plugin-shapefile"></script>
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {
+            alt: 3025.146690976602,
+            lat: 23.118583609981368,
+            lng: 113.32683321329824,
+            north: 327.73039628691436,
+            tilt: 45.733017455133115,
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          orbitRing: true
+        }
+      }
+  
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let polygonOptions = {
+        shpPath: 'assets/shapefile/polygons_wgs84.shp',
+        dbfPath: 'assets/shapefile/polygons_wgs84.dbf',
+        encoding: 'GBK'   // if table info contains Chinese characters, please use GBK
+      }
+      let polygons
+      altizure.Shapefile.polygonsFromShp(polygonOptions, sandbox, {
+        top: 60,
+        bottom: 0.2,
+        color: 0xffffff * Math.random(),
+        opacity: 0.2
+      }).then(function(res) {
+        polygons = res
+        polygons.map(polygon=>{
+          polygon.top = polygon.attributes.height
+        })
+        console.log(polygons.map((p)=>{return p.attributes}))
+      })
+
+      let polylineOptions = {
+        shpPath: 'assets/shapefile/polylines_wgs84.shp',
+        dbfPath: 'assets/shapefile/polylines_wgs84.dbf',
+        encoding: 'GBK'   // if table info contains Chinese characters, please use GBK
+      }
+      let polylines
+      altizure.Shapefile.polylinesFromShp(polylineOptions, sandbox, {
+        color: 0xf2e123,
+        fenceHeight: 30
+      })
+      .then(function(res) {
+        polylines = res
+        console.log(polylines.map((p)=>{return p.attributes}))
+      })
+
+      let pointOptions = {
+        shpPath: 'assets/shapefile/points_wgs84.shp',
+        dbfPath: 'assets/shapefile/points_wgs84.dbf',
+        encoding: 'GBK'   // if table info contains Chinese characters, please use GBK
+      }
+      let points
+      altizure.Shapefile.pointsFromShp(pointOptions, sandbox, {
+        imgUrl: 'assets/img/tagDemo.png',
+        scale: 5
+      })
+      .then(function(res) {
+        points = res
+        console.log(points.map((p)=>{return p.attributes}))
+      })
+    </script>
+  </body>
+</html>

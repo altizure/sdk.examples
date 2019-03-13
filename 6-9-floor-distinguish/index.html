@@ -1,0 +1,173 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 6.9 Floor Distinguish </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="tooltip.css">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="tooltip.es5.js"></script>
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {
+            alt: 212.2235806111245,
+            lat: 22.536633430256252,
+            lng: 113.93907438121158,
+            north: 49.46951323827608,
+            tilt: 59.112865195674686
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          orbitRing: true
+        }
+      }
+  
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+      .then(function(m) {
+        m.interactable = true
+        m.on('click',function(e){
+          let pt = sandbox.pickOnProjects(e)
+          if(!pt) {return}
+          console.log([pt.lng, pt.lat])
+        })
+      })
+
+      let textTag = new altizure.TextTagMarker({
+        // text string
+        text: '鼠标移动到建筑物上，查看楼层信息',
+        // text style
+        textStyle: {
+          fillStyle: 'yellow',
+          font: '500 16px Arial',
+          outlineWidth: 0.1,
+          outlineStyle: 'rgb(0, 0, 0)'
+        },
+
+        position: {
+          lng: 113.93889814704188, 
+          lat: 22.53624609855258, 
+          alt: 57.94661440729301
+        },
+        // scene
+        sandbox: sandbox,
+        scale: 1.5 // icon size
+      })
+
+      function floorDistinguish(floorNumber, first_floor, b_bottom, b_top, volume) {
+        let polyList = []
+        let floorHeight = (b_top - b_bottom) / floorNumber
+        for (let i = 0; i < floorNumber; i++) {
+          let this_bottom = b_bottom + i * floorHeight
+          let this_top = b_bottom + (i + 1) * floorHeight
+          volume = Object.assign(volume, { top: this_top, bottom: this_bottom })
+          let poly = new altizure.PolygonMarker({
+            volume: volume,
+            sandbox: sandbox,
+            name: 'polygon' + i,
+            visible: false,
+            interactable: true
+          })
+          poly.on('click', function(e) {
+            let swalElement = document.createElement('div')
+            var content = "\n                当前层数： ".concat(i + first_floor, "层\n                楼层性质：办公楼            ");
+            alert(content)
+          })
+          let tooltip = new Tooltip({ content: "第" + (i+first_floor) + "层" })
+          poly.on('mouseenter', function (e) {
+            poly.visible = true
+            tooltip.show(e)
+          })
+          poly.on('mouseover', function (e) {
+            tooltip.move(e)
+          })
+          poly.on('mouseleave', function (e) {
+            poly.visible = false
+            tooltip.hide()
+          })
+          polyList.push(poly)
+        }
+      }
+      
+      let floorNumber = 6, first_floor = 1, b_bottom = 9.33280126845176, b_top = 38.073039439920635
+      let volume1 = {
+        color: 0xf18100,
+        opacity: 0.3,
+        points: [
+          [113.93908453172624, 22.53594696430028],
+          [113.93908097722333, 22.53607304141249],
+          [113.93905891162292, 22.536081325701943],
+          [113.93907155909858, 22.53611921943695],
+          [113.93902909477387, 22.536125835531983],
+          [113.93902451729731, 22.53619295918657],
+          [113.93907791555155, 22.53620069414709],
+          [113.9390720700805, 22.536315326404107],
+          [113.93902247199814, 22.536317034143863],
+          [113.93901763232185, 22.536386198862076],
+          [113.93904325127986, 22.536389574341992],
+          [113.93904069005764, 22.53643516626461],
+          [113.93919313202441, 22.536432090538828],
+          [113.93919519632487, 22.536577910674744],
+          [113.93866499918545, 22.536553930178908], //背面
+          [113.93869412467751, 22.53593817990465],  //背面
+          [113.93908453172624, 22.53594696430028]
+        ].map(function (lnglat) {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+      }
+      floorDistinguish(floorNumber, first_floor, b_bottom, b_top, volume1)
+      
+      floorNumber = 4, first_floor = 7, b_bottom = 38.073039439920635, b_top = 54.200457878554026
+      let volume2 = {
+        color: 0xf18100,
+        opacity: 0.3,
+        points: [
+          [113.93908453172624, 22.53594696430028],
+          [113.93908097722333, 22.53607304141249],
+          [113.93905891162292, 22.536081325701943],
+          [113.93907155909858, 22.53611921943695],
+          [113.93902909477387, 22.536125835531983],
+          [113.93902451729731, 22.53619295918657],
+          [113.93907791555155, 22.53620069414709],
+          [113.9390720700805, 22.536315326404107],
+          [113.93902247199814, 22.536317034143863],
+          [113.93901763232185, 22.536386198862076],
+          [113.93904325127986, 22.536389574341992],
+          [113.93904069005764, 22.53643516626461],
+          [113.93919313202441, 22.536432090538828],
+          [113.93919519632487, 22.536577910674744],
+          [113.93866499918545, 22.536553930178908], //背面
+
+          [113.93868829348901, 22.536433736847364],
+          [113.93887637409814, 22.536434454389667],
+          [113.93888989070197, 22.536319148037173],
+          [113.93870479676292, 22.536309662214393],
+          [113.9386990486968, 22.536190760223782],
+          [113.93889431852743, 22.536191187871804],
+          [113.93889815945568, 22.53607375326102],
+          [113.9387054236112, 22.536065261339793],
+
+          [113.93869412467751, 22.53593817990465],  //背面
+          [113.93908453172624, 22.53594696430028]
+        ].map(function (lnglat) {
+          return new altizure.LngLatAlt(lnglat[0], lnglat[1], 0)
+        }),
+      }
+      floorDistinguish(floorNumber, first_floor, b_bottom, b_top, volume2)
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+  </body>
+</html>

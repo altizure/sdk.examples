@@ -1,0 +1,109 @@
+
+      .tooltip {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      .tooltip.top::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: black transparent transparent transparent;
+      }
+
+      .tooltip.bottom::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }
+
+      .tooltip.left::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 100%;
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent transparent black;
+      }
+
+      .tooltip.right::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        margin-top: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.top_right::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        right: 100%;
+        transform: rotate(67.5deg);
+        margin-top: -18px;
+        margin-right: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.top_left::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 100%;
+        transform: rotate(112.5deg);
+        margin-top: -18px;
+        margin-left: -10px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.bottom_right::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        right: 100%;
+        transform: rotate(157.5deg);
+        margin-bottom: -10px;
+        margin-right: -18px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
+
+      .tooltip.bottom_left::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 100%;
+        transform: rotate(22.5deg);
+        margin-bottom: -10px;
+        margin-left: -18px;
+        border-width: 10px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+      }
