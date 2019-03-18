@@ -1,5 +1,15 @@
 # Changelog of Altizure Sandbox 3D SDK
 
+### 2.7.4
+__Release data:__
+Mar. 18th, 2019
+
+__New features:__
++ Add example `6.10 Interactive Distance Measure` The distance measure tool under `Analysis`.
+
+__Improvements:__
+* Add a button link to the github code in the lower right corner of example.
+
 ### 2.7.3
 __Release data:__
 Mar. 12th, 2019
