@@ -66,6 +66,15 @@
         scale: 1.5 // icon size
       })
 
+      /**
+       * floor distinguish method
+       * @public
+       * @param int floorNumber (Total floor count)
+       * @param int first_floor (The first floor number. For example, if you want the floor numbers start from 10, then set first_floor = 10)
+       * @param double b_bottom (The buidling bottom height)
+       * @param double b_top (The buidling top height)
+       * @param double volume (including color, opacity and the base polygon)
+       */
       function floorDistinguish(floorNumber, first_floor, b_bottom, b_top, volume) {
         let polyList = []
         let floorHeight = (b_top - b_bottom) / floorNumber
@@ -87,11 +96,6 @@
                 楼层性质：办公楼
             `
             alert(content)
-            // swal({
-            //   title: "楼栋信息",
-            //   content: swalElement,
-            //   button: false
-            // })
           })
           let tooltip = new Tooltip({ content: "第" + (i+first_floor) + "层" })
           poly.on('mouseenter', function (e) {
