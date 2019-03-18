@@ -1,13 +1,5 @@
 # Altizure Sandbox 3D SDK 更新日志
 
-### 2.7.4
-__发布时间:__
-2019年3月13日
-
-__新功能:__
-+ 增加範例 `7.5 Plugin Shapefile` 导入 `shapefile` 功能。[范例 7.5](https://altizure.github.io/sdk.examples/7-5-plugin-shapefile/index.html)
-+ 增加範例 `6.9 Floor Distinguish` 建筑楼层单体化示例。[范例 6.9](https://altizure.github.io/sdk.examples/6-9-floor-distinguish/index.html)
-
 ### 2.7.3
 __发布时间:__
 2019年3月12日
@@ -15,6 +7,8 @@ __发布时间:__
 __新功能:__
 + `altizure-plugin-geosystem` 支持对`ObjMarker` 建立局部坐标系。
 + 增加範例 `5.11 Camera Move Path` 相机移动路径，可以在指定路径上匀速移动。
++ 增加範例 `7.5 Plugin Shapefile` 导入 `shapefile` 功能。[范例 7.5](https://altizure.github.io/sdk.examples/7-5-plugin-shapefile/index.html)
++ 增加範例 `6.9 Floor Distinguish` 建筑楼层单体化示例。[范例 6.9](https://altizure.github.io/sdk.examples/6-9-floor-distinguish/index.html)
 
 ### 2.7.2
 __发布时间:__

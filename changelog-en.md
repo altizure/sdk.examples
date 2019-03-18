@@ -1,13 +1,5 @@
 # Changelog of Altizure Sandbox 3D SDK
 
-### 2.7.4
-__Release data:__
-Mar. 13th, 2019
-
-__New features:__
-+ Add example `7.5 Plugin Shapefile` import `shapefile`. [example 7.5](https://altizure.github.io/sdk.examples/7-5-plugin-shapefile/index.html)
-+ Add example `6.9 Floor Distinguish` [example 6.9](https://altizure.github.io/sdk.examples/6-9-floor-distinguish/index.html)
-
 ### 2.7.3
 __Release data:__
 Mar. 12th, 2019
@@ -15,6 +7,8 @@ Mar. 12th, 2019
 __New features:__
 + `altizure-plugin-geosystem` Support for establishing a local coordinate system for `ObjMarker`.
 + Add example `5.11 Camera Move Path` The camera move path, can move at a constant speed on the specified path.
++ Add example `7.5 Plugin Shapefile` import `shapefile`. [example 7.5](https://altizure.github.io/sdk.examples/7-5-plugin-shapefile/index.html)
++ Add example `6.9 Floor Distinguish` [example 6.9](https://altizure.github.io/sdk.examples/6-9-floor-distinguish/index.html)
 
 ### 2.7.2
 __Release data:__

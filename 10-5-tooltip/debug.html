@@ -271,6 +271,11 @@
       // tag2.on('mouseenter', function (e) { tooltip.show(tag2.tooltipInfo, e) })
       // tag2.on('mouseover', function (e) { tooltip.move(e) })
       // tag2.on('mouseleave', function (e) { tooltip.hide() })
+      
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
     </script>
     <script src="../third_party/dat.gui.js"></script>      
     <script>
