@@ -46,7 +46,7 @@
       .then((m) => {
         sandbox.render(m, 'video')
         let camToEarth = m.composeCamToEarth(
-          new THREE.Vector3(-304, 168, 96), new THREE.Vector3(2, -1.24, 0), new THREE.Vector3(-304, 168, 96 - 40)
+          {x: -304, y: 168,z: 96}, {x: 2, y: -1.24, z: 0}, {x: -304, y: 168,z: 96 - 40}
         ).elements
         videoProjectorMarker = new altizure.VideoProjectorMarker({
           sandbox: sandbox,
