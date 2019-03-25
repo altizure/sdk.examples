@@ -89,6 +89,28 @@
         display: block;
       }
 
+      #src_link {
+        z-index: 10;
+        position: absolute;
+        color: black;
+        background: #aaa;
+        bottom: 0px;
+        right: 0px;
+        width: 160px;
+        height: 30px;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        margin-left: 12px;
+        margin-right: 12px;
+        padding: 0px;
+        border: 1px;
+        text-align: center;
+        border-color: #333;
+        border-style: solid;
+        text-decoration: none;
+        line-height: 30px;
+      }
+
       @media only screen and (max-width: 768px) {
         #table_of_contents {
           visibility: hidden;
@@ -106,7 +128,7 @@
           color: black;
           background: #aaa;
           /* top: 0px; */
-          bottom: 0px;
+          bottom: 42px;
           right: 0px;
           width: 160px;
           height: 30px;
@@ -148,6 +170,13 @@
         frame = document.createElement("iframe")
         frame.src = path
         contentdiv.appendChild(frame)
+        let srcLink = document.createElement('a')
+        srcLink.target = '_blank'
+        srcLink.title = 'View source code on GitHub'
+        srcLink.href = 'https://github.com/altizure/sdk.examples/blob/master' + path.substr(1)
+        srcLink.id = 'src_link'
+        srcLink.innerHTML = 'View source'
+        contentdiv.appendChild(srcLink)
       }
     </script>
     <script type="text/javascript">
@@ -470,6 +499,10 @@
             {
               name: '6.7 Compute Overlap Area',
               path: './6-7-compute-overlap-area/index.html'
+            },
+            {
+              name: '6.10 Interactive Distance Measure',
+              path: './6-10-interactive-distance-measure/index.html'
             },
           ]
         },

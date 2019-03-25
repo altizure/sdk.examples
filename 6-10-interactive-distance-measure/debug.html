@@ -1,0 +1,60 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 6.10 Interactive Distance Measure </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script type="text/javascript" src="./distanceMeasure.js"></script>
+    <script>
+      let options = {
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {
+            alt: 212.2235806111245,
+            lat: 22.536633430256252,
+            lng: 113.93907438121158,
+            north: 49.46951323827608,
+            tilt: 59.112865195674686
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          orbitRing: true
+        }
+      }
+  
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+
+      let measure = new DistanceMeasure({sandbox: sandbox})
+      
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      var gui = new dat.GUI()
+
+      let settings = {
+        distance: function() {
+          measure.start()
+        }
+      }
+
+      let measureFolder = gui.addFolder('Measurement')
+      measureFolder.open()
+      measureFolder.add(settings, 'distance')
+    </script>
+  </body>
+</html>

@@ -1,5 +1,15 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 2.7.4
+__发布时间:__
+2019年3月18日
+
+__新功能:__
++ 增加範例 `6.10 Interactive Distance Measure` `Analysis`目录下的可交互距离量测工具。
+
+__改进:__
+* 在 example 右下角添加链接到 github 代码的按钮。
+
 ### 2.7.3
 __发布时间:__
 2019年3月12日
