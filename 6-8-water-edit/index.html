@@ -84,7 +84,7 @@
 
     // crop must happend after the altizure project is initialized
     let marker = null
-    let waterIndex = null
+    let waterIndices = []
     sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
     .then(function(m) {
       // altizure project created, m is the arker
@@ -95,19 +95,24 @@
       return m.water.initialized
     })
     .then(function(m) {
-      waterIndex = m.water.createWater({level: -10})
+      waterIndex = m.water.createWater({level: -5})
+      waterIndices.push(waterIndex)
+      waterIndex = m.water.createWater({level: -10, color: 0x4323ff, alpha: 0.6, speed: 1, wave: 1})
+      waterIndices.push(waterIndex)
       // altizure water initialized
       // by default crop the first water
       m.water.crop(boundary, false)
       m.water.crop(boundary2)
+      // crop 2nd water
+      m.water.crop(boundary3, true, waterIndices[1])
       // m.water.crop(boundary, true, waterIndex) // crop by boundary defined above
       // m.water.crop(boundary2, true, waterIndex) // crop by boundary2
 
-      showGUI(m.water)
+      showGUI(m.water, waterIndices)
       return Promise.resolve(m)
     })
     .then(function(m)  {
-      m.water.uncrop(boundary3) // cancel cropping of a specified region
+      m.water.uncrop(boundary2) // cancel cropping of a specified region
       return Promise.resolve(m)
     })
     // we put import at last because for project marker without water information,
@@ -128,63 +133,64 @@
   <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
   <script>
 
-    function showGUI (instance) {
+    function showGUI (instance, waterIndices) {
       var Settings = function () {
-          this.crop1 = function() {
+        this.crop1 = function() {
           // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary)
         }
-          this.keep1 = function()  {
+        this.keep1 = function()  {
           // instance.uncrop()
           instance.crop(boundary, false)
         }
-          this.uncrop1 = function()  {
+        this.uncrop1 = function()  {
           // instance.uncrop()
           instance.uncrop(boundary)
         }
-          this.crop2 = function()  {
+        this.crop2 = function()  {
           // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary2)
         }
-          this.keep2 = function() {
+        this.keep2 = function() {
           // instance.uncrop()
           instance.crop(boundary2, false)
         }
-          this.uncrop2 = function()  {
+        this.uncrop2 = function()  {
           // instance.uncrop()
           instance.uncrop(boundary2)
         }
-          this.crop3 = function()  {
+        this.crop3 = function()  {
           // instance.uncrop() // remove effects caused by other operations
-          instance.crop(boundary3)
+          instance.crop(boundary3, true, waterIndices[1])
         }
-          this.keep3 = function() {
+        this.keep3 = function() {
           // instance.uncrop()
-          instance.crop(boundary3, false)
+          instance.crop(boundary3, false, waterIndices[1])
         }
-          this.uncrop3 = function()  {
+        this.uncrop3 = function()  {
           // instance.uncrop()
-          instance.uncrop(boundary3)
+          instance.uncrop(boundary3, true, waterIndices[1])
         }
-          this.clear = function()  {
-          instance.uncrop()
+        this.clear = function()  {
+          instance.uncrop(undefined, undefined, waterIndices[0])
+          instance.uncrop(undefined, undefined, waterIndices[1])
         }
       }
 
       var settings = new Settings()
       var gui = new dat.GUI()
 
-      var f1 = gui.addFolder('boundary 1')
+      var f1 = gui.addFolder('water 0 boundary 1')
       var crop1 = f1.add(settings, 'crop1')
       f1.add(settings, 'keep1')
       f1.add(settings, 'uncrop1')
 
-      var f2 = gui.addFolder('boundary 2')
+      var f2 = gui.addFolder('water 0 boundary 2')
       f2.add(settings, 'crop2')
       f2.add(settings, 'keep2')
       f2.add(settings, 'uncrop2')
 
-      var f3 = gui.addFolder('boundary 3')
+      var f3 = gui.addFolder('water 1 boundary 3')
       f3.add(settings, 'crop3')
       f3.add(settings, 'keep3')
       f3.add(settings, 'uncrop3')
@@ -192,6 +198,30 @@
       f3.open();
 
       gui.add(settings, 'clear')
+
+      var WaterProperty = function (water) {
+        this.water = water
+        this.speed = water.speed
+        this.wave = water.wave
+        this.color = water.color
+        this.level = water.level
+      }
+
+      var waterFolder = gui.addFolder('Water 0')
+      waterFolder.open()
+      var property0 = new WaterProperty(marker.water.getWater(waterIndices[0]))
+      waterFolder.add(property0, 'level', -100, 100).onChange(function(value)  { property0.water.level = value })
+      waterFolder.add(property0, 'speed', 0, 5).onChange(function(value) { property0.water.speed = value })
+      waterFolder.addColor(property0, 'color').onChange(function(value)  { property0.water.color = value })
+      waterFolder.add(property0, 'wave', 0, 5).onChange(function(value){ property0.water.wave = value })
+
+      var waterFolder = gui.addFolder('Water 1')
+      waterFolder.open()
+      var property1 = new WaterProperty(marker.water.getWater(waterIndices[1]))
+      waterFolder.add(property1, 'level', -100, 100).onChange(function(value)  { property1.water.level = value })
+      waterFolder.add(property1, 'speed', 0, 5).onChange(function(value) { property1.water.speed = value })
+      waterFolder.addColor(property1, 'color').onChange(function(value)  { property1.water.color = value })
+      waterFolder.add(property1, 'wave', 0, 5).onChange(function(value){ property1.water.wave = value })
     }
   </script>
 </body>
