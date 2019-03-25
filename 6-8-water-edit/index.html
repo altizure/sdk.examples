@@ -30,18 +30,30 @@
     let sandbox = new altizure.Sandbox('page-content', options)
 
     let boundary = [
-      {lng: 113.93932372264197, lat: 22.53800311245571, alt: 0},
-      {lng: 113.93938884232503, lat: 22.536564795125926, alt: 0},
-      {lng: 113.94060150961911, lat: 22.536613005930633, alt: 0},
-      {lng: 113.94052846052386, lat: 22.537770392044983, alt: 0}
+      {lng: 113.93792237067548, lat: 22.535631069714047, alt: 0},
+      {lng: 113.93787071550018, lat: 22.53781628320702, alt: 0},
+      {lng: 113.93855672213243, lat: 22.537772897692488, alt: 0},
+      {lng: 113.93889297874841, lat: 22.535632065599913, alt: 0},
+      {lng: 113.93792237067548, lat: 22.535631069714047, alt: 0},
     ]
     let boundary2 = [
-      {lng: 113.93765164656936, lat: 22.53669496821689, alt: 0},
-      {lng: 113.93956777767825, lat: 22.536638905806758, alt: 0},
-      {lng: 113.94038809950072, lat: 22.536152618468726, alt: 0},
-      {lng: 113.94028941210733, lat: 22.535763732866904, alt: 0},
-      {lng: 113.9378736820645, lat: 22.53567231129505, alt: 0}
+      {lng: 113.93853304844878, lat: 22.535597149181278, alt: 0},
+      {lng: 113.93876274814743, lat: 22.53693426280904, alt: 0},
+      {lng: 113.9392738803678, lat: 22.53697480603548, alt: 0},
+      {lng: 113.93957044479491, lat: 22.535619611516747, alt: 0},
+      {lng: 113.93853304844878, lat: 22.535597149181278, alt: 0},
     ]
+    let boundary3 = [
+      {lng: 113.9398812648754, lat: 22.536036319068128, alt: 16.108517675877042},
+      {lng: 113.93998800487813, lat: 22.5360562069557, alt: 13.814545059523923},
+      {lng: 113.94027435635607, lat: 22.536059863635302, alt: 15.054601540218163},
+      {lng: 113.94043891848187, lat: 22.536144206283492, alt: 8.868075653914254},
+      {lng: 113.94041219323621, lat: 22.53657914550383, alt: 13.812021481949081},
+      {lng: 113.94029500417105, lat: 22.5366945883164, alt: 15.252525834889836},
+      {lng: 113.93982166376748, lat: 22.53663720320577, alt: 18.36432627239326},
+      {lng: 113.9398812648754, lat: 22.536036319068128, alt: 16.108517675877042},
+    ]
+
     let polyline = new altizure.PolyFenceLineMarker({
       sandbox: sandbox,
       points: boundary,
@@ -54,6 +66,15 @@
     let polyline2 = new altizure.PolyFenceLineMarker({
       sandbox: sandbox,
       points: boundary2,
+      fenceHeight: 30,
+      color: 0x05c592,
+      style: {
+        texture: 'arrow', mapping: 'repeat'
+      }
+    })
+    let polyline3 = new altizure.PolyFenceLineMarker({
+      sandbox: sandbox,
+      points: boundary3,
       fenceHeight: 30,
       color: 0x05c592,
       style: {
@@ -77,7 +98,7 @@
       waterIndex = m.water.createWater({level: -10})
       // altizure water initialized
       // by default crop the first water
-      m.water.crop(boundary)
+      m.water.crop(boundary, false)
       m.water.crop(boundary2)
       // m.water.crop(boundary, true, waterIndex) // crop by boundary defined above
       // m.water.crop(boundary2, true, waterIndex) // crop by boundary2
@@ -86,7 +107,7 @@
       return Promise.resolve(m)
     })
     .then(function(m)  {
-      m.water.uncrop(boundary) // cancel cropping of a specified region
+      m.water.uncrop(boundary3) // cancel cropping of a specified region
       return Promise.resolve(m)
     })
     // we put import at last because for project marker without water information,
@@ -110,20 +131,40 @@
     function showGUI (instance) {
       var Settings = function () {
           this.crop1 = function() {
-          instance.uncrop() // remove effects caused by other operations
+          // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary)
         }
           this.keep1 = function()  {
-          instance.uncrop()
+          // instance.uncrop()
           instance.crop(boundary, false)
         }
+          this.uncrop1 = function()  {
+          // instance.uncrop()
+          instance.uncrop(boundary)
+        }
           this.crop2 = function()  {
-          instance.uncrop() // remove effects caused by other operations
+          // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary2)
         }
           this.keep2 = function() {
-          instance.uncrop()
+          // instance.uncrop()
           instance.crop(boundary2, false)
+        }
+          this.uncrop2 = function()  {
+          // instance.uncrop()
+          instance.uncrop(boundary2)
+        }
+          this.crop3 = function()  {
+          // instance.uncrop() // remove effects caused by other operations
+          instance.crop(boundary3)
+        }
+          this.keep3 = function() {
+          // instance.uncrop()
+          instance.crop(boundary3, false)
+        }
+          this.uncrop3 = function()  {
+          // instance.uncrop()
+          instance.uncrop(boundary3)
         }
           this.clear = function()  {
           instance.uncrop()
@@ -136,12 +177,19 @@
       var f1 = gui.addFolder('boundary 1')
       var crop1 = f1.add(settings, 'crop1')
       f1.add(settings, 'keep1')
+      f1.add(settings, 'uncrop1')
 
       var f2 = gui.addFolder('boundary 2')
       f2.add(settings, 'crop2')
       f2.add(settings, 'keep2')
+      f2.add(settings, 'uncrop2')
 
-      f2.open();
+      var f3 = gui.addFolder('boundary 3')
+      f3.add(settings, 'crop3')
+      f3.add(settings, 'keep3')
+      f3.add(settings, 'uncrop3')
+
+      f3.open();
 
       gui.add(settings, 'clear')
     }

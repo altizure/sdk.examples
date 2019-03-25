@@ -9,6 +9,7 @@ __New features:__
 
 __Improvements:__
 * Add a button link to the github code in the lower right corner of example.
+* Example `6.8 Water Edit` now shows how to edit multiple water surfaces.
 
 ### 2.7.3
 __Release data:__
