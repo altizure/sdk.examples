@@ -3,7 +3,7 @@
  * @public
  * @param {object} props
  */
-
+let _this
 class DistanceMeasure {
   constructor(props) {
     this.sandbox = props.sandbox
@@ -37,6 +37,7 @@ class DistanceMeasure {
       sandbox: sandbox,
       scale: 0.3
     }
+    _this = this
   }
   start() {
     this.enabled = true
@@ -46,34 +47,34 @@ class DistanceMeasure {
     document.removeEventListener('mouseup', this.handleMouseUp)
     document.removeEventListener('mousemove', this.handleMouseMove)
   }
-  handleMouseDown = (event) => {
-    if (this.enabled) {
-      this.lastDownEvent = event
+  handleMouseDown(event) {
+    if (_this.enabled) {
+      _this.lastDownEvent = event
     }
   }
-  handleMouseUp = (event) => {
-    if (this.enabled) {
-      if (event.button === this.lastDownEvent.button && Math.abs(event.x - this.lastDownEvent.x) <= 3 && Math.abs(event.y - this.lastDownEvent.y) <= 3) {
-        if (event.button === 0 && !this.drawing) {
-          this.startDraw(event)
-        } else if (event.button === 0 && this.drawing) {
-          this.addVertex(event)
-        } else if (event.button === 2 && this.drawing) {
-          this.endDraw(event)
+  handleMouseUp (event) {
+    if (_this.enabled) {
+      if (event.button === _this.lastDownEvent.button && Math.abs(event.x - _this.lastDownEvent.x) <= 3 && Math.abs(event.y - _this.lastDownEvent.y) <= 3) {
+        if (event.button === 0 && !_this.drawing) {
+          _this.startDraw(event)
+        } else if (event.button === 0 && _this.drawing) {
+          _this.addVertex(event)
+        } else if (event.button === 2 && _this.drawing) {
+          _this.endDraw(event)
         }
       }
     }
   }
-  handleMouseMove = (event) => {
-    if (this.drawing && this.enabled) {
-      let pt = this.sandbox.pickOnProjects(event)
-      this.drawingLine.setPoint(this.drawingLine.pointsNumber - 1, pt)
-      let pt0 = this.drawingLinePts[this.drawingLinePts.length - 1]
-      this.moveTextTag(pt0, pt)
+  handleMouseMove (event) {
+    if (_this.drawing && _this.enabled) {
+      let pt = _this.sandbox.pickOnProjects(event)
+      _this.drawingLine.setPoint(_this.drawingLine.pointsNumber - 1, pt)
+      let pt0 = _this.drawingLinePts[_this.drawingLinePts.length - 1]
+      _this.moveTextTag(pt0, pt)
     }
   }
 
-  startDraw = (event) => {
+  startDraw (event) {
     this.drawing = true
     let pt = this.sandbox.pickOnProjects(event)
     let points = [pt, pt]
@@ -82,14 +83,14 @@ class DistanceMeasure {
     this.drawingLinePts = [Object.assign({}, pt)]
     this.addTextTag(pt)
   }
-  addVertex = (event) => {
+  addVertex (event)  {
     let pt = this.sandbox.pickOnProjects(event)
     this.drawingLine.setPoint(this.drawingLine.pointsNumber - 1, pt)
     this.drawingLine.addPoint(pt)
     this.drawingLinePts.push(Object.assign({}, pt))
     this.addTextTag(pt)
   }
-  endDraw = (event) => {
+  endDraw (event) {
     this.drawing = false
     let points = this.drawingLinePts
     let line = new altizure.PolyCylinderLineMarker(Object.assign(this.defaultOption, { points }))
