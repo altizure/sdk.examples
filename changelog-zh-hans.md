@@ -11,7 +11,7 @@ __改进:__
 * 重叠的多片可视域，可视角度越多，绿色会越深。
 
 __缺陷修复:__
-* `sandbox.destruct()` 会导致未来新的 `Sandbox` 中 `ObjMarker`的control无法使用。
+* `sandbox.destruct()` 会导致其他的 `sandbox` 中 `ObjMarker`的control无法使用。
 
 
 ### 2.8.3
