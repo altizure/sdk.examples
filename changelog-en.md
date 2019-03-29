@@ -1,5 +1,19 @@
 # Changelog of Altizure Sandbox 3D SDK
 
+### 2.8.5
+__发布时间:__
+Mar. 29th, 2019
+
+__新功能:__
++ Add example `Project/6.8 Water Edit` Multiple water surface editting.
+
+__改进:__
+* In the visibility analysis, if the area is visible from more view points, it will be tinted greener.
+
+__缺陷修复:__
+* `sandbox.destruct()` may influence the controller of `ObjMarker` in other `Sandbox`。
+
+
 ### 2.8.3
 __Release data:__
 Mar. 25th, 2019
