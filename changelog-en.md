@@ -1,16 +1,29 @@
 # Changelog of Altizure Sandbox 3D SDK
 
+### 2.8.7
+__Release data:__
+2019年4月3日
+
+__New features:__
++ All `PlaneMarker` and inherited classes support `fixedSize` for the non-sprite mode.
+
+__Improvements:__
+* Use localStorage to cache common graphql requests, to reduce the waiting time for loading projects.
+
+__Bug fixes:__
+* Merged multiple IP location requests.
+
 ### 2.8.5
-__发布时间:__
+__Release data:__
 Mar. 29th, 2019
 
-__新功能:__
+__New features:__
 + Add example `Project/6.8 Water Edit` Multiple water surface editting.
 
-__改进:__
+__Improvements:__
 * In the visibility analysis, if the area is visible from more view points, it will be tinted greener.
 
-__缺陷修复:__
+__Bug fixes:__
 * `sandbox.destruct()` may influence the controller of `ObjMarker` in other `Sandbox`。
 
 
