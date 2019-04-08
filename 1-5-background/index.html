@@ -37,7 +37,14 @@
       }
       var gui = new dat.GUI()
       gui.add(bkgSetting, 'transparent').onChange(function (v) {
-        // do nothing as transparent can only be specified in initialization
+        bkgSetting.transparent = v
+        // background::transparent can only be specified in initialization.
+        // after initialization, you can change opacity to achieve the same effect.
+        if (v) {
+          sandbox.background.opacity = bkgSetting.opacity
+        } else {
+          sandbox.background.opacity = 1
+        }
       })
       gui.add(bkgSetting, 'opacity', 0, 1, 0.01).onChange(function (v) {
         bkgSetting.opacity = v
