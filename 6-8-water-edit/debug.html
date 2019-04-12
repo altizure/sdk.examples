@@ -141,38 +141,41 @@
           // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary)
         }
-        this.keep1 = function()  {
-          instance.uncrop()
-          instance.crop(boundary, false)
-        }
         this.uncrop1 = function()  {
           // instance.uncrop()
           instance.uncrop(boundary)
         }
+        this.keep1 = function()  {
+          instance.uncrop()
+          instance.crop(boundary, false)
+        }
+
         this.crop2 = function()  {
           // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary2)
-        }
-        this.keep2 = function() {
-          instance.uncrop()
-          instance.crop(boundary2, false)
         }
         this.uncrop2 = function()  {
           // instance.uncrop()
           instance.uncrop(boundary2)
         }
+        this.keep2 = function() {
+          instance.uncrop()
+          instance.crop(boundary2, false)
+        }
+        
         this.crop3 = function()  {
           // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary3, true, waterIndices[1])
-        }
-        this.keep3 = function() {
-          instance.uncrop()
-          instance.crop(boundary3, false, waterIndices[1])
         }
         this.uncrop3 = function()  {
           // instance.uncrop()
           instance.uncrop(boundary3, true, waterIndices[1])
         }
+        this.keep3 = function() {
+          instance.uncrop()
+          instance.crop(boundary3, false, waterIndices[1])
+        }
+        
         this.clear = function()  {
           instance.uncrop(undefined, undefined, waterIndices[0])
           instance.uncrop(undefined, undefined, waterIndices[1])
