@@ -17,6 +17,8 @@
     let visibilityManage = []
     let cameraMarker = []
     let timer = null
+    let judge = false
+    let count=0
     const point_list = [
       // [112.170031, 22.982716, 13.67],
       // [112.170005,22.982723,14.86 ],
@@ -29,6 +31,7 @@
       return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
     })
     let LookAtPoint = { lng: 112.170126, lat: 22.982691, alt: 11.27 }
+    let LookAtPoint2 = { lng: 112.170060, lat: 22.982665, alt: 14.98 }
 
     let options = {
       altizureApi: {
@@ -66,11 +69,35 @@
       .then(() => {
         Visibility_analysis_overlap()
         camera_alt = sandbox.camera.pose.alt
-        console.log(camera_alt)
       })
       .then(() => {
         timer = setInterval(timer_change, 1000)
+        document.addEventListener('click', handler)
       })
+    function handler() {
+      if(count==5){
+        cameraMarker[count-1].showFar=false
+        count=0
+      }
+      cameraMarker[count].showFar = true
+      if(count!=0){
+      cameraMarker[count-1].showFar=false
+      }
+      count=count+1
+      
+      // if (judge == false) {
+      //   cameraMarker.map((camera) => {
+      //     camera.showFar = true
+      //   })
+      //   judge = true
+      // }
+      // else {
+      //   cameraMarker.map((camera) => {
+      //     camera.showFar = false
+      //   })
+      //   judge = false
+      // }
+    }
     function Visibility_analysis_overlap() {
       sandbox.render(marker, 'visibility')
       point_list.map((point, i) => {
@@ -86,7 +113,17 @@
         cameraMarker[i].farInMeter = 40
         cameraMarker[i].nearInMeter = 0.1
         visibilityManage[i] = marker.showVisibility(cameraMarker[i])
-        cameraMarker[i].lookAt(LookAtPoint)
+        if (i == 3) {
+          cameraMarker[i].lookAt(LookAtPoint2)
+          cameraMarker[i].aspect = 0.8
+          cameraMarker[i].fov = 90
+          // cameraMarker[i].showFar= true
+        }
+        else {
+          cameraMarker[i].lookAt(LookAtPoint)
+
+        }
+
         visibilityManage[i].update({
           cameraMarker: cameraMarker[i]
         })
