@@ -1,12 +1,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 59fc06e8710da10a5337db1f </title>
+    <title> Altizure 7.6 Photo Fusion </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <!-- <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script> -->
+    <script src="../../sdk.examples/public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
     <script>
       let clat = 22.67
       let clng = 114.3
@@ -21,12 +24,7 @@
             lng: clng,
             north: 60,
             tilt: 45 },
-          flyTo: {
-            alt: 1200,
-            lat: clat,
-            lng: clng,
-            north: 60,
-            tilt: 45 },
+          flyTo: { lng: 114.29996564885415, lat: 22.669966869078426, alt: 46.884881680137944, north: 16.299628789272617, tilt: 12.681020878399314 },
         },
         renderItems: {
           earth: false,
@@ -39,7 +37,7 @@
 
       let model = null
       sandbox.add('AltizureProjectMarker', {
-        pid: '5849104597b73e0b090c01e8',
+        pid: '59fc06e8710da10a5337db1f',
         pose: {
           position: {lng: clng, lat: clat, alt: 0}
         }})
@@ -132,6 +130,7 @@
             }
           }
         }
+
       })
 
       function turnOnPhotoMode (res) {
@@ -181,17 +180,15 @@
         if (e.wheelDelta > 0) {
           if (sandbox.viewerCamera.fov > 15) { // recommended not to below 15
             sandbox.viewerCamera.fov -= 1
-            sandbox.earthView.camera.updateProjectionMatrix()
             sandbox.control.triggerChangeEvent()
           }
         } else if (e.wheelDelta < 0) {
           if (sandbox.viewerCamera.fov < 45) {
             sandbox.viewerCamera.fov += 1
-            sandbox.earthView.camera.updateProjectionMatrix()
             sandbox.control.triggerChangeEvent()
           }
         }
-        sandbox.updateVisibility()
+        sandbox.earthView.updateVisibility()
       }
     </script>
   </body>
