@@ -34,9 +34,10 @@
 
       let model = null
       sandbox.add('AltizureProjectMarker', {
-        pid: '59fc06e8710da10a5337db1f',
+        pid: '5cad46e17a56c31162183f7a',
         pose: {
-          position: {lng: clng, lat: clat, alt: 0}
+          position: {lng: clng, lat: clat, alt: 0},
+          scale: 1
         }})
       .then((marker) => {
         console.log('marker', marker)
@@ -46,10 +47,10 @@
           url: {
             cameraFile: './converted.json',
             // photoBase: './images/'
-            photoBase: 'https://data.altizure.com/tiling/59fc06e8710da10a5337db1f/',
+            photoBase: 'https://data.altizure.com/tiling/5cad46e17a56c31162183f7a/',
             photoMode: 'lod',
             minLevel: 0,
-            maxLevel: 4
+            maxLevel: 5
           }
         })
       })
