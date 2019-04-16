@@ -43,8 +43,6 @@
       { z: 1.32 }
     ]
     const point_list = [
-      // [112.170031, 22.982716, 13.67],
-      // [112.170005,22.982723,14.86 ],
       [112.170017, 22.982718, 13.88],
       [112.170070, 22.982745, 12.37],
       [112.170111, 22.982790, 12.13],
@@ -98,7 +96,6 @@
             }
           })
             .then(projectMarker => {
-              // ambush_soldier_list[i].marker = projectMarker
               markerlist.push(projectMarker)
               projectMarker.scale = 0.2
               projectMarker.euler = markereuler[i]
@@ -170,7 +167,7 @@
       }
     }
   </script>
-  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script src="../third_party/dat.gui.js"></script>
   <script>
     var gui = new dat.GUI()
     setUpUIFolder('Show soldier', true)
