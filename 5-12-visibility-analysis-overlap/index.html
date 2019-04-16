@@ -111,32 +111,7 @@
       })
       .then(() => {
         timer = setInterval(timer_change, 1000)
-        // document.addEventListener('click', handler)
       })
-    function handler() {
-      if (count == 5) {
-        cameraMarker[count - 1].showFar = false
-        count = 0
-      }
-      cameraMarker[count].showFar = true
-      if (count != 0) {
-        cameraMarker[count - 1].showFar = false
-      }
-      count = count + 1
-
-      // if (judge == false) {
-      //   cameraMarker.map((camera) => {
-      //     camera.showFar = true
-      //   })
-      //   judge = true
-      // }
-      // else {
-      //   cameraMarker.map((camera) => {
-      //     camera.showFar = false
-      //   })
-      //   judge = false
-      // }
-    }
     function Visibility_analysis_overlap() {
       sandbox.render(marker, 'visibility')
       point_list.map((point, i) => {

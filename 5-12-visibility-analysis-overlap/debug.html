@@ -113,20 +113,7 @@
       })
       .then(() => {
         timer = setInterval(timer_change, 1000)
-        // document.addEventListener('click', handler)
       })
-    function handler() {
-      if(count==5){
-        cameraMarker[count-1].showFar=false
-        count=0
-      }
-      cameraMarker[count].showFar = true
-      if(count!=0){
-      cameraMarker[count-1].showFar=false
-      }
-      count=count+1
-      
-    }
     function Visibility_analysis_overlap() {
       sandbox.render(marker, 'visibility')
       point_list.map((point, i) => {
