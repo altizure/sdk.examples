@@ -32,15 +32,18 @@
     let visibilityManage = []
     let cameraMarker = []
     let timer = null
-    let judge = false
     let count = 0
     let markerlist = []
+    let texttaglist=[]
     let markereuler = [
       { z: -2.05 },
       { z: -2.34 },
       { z: -2.96 },
       { z: 2.12 },
       { z: 1.32 }
+    ]
+    let judge = [
+      true, true, true, true, true
     ]
     const point_list = [
       [112.170017, 22.982718, 13.88],
@@ -132,9 +135,7 @@
         }
         else {
           cameraMarker[i].lookAt(LookAtPoint)
-
         }
-
         visibilityManage[i].update({
           cameraMarker: cameraMarker[i]
         })
@@ -152,18 +153,20 @@
           scale: 0.5,
           pinLength: 30
         })
+        texttaglist.push(testTag)
       })
     }
 
     function timer_change() {
       if (Math.abs(camera_alt - sandbox.camera.pose.alt) >= 10) {
         visibilityManage.map((manage, i) => {
+          if (judge[i] == true) {
           manage.update({
             cameraMarker: cameraMarker[i]
           })
+        }
         })
         camera_alt = sandbox.camera.pose.alt
-        console.log(camera_alt)
       }
     }
   </script>
@@ -185,12 +188,20 @@
       items.map((item,i)=>{
         folder.add(settings, item).onChange(function (v) {
         visibilityManage[i].remove()
+        markerlist[i].visible=false
+        cameraMarker[i].visible=false
+        texttaglist[i].visible=false
+        judge[i] = false
         settings.First = v
         if (v == true) {
           visibilityManage[i] = marker.showVisibility(cameraMarker[i])
+          markerlist[i].visible=true
+          texttaglist[i].visible=true
+          cameraMarker[i].visible=true
           visibilityManage[i].update({
             cameraMarker: cameraMarker[i]
           })
+          judge[i] = true
         }
       })
       })
