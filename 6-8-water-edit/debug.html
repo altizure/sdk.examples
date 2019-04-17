@@ -135,44 +135,38 @@
   <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
   <script>
 
-    function showGUI (instance, waterIndices) {
+     function showGUI (instance, waterIndices) {
       var Settings = function () {
         this.crop1 = function() {
-          // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary)
         }
         this.uncrop1 = function()  {
-          // instance.uncrop()
           instance.uncrop(boundary)
         }
         this.keep1 = function()  {
-          instance.uncrop()
+          instance.uncrop(undefined, undefined, waterIndices[0]) // remove effects caused by other operations
           instance.crop(boundary, false)
         }
 
         this.crop2 = function()  {
-          // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary2)
         }
         this.uncrop2 = function()  {
-          // instance.uncrop()
           instance.uncrop(boundary2)
         }
         this.keep2 = function() {
-          instance.uncrop()
+          instance.uncrop(undefined, undefined, waterIndices[0])
           instance.crop(boundary2, false)
         }
         
         this.crop3 = function()  {
-          // instance.uncrop() // remove effects caused by other operations
           instance.crop(boundary3, true, waterIndices[1])
         }
         this.uncrop3 = function()  {
-          // instance.uncrop()
           instance.uncrop(boundary3, true, waterIndices[1])
         }
         this.keep3 = function() {
-          instance.uncrop()
+          instance.uncrop(undefined, undefined, waterIndices[1])
           instance.crop(boundary3, false, waterIndices[1])
         }
         
@@ -187,20 +181,20 @@
 
       var f1 = gui.addFolder('water 0 boundary 1')
       var crop1 = f1.add(settings, 'crop1')
-      f1.add(settings, 'keep1')
       f1.add(settings, 'uncrop1')
+      f1.add(settings, 'keep1')
 
       var f2 = gui.addFolder('water 0 boundary 2')
       f2.add(settings, 'crop2')
-      f2.add(settings, 'keep2')
       f2.add(settings, 'uncrop2')
+      f2.add(settings, 'keep2')
 
       var f3 = gui.addFolder('water 1 boundary 3')
       f3.add(settings, 'crop3')
-      f3.add(settings, 'keep3')
       f3.add(settings, 'uncrop3')
+      f3.add(settings, 'keep3')
 
-      f3.open();
+      f1.open()
 
       gui.add(settings, 'clear')
 

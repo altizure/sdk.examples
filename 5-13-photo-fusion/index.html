@@ -40,6 +40,7 @@
           scale: 1
         }})
       .then((marker) => {
+        marker.focus()
         console.log('marker', marker)
         model = marker
 
@@ -51,7 +52,8 @@
             photoMode: 'lod',
             minLevel: 0,
             maxLevel: 5
-          }
+          },
+          showCameras: true
         })
       })
 
@@ -186,7 +188,7 @@
             sandbox.control.triggerChangeEvent()
           }
         }
-        sandbox.earthView.updateVisibility()
+        sandbox.updateVisibility()
       }
     </script>
   </body>
