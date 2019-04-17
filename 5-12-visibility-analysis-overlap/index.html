@@ -17,11 +17,11 @@
 </head>
 
 <body style="margin: 0px; padding: 0px;">
-  <div id="info">Ambush Analysis<br />
-    This demo is for some security usage.<br />
-    Here is a situation of visibility analysis overlaping.<br />
-    Suitable for visibility analysis when multiple security personnels are ambushing or patrolling.
-  </div>
+    <div id="info">Ambush Analysis<br/>
+      This demo is for some security usage.<br/>
+      Here is a situation of visibility analysis overlaping.<br/>
+      Suitable for visibility analysis when multiple security personnels are ambushing or patrolling.
+    </div>
   <div id="page-content"></div>
   <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
   <!--<script type="text/javascript" src="../release/altizure-earth-apis.min.js"></script>-->
@@ -184,26 +184,26 @@
         Forth: true,
         Fifth: true,
       }
-      let items = ['First', 'Second', 'Third', 'Forth', 'Fifth']
-      items.map((item, i) => {
+      let items=['First', 'Second','Third','Forth','Fifth']
+      items.map((item,i)=>{
         folder.add(settings, item).onChange(function (v) {
-          visibilityManage[i].remove()
-          markerlist[i].visible=false
-          cameraMarker[i].visible=false
-          texttaglist[i].visible=false
-          judge[i] = false
-          settings.First = v
-          if (v == true) {
-            visibilityManage[i] = marker.showVisibility(cameraMarker[i])
-            markerlist[i].visible=true
-            texttaglist[i].visible=true
-            cameraMarker[i].visible=true
-            visibilityManage[i].update({
-              cameraMarker: cameraMarker[i]
-            })
-            judge[i] = true
-          }
-        })
+        visibilityManage[i].remove()
+        markerlist[i].visible=false
+        cameraMarker[i].visible=false
+        texttaglist[i].visible=false
+        judge[i] = false
+        settings.First = v
+        if (v == true) {
+          visibilityManage[i] = marker.showVisibility(cameraMarker[i])
+          markerlist[i].visible=true
+          texttaglist[i].visible=true
+          cameraMarker[i].visible=true
+          visibilityManage[i].update({
+            cameraMarker: cameraMarker[i]
+          })
+          judge[i] = true
+        }
+      })
       })
       if (open) folder.open()
     }
