@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8">
   <style>
-    #info {
-      position: absolute;
-      padding: 10px;
-      width: 60%;
-      text-align: center;
-      z-index: 10;
-      color: rgb(207, 180, 26);
-    }
-  </style>
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 60%;
+        text-align: center;
+        z-index: 10;
+        color: rgb(207, 180, 26);
+      }
+    </style>
   <title> Altizure 5.12 Visibility analysis overlap </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
@@ -122,7 +122,7 @@
           position: { "lng": point.lng, "lat": point.lat, "alt": point.alt + 1.6 },
           showFar: false,
           showNear: true,
-          color: 0xff0000,
+          color: 0xff0000, 
           fov: 60,
         })
         cameraMarker[i].farInMeter = 40
@@ -161,9 +161,9 @@
       if (Math.abs(camera_alt - sandbox.camera.pose.alt) >= 10) {
         visibilityManage.map((manage, i) => {
           if (judge[i] == true) {
-            manage.update({
-              cameraMarker: cameraMarker[i]
-            })
+          manage.update({
+            cameraMarker: cameraMarker[i]
+          })
           }
         })
         camera_alt = sandbox.camera.pose.alt
