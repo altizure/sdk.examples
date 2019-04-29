@@ -1,5 +1,19 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 2.10.1
+__发布时间:__
+2019年4月29日
+
+__改进:__
+* 增加 [rotate 手势](https://docs.microsoft.com/en-us/windows/desktop/wintouch/windows-touch-gestures-overview) 可以左右旋转模型。与现有手势不冲突。
+
+### 2.9.3
+__发布时间:__
+2019年4月23日
+
+__新功能:__
++ 增加实时视频融合，可用于将实时监控视频流与三维模型融合。
+
 ### 2.9.1
 __发布时间:__
 2019年4月17日
