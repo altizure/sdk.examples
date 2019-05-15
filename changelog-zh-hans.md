@@ -1,5 +1,12 @@
 # Altizure Sandbox 3D SDK 更新日志
 
+### 2.11.3
+__发布时间:__
+2019年5月15日
+
+__新功能:__
+* AltizureProjectMarker初始化选项支持 showBBox，显示每个瓦片的包围盒。
+
 ### 2.11.2
 __发布时间:__
 2019年5月15日
