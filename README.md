@@ -33,9 +33,9 @@ In the example html file (e.g. `./1-1-altizure-earth/index.html`), replace the k
 
 with your own key
 
+* Learn from [Examples](https://altizure.github.io/sdk.examples/examples.sdk.html).
 * Read [Documentation](https://altizure.github.io/dev-docs-site/zh-hans/docs/user_docs/web/).
 * Check [FAQ](https://altizure.github.io/dev-docs-site/zh-hans/jssdk-faq.html).
-* Learn from [Examples](https://altizure.github.io/sdk.examples/examples.sdk.html).
 
 ### What are the available versions? ###
 
@@ -54,6 +54,7 @@ Please create an issue on [issue page](https://github.com/altizure/sdk.examples/
 * [Altizure Development Platform](https://developers.altizure.com/)
 * [Altizure开发平台-快速入门教程](https://www.jianshu.com/p/53e2c72fec0d)
 * [altizure.github.io/dev-docs-site](https://altizure.github.io/dev-docs-site/)
+* [Browser compatibility 浏览器兼容性](https://altizure.github.io/sdk.examples/compatibility_report.html)
 
 ### Contributors ###
 
