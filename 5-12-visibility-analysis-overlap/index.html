@@ -1,0 +1,213 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <style>
+      #info {
+        position: absolute;
+        padding: 10px;
+        width: 60%;
+        text-align: center;
+        z-index: 10;
+        color: rgb(207, 180, 26);
+      }
+    </style>
+  <title> Altizure 5.12 Visibility Analysis Overlap </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+    <div id="info">Ambush Analysis<br/>
+      This demo is for some security usage.<br/>
+      Here is a situation of visibility analysis overlaping.<br/>
+      Suitable for visibility analysis when multiple security personnels are ambushing or patrolling.
+    </div>
+  <div id="page-content"></div>
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+  <!--<script type="text/javascript" src="../release/altizure-earth-apis.min.js"></script>-->
+  <script>
+    let sandbox = null
+    let marker = null
+    let camera_alt = null
+    let visibilityManage = []
+    let cameraMarker = []
+    let timer = null
+    let count = 0
+    let markerlist = []
+    let texttaglist=[]
+    let markereuler = [
+      { z: -2.05 },
+      { z: -2.34 },
+      { z: -2.96 },
+      { z: 2.12 },
+      { z: 1.32 }
+    ]
+    let judge = [
+      true, true, true, true, true
+    ]
+    const point_list = [
+      [112.170017, 22.982718, 13.88],
+      [112.170070, 22.982745, 12.37],
+      [112.170111, 22.982790, 12.13],
+      [112.170182, 22.982727, 13.48],
+      [112.170209, 22.982665, 11.14],
+    ].map(function (lnglatalt) {
+      return new altizure.LngLatAlt(lnglatalt[0], lnglatalt[1], lnglatalt[2])
+    })
+    let LookAtPoint = { lng: 112.170126, lat: 22.982691, alt: 11.27 }
+    let LookAtPoint2 = { lng: 112.170060, lat: 22.982665, alt: 14.98 }
+
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: {
+          alt: 150,
+          lat: point_list[2].lat,
+          lng: point_list[2].lng,
+        },
+        flyTo: {
+          alt: 150,
+          lat: point_list[2].lat,
+          lng: point_list[2].lng,
+          north: 0,
+          tilt: 40
+        }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: true,
+        featureInView: false,
+        orbitRing: true
+      }
+    }
+    sandbox = new altizure.Sandbox('page-content', options)
+
+    sandbox.add('AltizureProjectMarker', { pid: '5c249bf10843bc542d9cd19f' })
+      .then(projectMarker => {
+        marker = projectMarker
+        marker.dim()
+        return marker.initialized
+      })
+      .then(function () {
+        point_list.map((point, i) => {
+          sandbox.add('AltizureProjectMarker', {
+            pid: '5c2c23d78a2e886aa2de44e5',
+            pose: {
+              position: { "lng": point.lng, "lat": point.lat, "alt": point.alt + 0.8 },
+            }
+          })
+            .then(projectMarker => {
+              markerlist[i]=projectMarker
+              projectMarker.scale = 0.2
+              projectMarker.euler = markereuler[i]
+              projectMarker.dim()
+              return projectMarker.initialized
+            })
+        })
+      })
+      .then(() => {
+        Visibility_analysis_overlap()
+        camera_alt = sandbox.camera.pose.alt
+      })
+      .then(() => {
+        timer = setInterval(timer_change, 1000)
+      })
+    function Visibility_analysis_overlap() {
+      sandbox.render(marker, 'visibility')
+      point_list.map((point, i) => {
+        cameraMarker[i] = new altizure.CameraMarker({
+          sandbox: sandbox,
+          position: { "lng": point.lng, "lat": point.lat, "alt": point.alt + 1.6 },
+          showFar: false,
+          showNear: true,
+          color: 0xff0000, 
+          fov: 60,
+        })
+        cameraMarker[i].farInMeter = 40
+        cameraMarker[i].nearInMeter = 0.1
+        visibilityManage[i] = marker.showVisibility(cameraMarker[i])
+        if (i == 3) {
+          cameraMarker[i].lookAt(LookAtPoint2)
+          cameraMarker[i].aspect = 0.8
+          cameraMarker[i].fov = 90
+        }
+        else {
+          cameraMarker[i].lookAt(LookAtPoint)
+        }
+        visibilityManage[i].update({
+          cameraMarker: cameraMarker[i]
+        })
+        let true_i = i + 1
+        let testTag = new altizure.TextTagMarker({
+          text: 'NO. ' + true_i,
+          textStyle: {
+            fillStyle: 'rgb(255, 255, 255)',
+            font: '500 24px Arial',
+            outlineWidth: 0.1,
+            outlineStyle: 'rgb(0, 0, 0)'
+          },
+          position: point,
+          sandbox: sandbox,
+          scale: 0.5,
+          pinLength: 30
+        })
+        texttaglist[i]=testTag
+      })
+    }
+
+    function timer_change() {
+      if (Math.abs(camera_alt - sandbox.camera.pose.alt) >= 10) {
+        visibilityManage.map((manage, i) => {
+          if (judge[i] == true) {
+          manage.update({
+            cameraMarker: cameraMarker[i]
+          })
+          }
+        })
+        camera_alt = sandbox.camera.pose.alt
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+    var gui = new dat.GUI()
+    setUpUIFolder('Show soldier', true)
+    function setUpUIFolder(folderName, open) {
+      let folder = gui.addFolder(folderName)
+
+      let settings = {
+        First: true,
+        Second: true,
+        Third: true,
+        Forth: true,
+        Fifth: true,
+      }
+      let items=['First', 'Second','Third','Forth','Fifth']
+      items.map((item,i)=>{
+        folder.add(settings, item).onChange(function (v) {
+        visibilityManage[i].remove()
+        markerlist[i].visible=false
+        cameraMarker[i].visible=false
+        texttaglist[i].visible=false
+        judge[i] = false
+        settings.First = v
+        if (v == true) {
+          visibilityManage[i] = marker.showVisibility(cameraMarker[i])
+          markerlist[i].visible=true
+          texttaglist[i].visible=true
+          cameraMarker[i].visible=true
+          visibilityManage[i].update({
+            cameraMarker: cameraMarker[i]
+          })
+          judge[i] = true
+        }
+      })
+      })
+      if (open) folder.open()
+    }
+  </script>
+</body>
+
+</html>

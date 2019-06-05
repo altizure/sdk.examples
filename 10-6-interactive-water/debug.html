@@ -1,0 +1,267 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 10.6 Interactive Water </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: { lng: 113.93922568914863, lat: 22.536935805838038, alt: 393.7309877171878, north: 129.75956653121534, tilt: 25.24614688161553 },
+        flyTo: { lng: 113.93922568914863, lat: 22.536935805838038, alt: 393.7309877171878, north: 129.75956653121534, tilt: 25.24614688161553 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      },
+      control: {
+        doubleTap: false // disable double tap/click to zoom
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+    let marker = null
+    let water = null
+    sandbox.add('AltizureProjectMarker', {
+      pid: '5849104597b73e0b090c01e8'
+    })
+      .then(function (m) {
+        marker = m
+        return m.initialized
+      })
+      .then(function (m) {
+        return m.loadCropMask() // [optional] download crop mask configured in Altizure
+      })
+      .then(function (m) {
+        return m.water.initialized
+      })
+      .then(function (m) {
+        water = m.water.createWater({ level: -10, alpha: 0.6, speed: 1, wave: 1 })
+        return Promise.resolve(m)
+      })
+      .then(function (m) {
+        showGUI(m)
+        return Promise.resolve(m)
+      })
+      .catch(function (err) {
+        console.error(err)
+        return err
+      })
+  </script>
+  <script src="../third_party/dat.gui.js"></script>      
+  <script>
+   let height = 2
+    let globalGuiSettings = {
+      drawing: false,
+      cropInner: true
+    }
+    let drawingLine
+    let finalDataObjects = {
+      points: []
+    }
+    let leftClickFunc = function (e) {
+      if (!globalGuiSettings.drawing) return
+      // left click to draw line
+      let pt = sandbox.window.toLngLatAlt(e)
+      if (!pt) return
+      if (drawingLine) {
+        drawingLine.addPoint(drawingLine.points[0])
+      } else {
+        drawingLine = new altizure.PolyLineMarker({
+          sandbox: sandbox,
+          points: [pt, pt, pt],
+          fenceHeight: height,
+          color: 'white'
+        })
+      }
+      finalDataObjects.points.push(pt)
+    }
+    let moveFunc = function (e) {
+      // editing line
+      if (!globalGuiSettings.drawing) return
+      let pt = sandbox.window.toLngLatAlt(e)
+      if (!pt) return
+      if (drawingLine) {
+        drawingLine.setPoint(drawingLine.pointsNumber - 2, pt)
+      }
+    }
+    let rightClickFunc = function (e) {
+      // right click to finish
+      // console.log(e.button)
+      if (!globalGuiSettings.drawing) return
+
+      let points = finalDataObjects.points
+      if (points.length >= 3) {
+        let lnglatpoints = points.map(function (pt) { return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt) }) // for tags
+        let tags = lnglatpoints.map(function (pt) {
+          let tag = new altizure.TagMarker({
+            sandbox: sandbox,
+            position: pt,
+            scale: 1,
+            fixedSize: 50,
+            pinLength: height,
+            imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+            pivot: { x: 0.5, y: -0.1 }
+          })
+          return tag
+        })
+        lnglatpoints.push(lnglatpoints[0])
+        let finalLine = new altizure.PolyLineMarker({
+          sandbox: sandbox, points: lnglatpoints, fenceHeight: height, color: 'white'
+        })
+        globalGuiSettings.drawingMarker = {
+          tags: tags, line: finalLine
+        }
+        tags.map(function (tag, i) {
+          tag.interactable = true
+          tag.on('mousedrag', function (e) {
+            let pt = sandbox.window.toLngLatAlt(e)
+            if (pt) {
+              tag.position = pt
+              if (i === 0 || i === finalLine.pointsNumber - 1) {
+                finalLine.setPoint(0, pt)
+                finalLine.setPoint(finalLine.pointsNumber - 1, pt)
+              } else {
+                finalLine.setPoint(i, pt)
+              }
+              finalDataObjects.points[i] = pt
+            }
+          })
+        })
+      }
+      // reset parameters
+      if (drawingLine) {
+        drawingLine.destruct()
+        drawingLine = undefined
+      }
+      globalGuiSettings.drawing = false
+    }
+
+    let lastDownEvent
+    sandbox.renderer.domElement.addEventListener('mousedown', function (e) {
+      lastDownEvent = e
+    })
+    sandbox.renderer.domElement.addEventListener('mouseup', function (e) {
+      if (e.button === lastDownEvent.button && Math.abs(e.x - lastDownEvent.x) <= 3 && Math.abs(e.y - lastDownEvent.y) <= 3) {
+        if (e.button === 0) {
+          leftClickFunc(e)
+        } else if (e.button === 2) {
+          rightClickFunc(e)
+        }
+      }
+    })
+    sandbox.renderer.domElement.addEventListener('mousemove', function (e) {
+      moveFunc(e)
+    })
+
+    function refreshAll() {
+      if (drawingLine) {
+        drawingLine.destruct()
+        drawingLine = undefined
+      }
+      finalDataObjects.points = []
+      globalGuiSettings.drawing = false
+      if (globalGuiSettings.drawingMarker) {
+        if (globalGuiSettings.drawingMarker.line) {
+          globalGuiSettings.drawingMarker.line.destruct()
+        }
+        if (globalGuiSettings.drawingMarker.tags) {
+          globalGuiSettings.drawingMarker.tags.map(function (tag) {
+            tag.destruct()
+          })
+        }
+        globalGuiSettings.drawingMarker = undefined
+      }
+    }
+    var gui = new dat.GUI()
+    function showGUI(marker) {
+      height = (marker.projInfo.max_bound.z - marker.projInfo.min_bound.z) / 10
+
+      let selectedType = 'none'
+      let guiSettings = {
+        keep: function () {
+          if (selectedType !== 'none') return
+          selectedType = 'keep'
+          refreshAll()
+          globalGuiSettings.drawing = true
+          globalGuiSettings.cropInner = false
+          gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = 'gray'
+        },
+        remove: function () {
+          if (selectedType !== 'none') return
+          selectedType = 'remove'
+          refreshAll()
+          globalGuiSettings.drawing = true
+          globalGuiSettings.cropInner = true
+          gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = 'gray'
+        },
+        apply: function () {
+          if (finalDataObjects.points && finalDataObjects.points.length > 2) {
+            let pts = finalDataObjects.points.map(function (pt) {
+              return new altizure.LngLatAlt(pt.lng, pt.lat, 0)
+            })
+            pts.push(pts[0])
+            console.log(globalGuiSettings.cropInner)
+            if (globalGuiSettings.cropInner == false) {
+              marker.water.uncrop(pts)
+            }
+            else {
+              marker.water.crop(pts, true, water)
+            }
+            finalDataObjects.points = []
+          }
+          refreshAll()
+          gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = ''
+          gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = ''
+          selectedType = 'none'
+        },
+        reset: function () {
+          marker.water.uncrop(undefined, undefined, water)
+          gui.domElement.children[1].children[0].children[0].children[0].children[1].style.background = ''
+          gui.domElement.children[1].children[0].children[0].children[0].children[2].style.background = ''
+          selectedType = 'none'
+          finalDataObjects.points = []
+        }
+      }
+
+      let cropFolder = gui.addFolder('Crop Type')
+      cropFolder.open()
+      cropFolder.add(guiSettings, 'keep').name('Keep')
+      cropFolder.add(guiSettings, 'remove').name('Remove')
+
+      let effectFolder = gui.addFolder('Apply or Reset')
+      effectFolder.open()
+      effectFolder.add(guiSettings, 'apply').name('Apply')
+      effectFolder.add(guiSettings, 'reset').name('Reset')
+
+      var WaterProperty = function (water) {
+        this.water = water
+        this.speed = water.speed
+        this.wave = water.wave
+        this.color = water.color
+        this.level = water.level
+      }
+      var waterFolder = gui.addFolder('Water Property')
+      waterFolder.open()
+      var property0 = new WaterProperty(marker.water.getWater(water))
+      waterFolder.add(property0, 'level', -100, 100).onChange(function (value) { property0.water.level = value })
+      waterFolder.add(property0, 'speed', 0, 5).onChange(function (value) { property0.water.speed = value })
+      waterFolder.addColor(property0, 'color').onChange(function (value) { property0.water.color = value })
+      waterFolder.add(property0, 'wave', 0, 5).onChange(function (value) { property0.water.wave = value })
+    }
+  </script>
+</body>
+
+</html>

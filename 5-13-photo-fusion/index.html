@@ -1,0 +1,195 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 5.13 Photo Fusion </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script>
+      let clat = 22.67
+      let clng = 114.3
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          poseTo: {
+            alt: 1200,
+            lat: clat,
+            lng: clng,
+            north: 60,
+            tilt: 45 },
+          flyTo: { lng: 114.29996564885415, lat: 22.669966869078426, alt: 46.884881680137944, north: 16.299628789272617, tilt: 12.681020878399314 },
+        },
+        renderItems: {
+          earth: false,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: false
+        }
+      }
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let model = null
+      sandbox.add('AltizureProjectMarker', {
+        pid: '5cad46e17a56c31162183f7a',
+        pose: {
+          position: {lng: clng, lat: clat, alt: 0},
+          scale: 1
+        }})
+      .then((marker) => {
+        marker.focus()
+        console.log('marker', marker)
+        model = marker
+
+        marker.importPhotos({
+          url: {
+            cameraFile: './converted.json',
+            // photoBase: './images/'
+            photoBase: 'https://data.altizure.com/tiling/5cad46e17a56c31162183f7a/',
+            photoMode: 'lod',
+            minLevel: 0,
+            maxLevel: 5
+          },
+          showCameras: true
+        })
+      })
+
+      let enableFusion = true
+      let isSnapped = false
+      // let currentDisplay = null
+      let currentPhoto = null
+      let initFov = null
+
+      let photoControl = new altizure.FusionPhotoControl({sandbox: sandbox})
+
+      sandbox.domElement.addEventListener('mousedown', (e) => {
+        if (!enableFusion) return
+        // console.log(e)
+        if (e.button === 0) {
+          if (isSnapped) {
+            photoControl.enablePan = true
+            photoControl.pan(e.clientX, e.clientY)
+          } 
+        } else if (e.button === 2) {
+          turnOffPhotoMode()
+        }
+      })
+
+      sandbox.domElement.addEventListener('mousemove', (e) => {
+        if (!enableFusion) return
+        if (isSnapped && e.button === 0) {
+          // console.log(sandbox.viewerCamera.view)
+          photoControl.pan(e.clientX, e.clientY)
+        }
+      })
+
+      sandbox.domElement.addEventListener('mouseup', (e) => {
+        if (!enableFusion) return
+        if (e.button === 0) {
+          if (isSnapped) {
+            let fovDiff = photoControl.pan(e.clientX, e.clientY)
+            photoControl.enablePan = false
+            if (fovDiff > 12 ) { // jump to next photo
+              // console.log('fovDiff', fovDiff)
+              turnOffPhotoMode()
+              snap()
+            }
+          } else {
+            snap()
+          }
+        } else if (e.button === 2) {
+          turnOffPhotoMode()
+          snap()
+        }
+        function snap() {
+          if (model) {
+            let photos = model.photos
+            if (photos) {
+              photos.snap( {
+                  orient: 30, // angle different to camera (in degree)
+                  dist: 10, // distance ratio
+                  alpha: 0.5 // weighting
+                }, 3000) // fly time
+                .then(res => {
+                  turnOnPhotoMode(res)
+                  if(sandbox.viewerCamera.fov > 35){
+                    sandbox.viewerCamera.fov = 35;
+                  }
+                })
+                .catch(err => {
+                  turnOffPhotoMode()
+                  if (err.message === 'No nearby photo.') {
+                    console.warn('nope')
+                  } else {
+                    console.error(err)
+                  }
+                })
+            }
+          }
+        }
+
+      })
+
+      function turnOnPhotoMode (res) {
+        console.log('trun on')
+        // currentDisplay = res.photoDisplay
+        currentPhoto = res
+        isSnapped = true
+        sandbox.enableDolly = false
+        sandbox.control.enableRotate = false
+        initFov = sandbox.viewerCamera.fov
+      }
+
+      function turnOffPhotoMode () {
+        console.log('turn off')
+        fadeOutDisplay()
+        // currentDisplay = null
+        currentPhoto = null
+        isSnapped = false
+        sandbox.enableDolly = true
+        sandbox.control.enableRotate = true
+        photoControl.enablePan = false
+      }
+
+      function turnOnFusion () {
+        enableFusion = true
+      }
+
+      function turnOffFusion () {
+        enableFusion = false
+        turnOffPhotoMode()
+        sandbox.viewerCamera.fov = 45
+        sandbox.control.restoreView()
+        sandbox.control.triggerChangeEvent()
+      }
+
+      function fadeOutDisplay () {
+        if (model) {
+          model.disposeCurrentDisplay()
+        }
+      }
+
+      sandbox.domElement.addEventListener("mousewheel", onMouseWheel, false)
+      // sandbox.control.domElement.addEventListener("DOMMouseScroll", onMouseWheel, false)
+
+      function onMouseWheel(e) {
+        if (!isSnapped) return // only respond when photo is being displayed
+        if (e.wheelDelta > 0) {
+          if (sandbox.viewerCamera.fov > 15) { // recommended not to below 15
+            sandbox.viewerCamera.fov -= 1
+            sandbox.control.triggerChangeEvent()
+          }
+        } else if (e.wheelDelta < 0) {
+          if (sandbox.viewerCamera.fov < 45) {
+            sandbox.viewerCamera.fov += 1
+            sandbox.control.triggerChangeEvent()
+          }
+        }
+        sandbox.updateVisibility()
+      }
+    </script>
+  </body>
+</html>

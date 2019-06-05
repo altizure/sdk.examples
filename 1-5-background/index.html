@@ -27,5 +27,37 @@
 
       let sandbox = new altizure.Sandbox('page-content', options)
     </script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      let bkgSetting = {
+        transparent: sandbox.background.transparent,
+        opacity: sandbox.background.opacity,
+        image: sandbox.background.image,
+        color: sandbox.background.color.getHex()
+      }
+      var gui = new dat.GUI()
+      gui.add(bkgSetting, 'transparent').onChange(function (v) {
+        bkgSetting.transparent = v
+        // background::transparent can only be specified in initialization.
+        // after initialization, you can change opacity to achieve the same effect.
+        if (v) {
+          sandbox.background.opacity = bkgSetting.opacity
+        } else {
+          sandbox.background.opacity = 1
+        }
+      })
+      gui.add(bkgSetting, 'opacity', 0, 1, 0.01).onChange(function (v) {
+        bkgSetting.opacity = v
+        sandbox.background.opacity = v
+      })
+      gui.addColor(bkgSetting, 'color').onChange(function (v) {
+        bkgSetting.color = v
+        sandbox.background.color = v
+      })
+      gui.add(bkgSetting, 'image', {'image1': 'url("https://www.w3schools.com/images/driveicon_32.png")', 'image2': 'url("http://hbimg.b0.upaiyun.com/ef67e3cb04b55dc34aa7f168eab053155598c432c9fa-zoA533_fw658")'}).onChange(function (v) {
+        bkgSetting.image = v
+        sandbox.background.image = v
+      })
+    </script>
   </body>
 </html>
