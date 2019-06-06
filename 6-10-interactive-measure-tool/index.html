@@ -41,9 +41,10 @@
 
     let Distancemeasure = new DistanceMeasure({ sandbox: sandbox })
     let RightAnglemeasure = new RightAngleMeasure({ sandbox: sandbox })
-    let Areameasure = new AreaMeasure({ sandbox: sandbox, altmarker: altmarker })
+    let GroundAreameasure1 = new GroundAreameasure({ sandbox: sandbox, altmarker: altmarker })
+    let SurfaceAreameasure1 = new SurfaceAreameasure({ sandbox: sandbox })
     let Volumemeasure = new VolumeMeasure({ sandbox: sandbox, altmarker: altmarker })
-    
+
   </script>
   <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
   <script>
@@ -53,34 +54,47 @@
       "Distance": function () {
         Distancemeasure.stop()
         RightAnglemeasure.stop()
-        Areameasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
         Volumemeasure.stop()
         Distancemeasure.start()
       },
       "Right angle": function () {
         Distancemeasure.stop()
         RightAnglemeasure.stop()
-        Areameasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
         Volumemeasure.stop()
         RightAnglemeasure.start()
       },
-      "Area": function () {
+      "Ground Area": function () {
         Distancemeasure.stop()
         RightAnglemeasure.stop()
-        Areameasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
         Volumemeasure.stop()
-        Areameasure.start()
+        GroundAreameasure1.start()
+      },
+      "Surface Area": function () {
+        Distancemeasure.stop()
+        RightAnglemeasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
+        Volumemeasure.stop()
+        SurfaceAreameasure1.start()
       },
       "Volume": function () {
         Distancemeasure.stop()
         RightAnglemeasure.stop()
-        Areameasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
         Volumemeasure.stop()
         Volumemeasure.start()
       },
       "Clean": function () {
         Distancemeasure.stop()
-        Areameasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
         RightAnglemeasure.stop()
         Volumemeasure.stop()
         clean()
@@ -91,7 +105,8 @@
     measureFolder.open()
     measureFolder.add(settings, 'Distance')
     measureFolder.add(settings, 'Right angle')
-    measureFolder.add(settings, 'Area')
+    measureFolder.add(settings, 'Ground Area')
+    measureFolder.add(settings, 'Surface Area')
     measureFolder.add(settings, 'Volume')
     measureFolder.add(settings, 'Clean')
   </script>
