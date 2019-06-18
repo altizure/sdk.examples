@@ -1,0 +1,115 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 6.10 Interactive Measure Tool </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+  <script type="text/javascript" src="./Measure.es5.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        poseTo: {
+          alt: 212.2235806111245,
+          lat: 22.536633430256252,
+          lng: 113.93907438121158,
+          north: 49.46951323827608,
+          tilt: 59.112865195674686
+        }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: true,
+        orbitRing: true
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+    var altmarker
+
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+      .then(function (res) {
+        altmarker = res
+      })
+
+    let Distancemeasure = new DistanceMeasure({ sandbox: sandbox })
+    let RightAnglemeasure = new RightAngleMeasure({ sandbox: sandbox })
+    let GroundAreameasure1 = new GroundAreameasure({ sandbox: sandbox, altmarker: altmarker })
+    let SurfaceAreameasure1 = new SurfaceAreameasure({ sandbox: sandbox })
+    let Volumemeasure = new VolumeMeasure({ sandbox: sandbox, altmarker: altmarker })
+
+  </script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+    var gui = new dat.GUI()
+
+    let settings = {
+      "Distance": function () {
+        Distancemeasure.stop()
+        RightAnglemeasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
+        Volumemeasure.stop()
+        Distancemeasure.start()
+      },
+      "Right angle": function () {
+        Distancemeasure.stop()
+        RightAnglemeasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
+        Volumemeasure.stop()
+        RightAnglemeasure.start()
+      },
+      "Ground Area": function () {
+        Distancemeasure.stop()
+        RightAnglemeasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
+        Volumemeasure.stop()
+        GroundAreameasure1.start()
+      },
+      "Surface Area": function () {
+        Distancemeasure.stop()
+        RightAnglemeasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
+        Volumemeasure.stop()
+        SurfaceAreameasure1.start()
+      },
+      "Volume": function () {
+        Distancemeasure.stop()
+        RightAnglemeasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
+        Volumemeasure.stop()
+        Volumemeasure.start()
+      },
+      "Clean": function () {
+        Distancemeasure.stop()
+        GroundAreameasure1.stop()
+        SurfaceAreameasure1.stop()
+        RightAnglemeasure.stop()
+        Volumemeasure.stop()
+        clean()
+      }
+    }
+
+    let measureFolder = gui.addFolder('Measurement')
+    measureFolder.open()
+    measureFolder.add(settings, 'Distance')
+    measureFolder.add(settings, 'Right angle')
+    measureFolder.add(settings, 'Ground Area')
+    measureFolder.add(settings, 'Surface Area')
+    measureFolder.add(settings, 'Volume')
+    measureFolder.add(settings, 'Clean')
+  </script>
+</body>
+
+</html>
