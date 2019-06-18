@@ -1,4 +1,4 @@
-# Altizure Sandbox 3D SDK 更新日志
+# Altizure Javascript 3D SDK 更新日志
 
 ### 2.11.3
 __发布时间:__
