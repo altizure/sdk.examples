@@ -46,7 +46,10 @@
       sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
         .then(function(res) {
           altmarker = res   
-          setUpUI(altmarker)               
+          return res.initialized
+        })
+        .then(function(res) {
+          setUpUI(altmarker)
         })
 
       let volume1 = {

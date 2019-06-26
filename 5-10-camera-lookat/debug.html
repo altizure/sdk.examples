@@ -37,6 +37,9 @@
       let altmarker0, altmarker1, altmarker2
       Promise.all([{ id: '5849104597b73e0b090c01e8' }, { id: '58428f1d97b73e0b090675cd' }, { id: '572e2668ad5ed4204d2f8e5a' }].map(function (obj) {
         return sandbox.add('AltizureProjectMarker', { pid: obj.id })
+          .then(function (res) {
+            return res.initialized
+          })
       })).then(function (values) {
         altmarker0 = values[0]
         altmarker1 = values[1]
@@ -72,7 +75,7 @@
             return new altizure.LngLatAlt(pt.lng, pt.lat, pt.alt)
           }),
           top: 40,
-          bottom: 0.1,
+          bottom: 1,
           color: 0x0000ff,
           opacity: 0.3
         },
