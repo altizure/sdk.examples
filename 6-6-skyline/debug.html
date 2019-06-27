@@ -76,6 +76,9 @@
       })
       .then(function(m) {
         altmarker = m
+        return m.initialized
+      })
+      .then(function(m) {
         setUpUI()
       })
       if (Stats) {
@@ -101,12 +104,12 @@
 
       let cameraMarker = null
       function updateCameraMarker () {
-        // todo
-        let camera = calculator._perspectiveCamera
+        let camera = calculator.camera
         if (cameraMarker === null) {
           cameraMarker = new altizure.CameraMarker({
             sandbox: sandbox,
-            camToEarth: camera.projectionMatrix.clone().elements,
+            // randomly assign a position as it will be updated later
+            position: {lng: 114, lat: 22, alt: 0.1},
             showNear: true,
             showFar: true
           })
