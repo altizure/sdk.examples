@@ -57,6 +57,12 @@ _______________________________
 
     - 无法组合不同类型纹理。
 
+5. 接口设计缺陷:
+
+    - 接口 camera.pose 和 marker.pose 语义上重复，但是却表示不相同的意义，接口参数也不同，非常容易导致概念混淆。
+
+    - 接口 camera.mat 迫使用户使用不明含义的空间变换矩阵数组。并且没有将内部数学进行足够封装，导致升级时接口无法兼容。
+
 _______________________________
 
 ## 如何提前测试？
@@ -66,29 +72,79 @@ _______________________________
 绝大部分接口与 sdk2 没有变化
 
 ### 与 SDK2 有变化的部分
+1. `camera pose` 更名， 涉及
+    ```
+    sandbox::camera::pose // 将更名为 `sandbox::camera::center`。
+    sandbox::camera::flyTo // 将更名为 `sandbox::camera::flyToCenter`。
+    ```
+    原有接口作废。
 
-1. `camera matrix`
+    *升级方法*：
+
+    将`sandbox::camera::pose` 替换为 `sandbox::camera::center`
+
+    `sandbox::camera::flyTo` 替换为 `sandbox::camera::flyToCenter`
+
+2. 初始化 Sandbox 时，camera pose 相关的更名。
+
+    `options.camera.poseTo` 更名为 `options.camera.center`
+
+    `options.camera.flyTo` 更名为 `options.camera.flyToCenter`
+
+    原有接口作废。
+
+    *升级方法*：
+
+    升级前:
+
+      ``` js
+      let options = {
+        ...
+        camera: {
+          poseTo: { // 更名 `center`
+            alt: 50000000,
+            ...
+          },
+          flyTo: { // 更名 `flyToCenter`
+            alt: 600,
+            ...
+          }
+        }
+      }
+      let sandbox = new altizure.Sandbox('page-content', options)
+      ```
+    
+      升级后:
+
+      ``` js
+      let options = {
+        ...
+        camera: {
+          center: { // 更名
+            alt: 50000000,
+            ...
+          },
+          flyToCenter: { // 更名
+            alt: 600,
+            ...
+          }
+        }
+      }
+      let sandbox = new altizure.Sandbox('page-content', options)
+      ```
+3. `camera matrix` 以下接口将从v3 中移除， 涉及
     ```
     Sandbox::camera::mat
     Sandbox::camera::flyToMat
-    Sandbox::camera::flyToCamToEarth
     Sandbox::camera::matToPose
     ```
 
-    ~ 升级方法 ~：
+    *升级方法*：
 
     以上涉及相机姿态矩阵 (范例 5.5)，可以先用 matToPose 转化，再使用 Sandbox::camera::flyTo 替换。
     如果您的代码中使用了以上接口，升级可参考 [升级范例](https://github.com/altizure/sdk.examples/tree/master/5-5-camera-mat/v3_upgrade.html) 
 
-2. `camToEarth` 的值不同于以前
-
-    如范例5.6 CameraMarker 类的初始化矩阵 camToEarth，范例5.8可视分析，范例7.3视频融合
-    
-    ~ 升级方法 ~：
-
-    使用 sdk3，重新获取 camera.mat 值，或重新调整 matrix 值。
-
-3. `sandbox::earthView::camera`
+4. `sandbox::earthView::camera`
 
     sandbox::earthView::camera::near
 
