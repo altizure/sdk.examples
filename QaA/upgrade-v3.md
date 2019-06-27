@@ -67,7 +67,15 @@ _______________________________
 
 ## 如何提前测试？
 
-引用 https://unpkg.com/altizure@beta/release/altizure-sdk.min.js
+引用
+
+https://beta.altizure.cn/sdk3
+
+or
+
+https://beta.altizure.com/sdk3
+
+
 
 绝大部分接口与 sdk2 没有变化
 
@@ -169,7 +177,7 @@ _______________________________
 
 - 另外，可以使用以下永久地址
 
-    https://beta.altizure.com/sdk-2.12.6 
+    https://beta.altizure.cn/sdk-2.12.6 
 
     https://beta.altizure.cn/sdk-2.12.6 
 
