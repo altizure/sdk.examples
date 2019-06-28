@@ -177,9 +177,9 @@ _______________________________
 
 - 另外，可以使用以下永久地址
 
-    https://beta.altizure.cn/sdk-2.12.12
+    https://beta.altizure.cn/sdk-2.12.13
 
-    https://beta.altizure.cn/sdk-2.12.12
+    https://beta.altizure.cn/sdk-2.12.13
 
 
  
