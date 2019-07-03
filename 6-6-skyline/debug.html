@@ -76,9 +76,15 @@
       })
       .then(function(m) {
         altmarker = m
+<<<<<<< HEAD
         return altmarker.initialized
       })
       .then(function(m){
+=======
+        return m.initialized
+      })
+      .then(function(m) {
+>>>>>>> master
         setUpUI()
       })
       if (Stats) {
@@ -108,7 +114,12 @@
         if (cameraMarker === null) {
           cameraMarker = new altizure.CameraMarker({
             sandbox: sandbox,
+<<<<<<< HEAD
             camToEarth: new Array(16),
+=======
+            // randomly assign a position as it will be updated later
+            position: {lng: 114, lat: 22, alt: 0.1},
+>>>>>>> master
             showNear: true,
             showFar: true
           })
