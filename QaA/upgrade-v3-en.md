@@ -1,14 +1,14 @@
 # Altizure Js SDK 3
 
-- 使用无限细分曲面逼近地球。
+- Simulate the Earth with an infinite subdivision surface
 
-- 对于地球、实景模型进行统一内存、显存管理。避免因为内存、显存引起的应用崩溃。
+- Unified memory and video memory management for the Earth and Altizure models. Avoid application crashes caused by memory and video memory.
 
-- 地球的数学模型严格遵从 WGS84 标准，满足高精度地理应用。
+- The mathematical model of the Earth strictly complies with the WGS84 standard, meet the requirements of high precision geographic applications.
 
-- 笛卡尔坐标系和 ECEF 一致，使用真实世界尺寸。
+- The Cartesian coordinate system used is consistent with ECEF, using real world dimensions.
 
-- 提升地球地图纹理加载策略，允许跳过中间层级加载。未来会开放更多底图相关功能。
+- Improve the earth map texture loading strategy, allowing skipping intermediate level. More basemap related functions will be opened in the future.
 
 _______________________________
 
@@ -65,9 +65,9 @@ _______________________________
 
 _______________________________
 
-## 如何提前测试？
+## How to test the SDK 3 in advance？
 
-引用
+Reference
 
 https://beta.altizure.cn/sdk3
 
@@ -75,45 +75,46 @@ or
 
 https://beta.altizure.com/sdk3
 
+in your applicaton.
+
+Most of the interfaces have no change with SDK 2
 
 
-绝大部分接口与 SDK 2 没有变化
-
-### 与 SDK 2 有变化的部分
-1. `camera pose` 更名， 涉及
+### The part which different from sdk 2
+1. `camera pose` rename， involving
     ```
-    sandbox::camera::pose // 将更名为 `sandbox::camera::center`。
-    sandbox::camera::flyTo // 将更名为 `sandbox::camera::flyToCenter`。
+    sandbox::camera::pose // will be renamed to `sandbox::camera::center`。
+    sandbox::camera::flyTo // will be renamed to `sandbox::camera::flyToCenter`。
     ```
-    原有接口作废。
+    The original interface will be void.
 
-    *升级方法*：
+    *Upgrade method*：
 
-    将`sandbox::camera::pose` 替换为 `sandbox::camera::center`
+    `sandbox::camera::pose` will be replaced with `sandbox::camera::center`
 
-    `sandbox::camera::flyTo` 替换为 `sandbox::camera::flyToCenter`
+    `sandbox::camera::flyTo` will be replaced with `sandbox::camera::flyToCenter`
 
-2. 初始化 Sandbox 时，camera pose 相关的更名。
+2. Renaming of camera pose related content when initializing Sandbox
 
-    `options.camera.poseTo` 更名为 `options.camera.center`
+    `options.camera.poseTo` will be renamed to `options.camera.center`
 
-    `options.camera.flyTo` 更名为 `options.camera.flyToCenter`
+    `options.camera.flyTo` will be renamed to `options.camera.flyToCenter`
 
-    原有接口作废。
+    The original interface will be void.
 
-    *升级方法*：
+    *Upgrade method*：
 
-    升级前:
+    Before upgrade:
 
       ``` js
       let options = {
         ...
         camera: {
-          poseTo: { // 更名 `center`
+          poseTo: { // rename `center`
             alt: 50000000,
             ...
           },
-          flyTo: { // 更名 `flyToCenter`
+          flyToCenter: { // rename `flyToCenterCenter`
             alt: 600,
             ...
           }
@@ -122,17 +123,17 @@ https://beta.altizure.com/sdk3
       let sandbox = new altizure.Sandbox('page-content', options)
       ```
     
-      升级后:
+      After upgrade:
 
       ``` js
       let options = {
         ...
         camera: {
-          center: { // 更名
+          center: { // rename
             alt: 50000000,
             ...
           },
-          flyToCenter: { // 更名
+          flyToCenterCenter: { // rename
             alt: 600,
             ...
           }
@@ -140,17 +141,17 @@ https://beta.altizure.com/sdk3
       }
       let sandbox = new altizure.Sandbox('page-content', options)
       ```
-3. `camera matrix` 以下接口将从 SDK 3 中移除， 涉及
+3. `camera matrix` The following interfaces will be removed from SDK 3, involving 
     ```
     Sandbox::camera::mat
     Sandbox::camera::flyToMat
     Sandbox::camera::matToPose
     ```
 
-    *升级方法*：
+    *Upgrade method*：
 
-    以上涉及相机姿态矩阵 (范例 5.5)，可以先用 matToPose 转化，再使用 Sandbox::camera::flyToCenter 替换。
-    如果您的代码中使用了以上接口，升级可参考 [升级范例](https://github.com/altizure/sdk.examples/tree/master/5-5-camera-mat/v3_upgrade.html) 
+    The above part about the camera pose matrix (as in Example 5.5) can be converted with matToPose and then replaced with Sandbox::camera::flyToCenter.
+    If the above interface is used in your code, the upgrade process can refer to [Upgrade Example](https://github.com/altizure/sdk.examples/tree/master/5-5-camera-mat/v3_upgrade.html) 
 
 4. `sandbox::earthView::camera`
 
@@ -158,29 +159,29 @@ https://beta.altizure.com/sdk3
 
     sandbox::earthView::camera::far
 
-    以上接口返回数值尺度发生改变，现在返回的数值以米为单位，是原数值的 6378137 倍（地球半径）。
+    The scale of the value returned by the above interface changes, and the value returned now is in meters, which is 6378137 times the original value (earth radius).
 
 
-### 报告新的问题
+### Report new issues
 
-    可以提交 issue 至 https://github.com/altizure/sdk.examples/issues
+    You can submit an issue to https://github.com/altizure/sdk.examples/issues
 
-### 尚未更新至最新版本的范例
-    范例 5.6
-    范例 5.8
-    范例 5.13
+### Samples to be updated
+    Sample 5.6
+    Sample 5.8
+    Sample 5.13
 
 _______________________________
 
-## 不想升级？如何继续使用 SDK 2:
+## Don't want to upgrade? And how to continue using SDK 2?
 
-- 网站链接都将持续指向 SDK 2
+- The following website links will continue to point to SDK 2
 
     beta.altizure.cn/sdk
 
     beta.altizure.com/sdk
 
-- 另外，可以使用以下永久地址
+- In addition, the following permanent addresses can also be used
 
     https://beta.altizure.cn/sdk-2.12.13
 

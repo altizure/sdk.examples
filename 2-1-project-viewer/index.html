@@ -15,13 +15,13 @@
         key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
       },
       camera: {
-        poseTo: {
+        center: {
           lat: 22.5,
           lng: 114,
           alt: 1000,
           tilt: 45
         },
-        flyTo: {
+        flyToCenter: {
           lat: 22.5,
           lng: 114,
           alt: 1000,
@@ -70,7 +70,7 @@
       })
       .then(() => { // handle tilt details
         // tilt up the project if the looking direction is too horizontal
-        let {tilt} = sandbox.camera.pose
+        let {tilt} = sandbox.camera.center
         if (tilt >= 70) {
           const up = Math.max(10, Math.min(tilt - 70, 20))
           // wait for the rendering
