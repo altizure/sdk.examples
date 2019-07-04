@@ -57,10 +57,7 @@
       ]
       let invisibleMarker = null
       let cameraMarkers = ms.map(function(mat, index)  {
-        let convertedPose = sandbox.camera.matToPose(mat)
-        console.log(convertedPose)
         let marker = new altizure.CameraMarker({
-      
           sandbox: sandbox, camToEarth: mat, showFar: false, showNear: true, color: 0xff0000
         })
         marker.interactable = true
@@ -77,41 +74,41 @@
         return marker
       })
 
-      // function visualizeCurrentCamera () {
+      function visualizeCurrentCamera () {
 
-      //   let marker = new altizure.CameraMarker({
-      //     sandbox: sandbox, camToEarth: sandbox.camera.mat
-      //   })
-      //   marker.interactable = true
-      //   marker.on('mouseenter', function(event)  {marker.color = 0xffffff})
-      //   marker.on('mouseleave', function(event) {marker.color = 0xff0000})
-      //   marker.on('click', function(event) {
-      //     marker.visible = false
-      //     if (invisibleMarker) {
-      //       invisibleMarker.visible = true
-      //     }
-      //     invisibleMarker = marker
-      //     sandbox.camera.flyToCamToEarth(marker.camToEarth)
-      //   })
-      //   updateCameraMarker(marker)
-      //   cameraMarkers.push(marker)
-      // }
-      // function updateCameraMarker (marker) {
-      //   marker.fov = sandbox.earthView.camera.fov
-      //   marker.aspect = sandbox.earthView.camera.aspect
-      //   marker.near = sandbox.earthView.camera.near * 500
-      //   marker.far = sandbox.earthView.camera.far
-      // }
+        let marker = new altizure.CameraMarker({
+          sandbox: sandbox, camToEarth: sandbox.camera.mat
+        })
+        marker.interactable = true
+        marker.on('mouseenter', function(event)  {marker.color = 0xffffff})
+        marker.on('mouseleave', function(event) {marker.color = 0xff0000})
+        marker.on('click', function(event) {
+          marker.visible = false
+          if (invisibleMarker) {
+            invisibleMarker.visible = true
+          }
+          invisibleMarker = marker
+          sandbox.camera.flyToCamToEarth(marker.camToEarth)
+        })
+        updateCameraMarker(marker)
+        cameraMarkers.push(marker)
+      }
+      function updateCameraMarker (marker) {
+        marker.fov = sandbox.earthView.camera.fov
+        marker.aspect = sandbox.earthView.camera.aspect
+        marker.near = sandbox.earthView.camera.near * 500
+        marker.far = sandbox.earthView.camera.far
+      }
 
     </script>
     <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
     <script>
-      // var Operations = function() {
-      //   this.visualize = function() {visualizeCurrentCamera()}
-      // }
-      // var gui = new dat.GUI()
-      // var op = new Operations()
-      // gui.add(op, 'visualize').name('Add Camera')
+      var Operations = function() {
+        this.visualize = function() {visualizeCurrentCamera()}
+      }
+      var gui = new dat.GUI()
+      var op = new Operations()
+      gui.add(op, 'visualize').name('Add Camera')
     </script>
   </body>
 </html>
