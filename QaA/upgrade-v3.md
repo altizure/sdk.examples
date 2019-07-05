@@ -1,3 +1,13 @@
+# Languages:
+
+* [**English Version**](./upgrade-v3-en.md)
+
+* [**中文版本**](./upgrade-v3.md)
+
+
+_______________________________
+
+
 # Altizure Js SDK 3
 
 - 使用无限细分曲面逼近地球。
@@ -154,9 +164,10 @@ https://beta.altizure.com/sdk3
 
 4. `sandbox::earthView::camera`
 
+    ```
     sandbox::earthView::camera::near
-
     sandbox::earthView::camera::far
+    ```
 
     以上接口返回数值尺度发生改变，现在返回的数值以米为单位，是原数值的 6378137 倍（地球半径）。
 
