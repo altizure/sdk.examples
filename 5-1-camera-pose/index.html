@@ -6,17 +6,17 @@
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
     <script>
       let options = {
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { alt:100000,
+          center: { alt:100000,
             lat:22.538388886344876,
             lng:113.94255600866971 },
-          flyTo: { alt:1020.0739295752213,
+          flyToCenter: { alt:1020.0739295752213,
             lat:22.538388886344876,
             lng:113.94255600866971,
             north:-27.271585092584015,
@@ -49,10 +49,10 @@
 
       function cameraLoop () {
         // get current pose
-        console.log(sandbox.camera.pose) 
+        console.log(sandbox.camera.center) 
 
         // set camera pose
-        sandbox.camera.pose = camPoses[cnt % camPoses.length]
+        sandbox.camera.center = camPoses[cnt % camPoses.length]
 
         // go to next pose after 3 sec
         cnt++
