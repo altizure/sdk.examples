@@ -56,7 +56,7 @@
         let altmarker, altmarkerpos, polygonMarkers, boundary
         sandbox.add('AltizureProjectMarker', {pid: projectMarkerID})
         .then(function(m) {
-          sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
+          sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
           return m.initialized
         })
         .then(function(m){

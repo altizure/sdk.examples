@@ -62,12 +62,12 @@
         key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
       },
       camera: {
-        poseTo: {
+        center: {
           alt: 150,
           lat: point_list[2].lat,
           lng: point_list[2].lng,
         },
-        flyTo: {
+        flyToCenter: {
           alt: 150,
           lat: point_list[2].lat,
           lng: point_list[2].lng,
@@ -109,7 +109,7 @@
       })
       .then(() => {
         Visibility_analysis_overlap()
-        camera_alt = sandbox.camera.pose.alt
+        camera_alt = sandbox.camera.center.alt
       })
       .then(() => {
         timer = setInterval(timer_change, 1000)
@@ -158,7 +158,7 @@
     }
 
     function timer_change() {
-      if (Math.abs(camera_alt - sandbox.camera.pose.alt) >= 10) {
+      if (Math.abs(camera_alt - sandbox.camera.center.alt) >= 10) {
         visibilityManage.map((manage, i) => {
           if (judge[i] == true) {
           manage.update({
@@ -166,7 +166,7 @@
           })
           }
         })
-        camera_alt = sandbox.camera.pose.alt
+        camera_alt = sandbox.camera.center.alt
       }
     }
   </script>

@@ -42,7 +42,7 @@
         return m.initialized
       })
       .then(function(m){
-        sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
+        sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
         altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(projectMarker)
         .then(function(result) {

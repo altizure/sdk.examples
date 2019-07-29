@@ -13,10 +13,10 @@
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { alt:100000,
+          center: { alt:100000,
             lat:22.538388886344876,
             lng:113.94255600866971 },
-          flyTo: { alt:1020.0739295752213,
+          flyToCenter: { alt:1020.0739295752213,
             lat:22.538388886344876,
             lng:113.94255600866971,
             north:-27.271585092584015,
@@ -50,8 +50,8 @@
       function cameraLoop () {
         // camera.flyTo is a smooth transition from one pose to another
         // as a comparision, camera.pose is more like jumpping
-        sandbox.camera.flyTo(camPoses[cnt % camPoses.length])
-        // sandbox.camera.pose = {north: 90 * (cnt % 4 - 2), tilt: (cnt % 6) * 10 + 20}
+        sandbox.camera.flyToCenter(camPoses[cnt % camPoses.length])
+        // sandbox.camera.center = {north: 90 * (cnt % 4 - 2), tilt: (cnt % 6) * 10 + 20}
         cnt++
         setTimeout(cameraLoop, 3000)
       }

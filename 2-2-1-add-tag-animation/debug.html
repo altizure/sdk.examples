@@ -17,7 +17,7 @@
         key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
       },
       camera: {
-        poseTo: {
+        center: {
           alt: 621.1335397083853,
           lat: 22.536956027594783,
           lng: 113.9410408816787,
@@ -409,10 +409,130 @@
       scale: ReflectionScale
     })
     tag17.isSprite = false
-    tag17.tagQuaternion = { x: 0, y: 0, z: Math.PI, order: 'XYZ', isEuler: true }
+    tag17.tagQuaternion = { x: 0, y: Math.PI, z: Math.PI, order: 'XYZ', isEuler: true }
 
+    let textTag5 = new altizure.TextTagMarker({
+      text: '波纹组合特效',
+      textStyle: {
+        fillStyle: 'rgb(255, 255, 255)',
+        font: '500 60px Arial',
+        margin: 5,
+        outlineWidth: 0.1,
+        outlineStyle: 'rgb(0, 0, 0)'
+      },
+      position: { lng: 113.940183, lat: 22.5368812 - 0.0005, alt: 90 },
+      sandbox: sandbox,
+      scale: 1
+    })
 
-    let textTag4 = new altizure.TextTagMarker({
+    let tag18 = new altizure.TagMarker({
+      imgUrl: '../public/assets/img/tag_animation/19.png',
+      position: { lng: 113.940183, lat: 22.5368812 - 0.0005, alt: 50 },
+      sandbox: sandbox,
+      scale: 0.001,
+    })
+    tag18.isSprite = false
+    tag18.tagQuaternion = { x: 0, y: 0, z: 0, order: 'XYZ', isEuler: true }
+    let z18 = 0.001
+    let zo18 = 2
+    let o18 = tag18.opacity
+    let oo18 = tag18.opacity
+    let n18 = 0
+    mySetInterval(function () {
+      if (z18 == 0.001) {
+        tag18.opacity = 1
+        o18 = oo18
+      }
+      n18++
+      z18 = z18 + zo18 / 10
+      tag18.scale = z18
+      o18 = o18 - 0.005
+      tag18.opacity = o18
+
+      if (n18 == 30) {
+        z18 = 0.001
+        tag18.scale = z18
+        n18 = 0
+      }
+    }, 100)
+    let tag19 = new altizure.TagMarker({
+      imgUrl: '../public/assets/img/tag_animation/19.png',
+      position: { lng: 113.940183, lat: 22.5368812 - 0.0005, alt: 50 },
+      sandbox: sandbox,
+      scale: 0.001,
+    })
+    tag19.isSprite = false
+    tag19.tagQuaternion = { x: 0, y: 0, z: 0, order: 'XYZ', isEuler: true }
+    let z19 = 0.001
+    let zo19 = 2
+    let o19 = tag19.opacity
+    let oo19 = tag19.opacity
+    let n19 = 0
+    let tag_interval19
+    let tag_timeout19 = setTimeout(function () {
+      mySetInterval(function () {
+        if (z19 == 0.001) {
+          tag19.opacity = 1
+          o19 = oo19
+        }
+        z19 = z19 + zo19 / 10
+        tag19.scale = z19
+        o19 = o19 - 0.005
+        tag19.opacity = o19
+        n19++
+        if (n19 == 30) {
+          z19 = 0.001
+          tag19.scale = z19
+          n19 = 0
+        }
+      }, 100)
+    }, 1500)
+
+    let tag20 = new altizure.TagMarker({
+      imgUrl: '../public/assets/img/tag_animation/19.png',
+      position: { lng: 113.940183, lat: 22.5368812 - 0.0005, alt: 50 },
+      sandbox: sandbox,
+      scale: 0.001,
+    })
+    tag20.isSprite = false
+    tag20.tagQuaternion = { x: 0, y: 0, z: 0, order: 'XYZ', isEuler: true }
+    let z20 = 0.001
+    let zo20 = 2
+    let o20 = tag20.opacity
+    let oo20 = tag20.opacity
+    let n20 = 0
+    let tag_timeout20_1
+    let tag_timeout20 = setTimeout(function () {
+
+      mySetInterval(function () {
+        if (z20 == 0.001) {
+          tag20.opacity = 1
+          o20 = oo20
+        }
+        z20 = z20 + zo20 / 10
+        tag20.scale = z20
+        n20++
+        o20 = o20 - 0.005
+        tag20.opacity = o20
+
+        if (n20 == 30) {
+          z20 = 0.001
+          tag20.scale = z20
+          n20 = 0
+        }
+      }, 100)
+
+    }, 2450)
+
+    function mySetInterval(fn, millisec) {
+      function interval() {
+        setTimeout(interval, millisec);
+        fn();
+      }
+      setTimeout(interval, millisec)
+    }
+
+      let textTag4 = new altizure.TextTagMarker({
       text: '环形旋转特效',
       textStyle: {
         fillStyle: 'rgb(255, 255, 255)',
@@ -429,6 +549,12 @@
     while (listn < 15) {
       let remainder = listn % 4
       let integer = parseInt(listn / 4)
+      let string = "z1 + 2 * Math.PI / 15"
+      let interval = 100
+      if (listn == 5 || listn == 6) {
+        string = "z1 - 2 * Math.PI / 9"
+        interval = 150
+      }
 
       let tag1 = new altizure.TagMarker({
         imgUrl: '../public/assets/img/tag_animation/list/' + listn + '.png',
@@ -442,9 +568,9 @@
       tag1.tagQuaternion = { x: 0, y: 0, z: 0, order: 'XYZ', isEuler: true }
       let z1 = 0
       let tag_interval1 = setInterval(function () {
-        z1 = z1 + 2 * Math.PI / 15
+        z1 = eval(string)
         tag1.tagQuaternion = { x: 0, y: 0, z: z1, order: 'XYZ', isEuler: true }
-      }, 100);
+      }, interval);
       listn++
     }
   </script>
