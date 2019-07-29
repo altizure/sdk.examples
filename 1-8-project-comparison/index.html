@@ -13,6 +13,13 @@
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
+        camera: {
+          center: {
+            alt: 632.3638155861797,
+            lat: 30.9606861645347,
+            lng: 121.43563126339929
+          }
+        },
         renderItems: {
           earth: true,
           earthUseTexture: true,
@@ -24,14 +31,14 @@
       let sandbox1 = new altizure.Sandbox('page-content1', options)
       let sandbox2 = new altizure.Sandbox('page-content2', options)
 
-      // add project: https://www.altizure.com/project/58428f1d97b73e0b090675cd/model
-      // at the default GPS position
-      // Note: your developer key must have access to the project, and the project must have valid GPS information.
+      // add two demo projects
       sandbox1.add('AltizureProjectMarker', {pid: '59226d12b8cfc91d91c6e3c4'})
-        .then(m => m.focus())
+        .then(m => {
+          pose = sandbox1.camera.pose
 
-      sandbox2.add('AltizureProjectMarker', {pid: '5a1b75ba3330b52b3cffdf28'})
-        .then(m => m.focus())
+          sandbox2.add('AltizureProjectMarker', {pid: '5a1b75ba3330b52b3cffdf28', pose: { position: m.position }})
+            .then(m => sandbox2.camera.pose = pose)
+        })
     </script>
   </body>
 </html>
