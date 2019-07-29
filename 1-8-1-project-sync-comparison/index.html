@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 1.8 Project Comparison </title>
+    <title> Altizure 1.8.1 Project Sync Comparison </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body style="margin: 0;padding: 0;display:flex;flex-direction: row">
@@ -28,8 +28,15 @@
         }
       }
 
+      let pose
+
       let sandbox1 = new altizure.Sandbox('page-content1', options)
       let sandbox2 = new altizure.Sandbox('page-content2', options)
+
+      // bind sandbox2 camera with sandbox1, so changing the pose of sandbox1 will affect sandbox2
+      sandbox1.on('cameraChange', function () {
+        sandbox2.camera.pose = sandbox1.camera.pose
+      })
 
       // add two demo projects
       sandbox1.add('AltizureProjectMarker', {pid: '59226d12b8cfc91d91c6e3c4'})
