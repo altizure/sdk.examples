@@ -1,0 +1,37 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 1.8 Project Comparison </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0;padding: 0;display:flex;flex-direction: row">
+    <div id="page-content1" style="width: 50%;height: 100vh;border: solid 1px white"></div>
+    <div id="page-content2" style="width: 50%;height: 100vh;border: solid 1px white"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox1 = new altizure.Sandbox('page-content1', options)
+      let sandbox2 = new altizure.Sandbox('page-content2', options)
+
+      // add project: https://www.altizure.com/project/58428f1d97b73e0b090675cd/model
+      // at the default GPS position
+      // Note: your developer key must have access to the project, and the project must have valid GPS information.
+      sandbox1.add('AltizureProjectMarker', {pid: '59226d12b8cfc91d91c6e3c4'})
+        .then(m => m.focus())
+
+      sandbox2.add('AltizureProjectMarker', {pid: '5a1b75ba3330b52b3cffdf28'})
+        .then(m => m.focus())
+    </script>
+  </body>
+</html>
