@@ -39,9 +39,10 @@ with your own key
 
 ### What are the available versions? ###
 
-Three versions are provided:
+Four versions are provided:
 
-* beta: https://beta.altizure.cn/sdk
+* beta: https://beta.altizure.cn/sdk3
+* v2: https://beta.altizure.cn/sdk
 * stable: https://www.altizure.com/sdk
 * China: https://www.altizure.cn/sdk
 
