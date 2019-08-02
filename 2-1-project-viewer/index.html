@@ -8,7 +8,8 @@
 
 <body style="margin: 0px; padding: 0px;">
   <div id="page-content"></div>
-  <script type="text/javascript" src="https://unpkg.com/altizure@1.2.22/release/altizure-sdk.min.js"></script>
+  <!-- <script type="text/javascript" src="https://unpkg.com/altizure@1.2.22/release/altizure-sdk.min.js"></script> -->
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
   <script>
     let options = {
       altizureApi: {
@@ -40,17 +41,19 @@
 
     let marker
     sandbox.add('AltizureProjectMarker', {
-      pid: '5b94a402fdcbb879b3bd8df1',
+      // pid: '5b94a402fdcbb879b3bd8df1',
       // pid: '5b963f71d1e2037bf80738bd',
       // pid: '5b97a561c1ac675fae3caa7e',
       // pid: '5b97cdd8c1ac675fae3dc76d',
       // pid: '5b974573d1e2037bf8094dd2',
       // pid: '5b96ab4fd1e2037bf808322b',
+      pid: '5d3971be2f8fff4899940faf',
       autoScale: 500,
       pose: {
         // always fix the position because the viewr care nothing about earth
         position: { lng: 114, lat: 22.5, alt: 0 }
-      }
+      },
+      showBBox: true
     })
       .then(projectMarker => {
         marker = projectMarker

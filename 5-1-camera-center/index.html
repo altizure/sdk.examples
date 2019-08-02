@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 5.1 Camera Pose </title>
+    <title> Altizure 5.1 Camera Center </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body style="margin: 0px; padding: 0px;">
@@ -34,7 +34,7 @@
 
       sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
       
-      let camPoses = [
+      let camCenters = [
         {lng: 113.93896355539998, lat: 22.53636773396518, alt: 239.80559688295705, north: 75.24963034992078, tilt: 65.55794365893665},
         {lng: 113.9379351650922, lat: 22.536336856801327, alt: 184.9856514715036, north: 75.24963034992078, tilt: 68.87760857113925},
         {lng: 113.93884290778922, lat: 22.53668315556844, alt: 89.33026010506228, north: 31.64977621454054, tilt: 64.99648207392408},
@@ -52,7 +52,7 @@
         console.log(sandbox.camera.center) 
 
         // set camera pose
-        sandbox.camera.center = camPoses[cnt % camPoses.length]
+        sandbox.camera.center = camCenters[cnt % camCenters.length]
 
         // go to next pose after 3 sec
         cnt++
