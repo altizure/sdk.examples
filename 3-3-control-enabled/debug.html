@@ -1,0 +1,75 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> 3.3 Control Enabled </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script src="../public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          center: { alt: 400,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 55,
+            tilt: 55 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let marker = null
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+        .then(function (m) {
+          marker = m // the created altizure project marker
+          // GUI
+          setProjectUI(marker)
+        })
+
+      function setProjectUI (marker) {
+        function UIController () {
+          this.enabledSwirlUp = true
+          this.enabledSwirlLeft = true
+          this.enabledOrbit = true
+          this.enabledDolly = true
+        }
+
+        var c1 = new UIController()
+        var gui = new dat.GUI()
+        
+        const control = sandbox.control
+        gui.add(c1, 'enabledSwirlUp').onChange(val => {
+          control.enabledSwirlUp = val
+        })
+        gui.add(c1, 'enabledSwirlLeft').onChange(val => {
+          control.enabledSwirlLeft = val
+        })
+        gui.add(c1, 'enabledOrbit').onChange(val => {
+          control.enabledOrbit = val
+        })
+        gui.add(c1, 'enabledDolly').onChange(val => {
+          control.enabledDolly = val
+        })
+      }
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+    </script>
+  </body>
+</html>

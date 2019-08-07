@@ -6,7 +6,8 @@
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
     <script>
       let options = {
         // camera 
@@ -156,9 +157,7 @@
           info.textContent = 'AltizureMarker loading... Please try again later'
         }
       }
-    </script>
-    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
-    <script>
+      
       function setUpUI (altmarker) {
         var PolyMeasureText = function(altmarker, polygon) {
           let scope = this
