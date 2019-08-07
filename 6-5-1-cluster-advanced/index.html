@@ -1,15 +1,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 6.5 Markercluster</title>
+    <title> 6.5 Advanced Cluster </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
-    <script type="text/javascript" src="../../build/three.js"></script>
-    <script type="text/javascript" src="../../build/altizure-core.js"></script>
-    <script type="text/javascript" src="https://beta.altizure.com/sdk-plugin-geojson"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
     <script>
       let options = {
         altizureApi:{
@@ -123,11 +121,6 @@
         cluster.clustering().then(function(clusters) {
           cluster.enable({})
         })
-      }
-
-      if (Stats) {
-        sandbox.earthView._stats = new Stats()
-        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
       }
     </script>
   </body>
