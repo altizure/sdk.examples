@@ -172,6 +172,10 @@ https://beta.altizure.com/sdk3
     以上接口返回数值尺度发生改变，现在返回的数值以米为单位，是原数值的 6378137 倍（地球半径）。
 
 
+### 相关 issue
+
++ [`SDK2` 中对齐的 `Polygon` 和实景模型在 `SDK3` 出现偏移](https://bitbucket.org/jingbo/altizure.sdk.examples/issues/20/coordinate-not-corresponding-between-sdk2)
+
 ### 报告新的问题
 
     可以提交 issue 至 https://github.com/altizure/sdk.examples/issues
