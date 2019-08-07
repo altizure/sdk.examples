@@ -29,6 +29,16 @@
       var tagMarkers = []
       var cluster = new altizure.MarkerCluster({
         sandbox: sandbox,
+        // text style
+        textStyle: {
+            fillStyle: 'rgb(155, 255, 123)',
+            font: 'normal 500 20px Arial',
+            margin:5,
+            outlineWidth: 2,
+            outlineStyle: 'rgb(255, 255, 0)'
+        },
+        pinLength:20,
+        scale:2
       })
       sandbox.add('AltizureProjectMarker', {
         pid: projectMarkerID,
