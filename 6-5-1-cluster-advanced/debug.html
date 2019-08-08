@@ -1,134 +1,141 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title> 6.5 Advanced Cluster </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  </head>
-  <body>
-    <div id="page-content"></div>
-    <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
-    <script type="text/javascript" src="../../build/three.js"></script>
-    <script type="text/javascript" src="../../build/altizure-core.js"></script>
-    <script type="text/javascript" src="https://beta.altizure.com/sdk-plugin-geojson"></script>
-    <script>
-      let options = {
-        altizureApi:{
-          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
-        },
-        renderItems: {
-          earth: true,
-          earthUseTexture: false,
-          featureInView: false,
-          orbitRing: false
-        }
-      }
 
-      let sandbox = new altizure.Sandbox('page-content', options)
-      let projectMarkerID = '58428f1d97b73e0b090675cd'
-      // let projectMarkerID = '5723553732f7a5ee26ff526b'
-      // let projectMarkerID = '5a58de8c93ac3d233f7980c5'
-      let projectMarker
-      var tagMarkers = []
-      var cluster = new altizure.MarkerCluster({
-        sandbox: sandbox,
-        visualizeProperty: 'visualizeWeight'
-      })
-      sandbox.add('AltizureProjectMarker', {
-        pid: projectMarkerID,
-        pose: {
-          position: {lng:114.26335, lat:22.3344,alt:0} // to align with the vector data
-        } 
-      })
-      .then(function(m){
+<head>
+  <meta charset="utf-8">
+  <title> 6.5 Advanced Cluster </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body>
+  <div id="page-content"></div>
+  <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
+  <script type="text/javascript" src="https://beta.altizure.com/sdk-plugin-geojson"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: false
+      }
+    }
+
+    let defalutTextStyle = {
+      fillStyle: 'rgb(155, 155, 255)',
+      font: 'normal 500 40px Arial',
+      margin: 5,
+      outlineWidth: 2,
+      outlineStyle: 'rgb(0, 0, 0)'
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+    let projectMarkerID = '58428f1d97b73e0b090675cd'
+    // let projectMarkerID = '5723553732f7a5ee26ff526b'
+    // let projectMarkerID = '5a58de8c93ac3d233f7980c5'
+    let projectMarker
+    var tagMarkers = []
+    var cluster = new altizure.MarkerCluster({
+      sandbox: sandbox,
+      visualizeProperty: 'visualizeWeight',
+      textStyle: defalutTextStyle
+    })
+    sandbox.add('AltizureProjectMarker', {
+      pid: projectMarkerID,
+      pose: {
+        position: { lng: 114.26335, lat: 22.3344, alt: 0 } // to align with the vector data
+      }
+    })
+      .then(function (m) {
         return m.initialized
       })
-      .then(function(m){
-        sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
+      .then(function (m) {
+        sandbox.camera.flyToCenter({ lng: m.position.lng, lat: m.position.lat, alt: 4000 }, 1)
         projectMarker = m
         altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(projectMarker)
-        .then(function(result) {
-          visualizeGeoJSONData(result.geojson)
-          sandbox.positionsAltitude(positions).map(function(alt, i) {
-            tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
-            tagMarkers[i].depthTest = true
-          })
-
-          setTimeout(start(500), 2000)
-        })
-      })
-      function visualizeGeoJSONData (geojson) {
-        let features = geojson.features
-        for (let i = 0; i < features.length; ++i) {
-          let feature = features[i]
-          if (feature.geometry.type === 'Polygon') {
-            let pt = [0, 0]
-            let ptarray = feature.geometry.coordinates[0]
-            ptarray.map(function(v) {
-              pt[0] += v[0]
-              pt[1] += v[1]
+          .then(function (result) {
+            visualizeGeoJSONData(result.geojson)
+            sandbox.positionsAltitude(positions).map(function (alt, i) {
+              tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, { alt: alt })
+              tagMarkers[i].depthTest = true
             })
-            pt[0] /= ptarray.length
-            pt[1] /= ptarray.length
-            visualizeAsTagMarker(pt)
-          }
-        }
-      }
 
-      let positions = []
-      function visualizeAsTagMarker (point) {
-        let pos = new altizure.LngLatAlt(point[0],point[1],0.1)
-        positions.push(pos)
-        const value = Math.round(Math.random() * 100)
-        // let tag = new altizure.TagMarker({
-        //   sandbox: sandbox,
-        //   position: pos,
-        //   imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
-        //   scale: 1
-        // })
-        let tag = new altizure.TextTagMarker({
-          sandbox: sandbox,
-          text: value.toString(),
-          textStyle: {
-            fillStyle: 'rgb(255, 255, 0)',
-            font: 'normal 500 50px Arial',
-            outlineWidth: 10,
-            outlineStyle: 'rgb(255, 0, 0)'
-          },
-          position: pos,
-          scale: 1
-        })
-        // tag.sprite.material.color.set(0xff0000)
-        tag.pinLength = 15
-        tag.visualizeWeight = value
-        tagMarkers.push(tag)
-        cluster.add(tag)
-      }
-
-      const debounce = function(func, delay) {
-        let inDebounce
-        return function() {
-          const context = this
-          const args = arguments
-          clearTimeout(inDebounce)
-          inDebounce = setTimeout(function() {func.apply(context, args), delay})
-        }
-      }
-
-      function start(debounce_delay) {
-        sandbox.on('cameraChange', debounce(function () {
-          cluster.clustering().then(function(clusters){
-            cluster.enable({})
+            setTimeout(start(500), 2000)
           })
-        }, debounce_delay))
-        cluster.clustering().then(function(clusters) {
+      })
+    function visualizeGeoJSONData(geojson) {
+      let features = geojson.features
+      for (let i = 0; i < features.length; ++i) {
+        let feature = features[i]
+        if (feature.geometry.type === 'Polygon') {
+          let pt = [0, 0]
+          let ptarray = feature.geometry.coordinates[0]
+          ptarray.map(function (v) {
+            pt[0] += v[0]
+            pt[1] += v[1]
+          })
+          pt[0] /= ptarray.length
+          pt[1] /= ptarray.length
+          visualizeAsTagMarker(pt)
+        }
+      }
+    }
+
+    let positions = []
+    function visualizeAsTagMarker(point) {
+      let pos = new altizure.LngLatAlt(point[0], point[1], 0.1)
+      positions.push(pos)
+      const value = Math.round(Math.random() * 100)
+      // let tag = new altizure.TagMarker({
+      //   sandbox: sandbox,
+      //   position: pos,
+      //   imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+      //   scale: 1
+      // })
+      let tag = new altizure.TextTagMarker({
+        sandbox: sandbox,
+        text: value.toString(),
+        textStyle: defalutTextStyle,
+        position: pos,
+        scale: 1
+      })
+      // tag.sprite.material.color.set(0xff0000)
+      tag.pinLength = 15
+      tag.visualizeWeight = value
+      tagMarkers.push(tag)
+      cluster.add(tag)
+    }
+
+    const debounce = function (func, delay) {
+      let inDebounce
+      return function () {
+        const context = this
+        const args = arguments
+        clearTimeout(inDebounce)
+        inDebounce = setTimeout(function () { func.apply(context, args), delay })
+      }
+    }
+
+    function start(debounce_delay) {
+      sandbox.on('cameraChange', debounce(function () {
+        cluster.clustering().then(function (clusters) {
           cluster.enable({})
         })
-      }
+      }, debounce_delay))
+      cluster.clustering().then(function (clusters) {
+        cluster.enable({})
+      })
+    }
 
-      if (Stats) {
-        sandbox.earthView._stats = new Stats()
-        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
-      }
-    </script>
-  </body>
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+  </script>
+</body>
+
 </html>
