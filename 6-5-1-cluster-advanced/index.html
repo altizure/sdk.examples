@@ -21,6 +21,14 @@
         }
       }
 
+      let defalutTextStyle = {
+      fillStyle: 'rgb(155, 155, 255)',
+      font: 'normal 500 40px Arial',
+      margin: 5,
+      outlineWidth: 2,
+      outlineStyle: 'rgb(0, 0, 0)'
+      }
+
       let sandbox = new altizure.Sandbox('page-content', options)
       let projectMarkerID = '58428f1d97b73e0b090675cd'
       // let projectMarkerID = '5723553732f7a5ee26ff526b'
@@ -29,7 +37,8 @@
       var tagMarkers = []
       var cluster = new altizure.MarkerCluster({
         sandbox: sandbox,
-        visualizeProperty: 'visualizeWeight'
+        visualizeProperty: 'visualizeWeight',
+        textStyle: defalutTextStyle,
       })
       sandbox.add('AltizureProjectMarker', {
         pid: projectMarkerID,
@@ -86,12 +95,7 @@
         let tag = new altizure.TextTagMarker({
           sandbox: sandbox,
           text: value.toString(),
-          textStyle: {
-            fillStyle: 'rgb(255, 255, 0)',
-            font: 'normal 500 50px Arial',
-            outlineWidth: 10,
-            outlineStyle: 'rgb(255, 0, 0)'
-          },
+          textStyle: defalutTextStyle,
           position: pos,
           scale: 1
         })
