@@ -50,12 +50,12 @@
       ]
       points.map(function (lla) {lla.alt=200})
       let line = new altizure.PolyTubeLineMarker({
-        sandbox,
+        sandbox:sandbox,
         points: points.map(function (lla) {return {lng: lla.lng, lat: lla.lat, alt: 150}}),
         lineWidth: 5
       })
       let fline = new altizure.PolyFenceLineMarker({
-        sandbox,
+        sandbox:sandbox,
         points: points.map(function (lla) {return {lng: lla.lng, lat: lla.lat, alt: 0}}),
         fenceHeight: 50
       })
