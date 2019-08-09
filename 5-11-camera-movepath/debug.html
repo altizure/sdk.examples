@@ -50,17 +50,18 @@
       ]
       points.map(function (lla) {lla.alt=200})
       let line = new altizure.PolyTubeLineMarker({
-        sandbox,
+        sandbox:sandbox,
         points: points.map(function (lla) {return {lng: lla.lng, lat: lla.lat, alt: 150}}),
         lineWidth: 5
       })
       let fline = new altizure.PolyFenceLineMarker({
-        sandbox,
+        sandbox:sandbox,
         points: points.map(function (lla) {return {lng: lla.lng, lat: lla.lat, alt: 0}}),
         fenceHeight: 50
       })
 
-      function test (speed=100) {
+      function test (speed) {
+        if(speed==undefined||speed==null){speed=100}
         t=Date.now()
         console.log(line.length/speed)
         sandbox.camera.movePath({curves: points.slice(),speed: speed}).then(

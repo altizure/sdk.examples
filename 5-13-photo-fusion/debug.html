@@ -42,7 +42,7 @@
           position: {lng: clng, lat: clat, alt: 0},
           scale: 1
         }})
-      .then((marker) => {
+      .then(function(marker) {
         marker.focus()
         console.log('marker', marker)
         model = marker
@@ -68,7 +68,7 @@
 
       let photoControl = new altizure.FusionPhotoControl({sandbox: sandbox})
 
-      sandbox.domElement.addEventListener('mousedown', (e) => {
+      sandbox.domElement.addEventListener('mousedown', function(e) {
         if (!enableFusion) return
         // console.log(e)
         if (e.button === 0) {
@@ -81,7 +81,7 @@
         }
       })
 
-      sandbox.domElement.addEventListener('mousemove', (e) => {
+      sandbox.domElement.addEventListener('mousemove', function(e) {
         if (!enableFusion) return
         if (isSnapped && e.button === 0) {
           // console.log(sandbox.viewerCamera.view)
@@ -89,7 +89,7 @@
         }
       })
 
-      sandbox.domElement.addEventListener('mouseup', (e) => {
+      sandbox.domElement.addEventListener('mouseup', function(e) {
         if (!enableFusion) return
         if (e.button === 0) {
           if (isSnapped) {
@@ -116,13 +116,13 @@
                   dist: 10, // distance ratio
                   alpha: 0.5 // weighting
                 }, 3000) // fly time
-                .then(res => {
+                .then(function(res) {
                   turnOnPhotoMode(res)
                   if(sandbox.viewerCamera.fov > 35){
                     sandbox.viewerCamera.fov = 35;
                   }
                 })
-                .catch(err => {
+                .catch(function(err) {
                   turnOffPhotoMode()
                   if (err.message === 'No nearby photo.') {
                     console.warn('nope')

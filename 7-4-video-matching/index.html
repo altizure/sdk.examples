@@ -40,15 +40,15 @@
           position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         return m.initialized
       })
-      .then((m) => {
+      .then(function(m) {
         sandbox.render(m, 'video')
         altmarker = m
         return queryForPose()
       })
-      .then((camToEarth) => {
+      .then(function(camToEarth) {
         queryPose = camToEarth
         manuallyAlignedPose = altmarker.composeCamToEarth(
           // position, target, up in object space, manually aligned
@@ -57,10 +57,6 @@
         projectVideo(altmarker, queryPose, queryInfo)
       })
 
-      if (Stats) {
-        sandbox.earthView._stats = new Stats()
-        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
-      }
 
       function projectVideo (m, pose, queryInfo) {
         videoProjectorMarker = new altizure.VideoProjectorMarker({
