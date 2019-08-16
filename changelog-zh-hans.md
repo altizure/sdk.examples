@@ -5,7 +5,7 @@ __发布时间:__
 2019年8月16日
 
 __新功能:__
-+ 範例 2.16 导入 `GLTF/GLB` 模型
++ [範例 2.16](https://altizure.github.io/sdk.examples/2-16-add-gltf/) 导入 `GLTF/GLB` 模型
 
 __改进:__
 + `Marker::postion`, `scale` 等接口兼容字符串类型
@@ -17,7 +17,7 @@ __发布时间:__
 2019年8月7日
 
 __新功能:__
-+ 範例 6.5.1 带权重的 `Marker 聚类`
++ [範例 6.5.1](https://altizure.github.io/sdk.examples/6-5-1-cluster-advanced/index.html) 带权重的 `Marker 聚类`
 + 範例 6.5.1 `Marker 聚类` 增加样式接口
 
 __改进:__
