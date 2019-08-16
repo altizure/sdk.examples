@@ -17,7 +17,7 @@
         },
         camera: {
           center: {
-            lng: 114.21723133172968, lat: 22.42922717072318, alt: 1840.6833595874607, north: 0.009183066005217688, tilt: 65.00000896856425
+            lng: 114.21756940083532, lat: 22.421749765426334, alt: 2725.3967648095004, north: 0.009709522611082587, tilt: 64.99993729175077
           } // this should be close to your added marker's position
         },
         renderItems: {
@@ -52,6 +52,26 @@
         position: {lng: 114.21146546031991 + 1e-2, lat: 22.426228743611954, alt: 50},
         scale: 40,
         url: '../public/assets/gltf/pirate_building/scene.gltf', // https://sketchfab.com/3d-models/pirate-building-158b1c2284464854b1ae5c333e9b0544
+      })
+
+      let gltfMarker3 = new altizure.GLTFMarker({
+        sandbox,
+        position: {lng: 114.21146546031991, lat: 22.426228743611954 - 1e-2, alt: 100},
+        scale: 100,
+        url: '../public/assets/gltf/DamagedHelmet.glb',
+        envMapBase: '../public/assets/img/envmap/lake1/',
+        envMapUrl: [
+          'lake1_ft.JPG', 'lake1_bk.JPG',
+          'lake1_up.JPG', 'lake1_dn.JPG',
+          'lake1_rt.JPG', 'lake1_lf.JPG'
+        ]
+      })
+
+      let gltfMarker4 = new altizure.GLTFMarker({
+        sandbox: sandbox,
+        position: {lng: 114.21146546031991 + 1e-2, lat: 22.426228743611954 - 1e-2, alt: 50},
+        scale: 40,
+        url: '../public/assets/gltf/pirate_building.glb', // https://sketchfab.com/3d-models/pirate-building-158b1c2284464854b1ae5c333e9b0544
       })
 
       if (Stats) {
