@@ -85,20 +85,20 @@
     sandbox = new altizure.Sandbox('page-content', options)
 
     sandbox.add('AltizureProjectMarker', { pid: '5c249bf10843bc542d9cd19f' })
-      .then(projectMarker => {
+      .then(function(projectMarker) {
         marker = projectMarker
         marker.dim()
         return marker.initialized
       })
       .then(function () {
-        point_list.map((point, i) => {
+        point_list.map(function(point, i) {
           sandbox.add('AltizureProjectMarker', {
             pid: '5c2c23d78a2e886aa2de44e5',
             pose: {
               position: { "lng": point.lng, "lat": point.lat, "alt": point.alt + 0.8 },
             }
           })
-            .then(projectMarker => {
+            .then(function(projectMarker) {
               markerlist[i]=projectMarker
               projectMarker.scale = 0.2
               projectMarker.euler = markereuler[i]
@@ -107,16 +107,16 @@
             })
         })
       })
-      .then(() => {
+      .then(function() {
         Visibility_analysis_overlap()
         camera_alt = sandbox.camera.center.alt
       })
-      .then(() => {
+      .then(function() {
         timer = setInterval(timer_change, 1000)
       })
     function Visibility_analysis_overlap() {
       sandbox.render(marker, 'visibility')
-      point_list.map((point, i) => {
+      point_list.map(function(point, i) {
         cameraMarker[i] = new altizure.CameraMarker({
           sandbox: sandbox,
           position: { "lng": point.lng, "lat": point.lat, "alt": point.alt + 1.6 },
@@ -159,7 +159,7 @@
 
     function timer_change() {
       if (Math.abs(camera_alt - sandbox.camera.center.alt) >= 10) {
-        visibilityManage.map((manage, i) => {
+        visibilityManage.map(function(manage, i) {
           if (judge[i] == true) {
           manage.update({
             cameraMarker: cameraMarker[i]
@@ -185,7 +185,7 @@
         Fifth: true,
       }
       let items=['First', 'Second','Third','Forth','Fifth']
-      items.map((item,i)=>{
+      items.map(function(item,i) {
         folder.add(settings, item).onChange(function (v) {
         visibilityManage[i].remove()
         markerlist[i].visible=false

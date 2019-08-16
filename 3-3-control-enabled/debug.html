@@ -52,16 +52,16 @@
         var gui = new dat.GUI()
         
         const control = sandbox.control
-        gui.add(c1, 'enabledSwirlUp').onChange(val => {
+        gui.add(c1, 'enabledSwirlUp').onChange(function(val) {
           control.enabledSwirlUp = val
         })
-        gui.add(c1, 'enabledSwirlLeft').onChange(val => {
+        gui.add(c1, 'enabledSwirlLeft').onChange(function(val) {
           control.enabledSwirlLeft = val
         })
-        gui.add(c1, 'enabledOrbit').onChange(val => {
+        gui.add(c1, 'enabledOrbit').onChange(function(val){
           control.enabledOrbit = val
         })
-        gui.add(c1, 'enabledDolly').onChange(val => {
+        gui.add(c1, 'enabledDolly').onChange(function(val){
           control.enabledDolly = val
         })
       }

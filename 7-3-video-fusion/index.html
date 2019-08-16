@@ -37,13 +37,13 @@
           position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         return m.initialized
       })
       .then(function(m) {
         return m.loadCropMask() // [optional] download crop mask configured in Altizure
       })
-      .then((m) => {
+      .then(function(m) {
         sandbox.render(m, 'video')
         let camToEarth = m.composeCamToEarth(
           {x: -304, y: 168,z: 96}, {x: 2, y: -1.24, z: 0}, {x: -304, y: 168,z: 96 - 40}
@@ -83,16 +83,16 @@
       var gui = new dat.GUI({autoplace: false, width: 500})
       function addUIForProjector (projector) {
         if (!projector) return
-        gui.add(projector, 'fov', 10, 100, 1).onChange((v) => {
+        gui.add(projector, 'fov', 10, 100, 1).onChange(function(v) {
           projector.fov = v
         })
-        gui.add(projector, 'aspect', 0.1, 8, 0.1).onChange((v) => {
+        gui.add(projector, 'aspect', 0.1, 8, 0.1).onChange(function(v) {
           projector.aspect = v
         })
-        gui.add(projector, 'nearInMeter', 0.1, 400, 0.1).onChange((v) => {
+        gui.add(projector, 'nearInMeter', 0.1, 400, 0.1).onChange(function(v) {
           projector.nearInMeters = v
         })
-        gui.add(projector, 'farInMeter', 0.1, 400, 0.1).onChange((v) => {
+        gui.add(projector, 'farInMeter', 0.1, 400, 0.1).onChange(function(v) {
           projector.farInMeters = v
         })
 

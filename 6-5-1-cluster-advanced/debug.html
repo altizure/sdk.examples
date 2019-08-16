@@ -1,13 +1,15 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 6.5 Markercluster</title>
+    <title> 6.5 Advanced Cluster </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
+    <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk-plugin-geojson"></script>
     <script>
       let options = {
         altizureApi:{
@@ -21,6 +23,14 @@
         }
       }
 
+      let defalutTextStyle = {
+        fillStyle: 'rgb(155, 155, 255)',
+        font: 'normal 500 40px Arial',
+        margin: 5,
+        outlineWidth: 2,
+        outlineStyle: 'rgb(0, 0, 0)'
+      }
+
       let sandbox = new altizure.Sandbox('page-content', options)
       let projectMarkerID = '58428f1d97b73e0b090675cd'
       // let projectMarkerID = '5723553732f7a5ee26ff526b'
@@ -29,6 +39,8 @@
       var tagMarkers = []
       var cluster = new altizure.MarkerCluster({
         sandbox: sandbox,
+        visualizeProperty: 'visualizeWeight',
+        textStyle: defalutTextStyle,
       })
       sandbox.add('AltizureProjectMarker', {
         pid: projectMarkerID,
@@ -75,14 +87,23 @@
       function visualizeAsTagMarker (point) {
         let pos = new altizure.LngLatAlt(point[0],point[1],0.1)
         positions.push(pos)
-        let tag = new altizure.TagMarker({
+        const value = Math.round(Math.random() * 100)
+        // let tag = new altizure.TagMarker({
+        //   sandbox: sandbox,
+        //   position: pos,
+        //   imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
+        //   scale: 1
+        // })
+        let tag = new altizure.TextTagMarker({
           sandbox: sandbox,
+          text: value.toString(),
+          textStyle: defalutTextStyle,
           position: pos,
-          imgUrl: '../public/assets/img/tag/normal/tagDemo.png',
           scale: 1
         })
-        tag.sprite.material.color.set(0xff0000)
+        // tag.sprite.material.color.set(0xff0000)
         tag.pinLength = 15
+        tag.visualizeWeight = value
         tagMarkers.push(tag)
         cluster.add(tag)
       }
@@ -106,6 +127,11 @@
         cluster.clustering().then(function(clusters) {
           cluster.enable({})
         })
+      }
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
       }
     </script>
   </body>
