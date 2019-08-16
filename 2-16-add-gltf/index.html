@@ -1,0 +1,61 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 2.16 Add gltf Model </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script type="text/javascript" src="https://unpkg.com/altizure-plugin-gltf"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          center: {
+            lng: 114.21723133172968, lat: 22.42922717072318, alt: 1840.6833595874607, north: 0.009183066005217688, tilt: 65.00000896856425
+          } // this should be close to your added marker's position
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let gltfMarker = new altizure.GLTFMarker({
+        sandbox,
+        position: {lng: 114.21146546031991, lat: 22.426228743611954, alt: 100},
+        scale: 100,
+        url: '../public/assets/gltf/DamagedHelmet/DamagedHelmet.gltf',
+        envMapBase: '../public/assets/img/envmap/lake1/',
+        envMapUrl: [
+          'lake1_ft.JPG', 'lake1_bk.JPG',
+          'lake1_up.JPG', 'lake1_dn.JPG',
+          'lake1_rt.JPG', 'lake1_lf.JPG'
+        ]
+      })
+      gltfMarker.initialized.then(function () {
+        console.log('DamagedHelmet.gltf loaded')
+        sandbox.camera.lookAt(gltfMarker, 0, 65)
+      })
+
+      let gltfMarker2 = new altizure.GLTFMarker({
+        sandbox: sandbox,
+        position: {lng: 114.21146546031991 + 1e-2, lat: 22.426228743611954, alt: 50},
+        scale: 40,
+        url: '../public/assets/gltf/pirate_building/scene.gltf', // https://sketchfab.com/3d-models/pirate-building-158b1c2284464854b1ae5c333e9b0544
+      })
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+  </body>
+</html>
