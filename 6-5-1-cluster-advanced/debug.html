@@ -10,6 +10,7 @@
     <script type="text/javascript" src="../../build/three.js"></script>
     <script type="text/javascript" src="../../build/altizure-core.js"></script>
     <script type="text/javascript" src="https://beta.altizure.com/sdk-plugin-geojson"></script>
+    <script type="text/javascript" src="../public/json/markerCluster.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -54,16 +55,12 @@
       .then(function(m){
         sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
-        altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(projectMarker)
-        .then(function(result) {
-          visualizeGeoJSONData(result.geojson)
-          sandbox.positionsAltitude(positions).map(function(alt, i) {
-            tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
-            tagMarkers[i].depthTest = true
-          })
-
-          setTimeout(start(500), 2000)
+        visualizeGeoJSONData(jsonData)
+        sandbox.positionsAltitude(positions).map(function(alt, i) {
+          tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
+          tagMarkers[i].depthTest = true
         })
+        setTimeout(start(500), 2000)
       })
       function visualizeGeoJSONData (geojson) {
         let features = geojson.features
