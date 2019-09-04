@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 1.3 Render Items </title>
+    <title> Terrain </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body style="margin: 0px; padding: 0px;">
@@ -14,12 +14,21 @@
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
+        camera: {
+          center: {
+            alt: 10000000,
+            lat: 22.64429,
+            lng: 114.06191,
+            north: 0,
+            tilt: 0
+          }
+        },
         // render items
         renderItems: {
-          earth: true, // earth globe
-          earthUseTexture: false, // satellite images
-          featureInView: false, // altizure featured projects
-          orbitRing: true // earth orbit ring
+          planet: {
+            showDem: true, // set showDem before creating sandbox
+            showPlanetWireframe: true // can be changed later
+          }
         }
       }
 
@@ -30,5 +39,7 @@
         sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
       }
     </script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script src="./gui.js"></script>
   </body>
 </html>

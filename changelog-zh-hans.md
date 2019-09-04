@@ -1,4 +1,46 @@
 # Altizure Javascript 3D SDK 更新日志
+### 3.4.3
+__发布时间:__
+2019年8月28日
+
+__新功能:__
++ [范例 8.1](https://altizure.github.io/sdk.examples/8-1-terrain/) 全球地形，初始化 `Sandbox` 时选择 `renderItems::planet::showDem = true` 开启。
+
++ [範例 8.2](https://altizure.github.io/sdk.examples/8-2-rtk-project/) 导入 Altizure 第三代数据 （version 3），使用 `RTK` 生成的高精度GIS实景模型。
+
+__缺陷修复:__
+* `GeoSystem::align` 后，场景没有及时更新导致的 `crop` 位置不准确。
+* 当 `tilt = 0`, 鼠标控制可能发生剧烈抖动。
+
+__改进:__
+一部分非公开的，但是再范例中使用过的接口，改为了公开接口。
+* 2.1 autoScale
+```
+projectMarker._apiInfo.name -> projectMarker.spec.name
+```
+
+* 2.1 project viewer
+```
+marker._apiInfo.annotations -> marker.spec.render.annotations
+```
+
+* 4.5 lnglat to alt
+```
+let geoInfo = altmarker._apiInfo.geoInfo
+maxlat = geoInfo.maxLat
+maxlng = geoInfo.maxLong
+minlat = geoInfo.minLat
+minlng = geoInfo.minLong
+```
+更改为
+```
+let geoInfo = altmarker.spec.model.gis
+maxlat = geoInfo.maxLat
+maxlng = geoInfo.maxLng
+minlat = geoInfo.minLat
+minlng = geoInfo.minLng
+```
+
 
 ### 3.2.1
 __发布时间:__
