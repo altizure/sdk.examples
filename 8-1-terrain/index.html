@@ -1,14 +1,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 1.3 Render Items </title>
+    <title> Terrain </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script src="../public/js/stats.min.js"></script>
-    <script type="text/javascript" src="../../build/three.js"></script>
-    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/altizure@beta/release/altizure.min.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -16,10 +14,10 @@
         },
         // render items
         renderItems: {
-          earth: true, // earth globe
-          earthUseTexture: false, // satellite images
-          featureInView: false, // altizure featured projects
-          orbitRing: true // earth orbit ring
+          planet: {
+            showDem: true, // set showDem before creating sandbox
+            showPlanetWireframe: true // can be changed later
+          }
         }
       }
 
@@ -30,5 +28,7 @@
         sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
       }
     </script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script src="./gui.js"></script>
   </body>
 </html>
