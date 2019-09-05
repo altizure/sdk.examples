@@ -1,0 +1,50 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> 3.4 Control Config </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script src="../public/js/stats.min.js"></script>
+    <script type="text/javascript" src="../../build/three.js"></script>
+    <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script src="../third_party/dat.gui.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let gui = new dat.GUI()
+      gui.add(sandbox.control.buttonConfig, 'ORBIT', { LEFT: altizure.MOUSE.LEFT, MIDDLE: altizure.MOUSE.MIDDLE, RIGHT: altizure.MOUSE.RIGHT}).onChange(function (v) {
+        sandbox.control.buttonConfig = {ORBIT: Number(v)}
+      })
+      gui.add(sandbox.control.buttonConfig, 'SWIRL', { LEFT: altizure.MOUSE.LEFT, MIDDLE: altizure.MOUSE.MIDDLE, RIGHT: altizure.MOUSE.RIGHT}).onChange(function (v) {
+        sandbox.control.buttonConfig = {SWIRL: Number(v)}
+      })
+      gui.add(sandbox.control.buttonConfig, 'DOLLY', { LEFT: altizure.MOUSE.LEFT, MIDDLE: altizure.MOUSE.MIDDLE, RIGHT: altizure.MOUSE.RIGHT}).onChange(function (v) {
+        sandbox.control.buttonConfig = {DOLLY: Number(v)}
+      })
+      gui.add(sandbox.control.buttonConfig, 'ORBITLEFTREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'ORBITUPREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'DOLLYREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'SWIRLLEFTREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'SWIRLUPREVERSE')
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+    </script>
+  </body>
+</html>

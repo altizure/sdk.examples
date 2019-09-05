@@ -13,10 +13,10 @@
       let options = {
         // camera 
         camera: {
-          poseTo: {
+          center: {
             lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           },
-          flyTo: {
+          flyToCenter: {
             lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           }
         },
@@ -39,13 +39,13 @@
           position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         return m.initialized
       })
       .then(function(m) {
         return m.loadCropMask() // [optional] download crop mask configured in Altizure
       })
-      .then((m) => {
+      .then(function(m) {
         sandbox.render(m, 'video')
         let camToEarth = m.composeCamToEarth(
           {x: -304, y: 168,z: 96}, {x: 2, y: -1.24, z: 0}, {x: -304, y: 168,z: 96 - 40}
@@ -60,7 +60,9 @@
           farInMeter: 100,
 
           camToEarth: camToEarth,
-          // camToEarth:  [0.6033466881308296, -0.7398925025545825, 0.2975430365259394, 0, -0.12898863652192616, -0.4587333516108402, -0.8791618984965737, 0, 0.7869782116232786, 0.49205974920064577, -0.3722129735068672, 0, 0.7843725797837694, 0.5074214080907662, -0.3530742566080696, 1],
+          // [upgrade_v3] the inner coordinate of earth has changed, previous matrix value is not consistent with current value, change to new one. sandbox.camera.mat consistent with current camToEarth
+          // camToEarth: [0.3033727908931008, 0.609757188409188, -0.7322302376500529, 0, -0.884808143675164, -0.1049486257790694, -0.45398274728583593, 0, -0.35366580076654475, 0.7856092903793889, 0.507679568465929, 0, -2257982.378367097, 5016100.371608737, 3219930.3349923408, 1],
+          // [upgrade_v3_end]
           // position: {lng: 114.23473224705329, lat: 30.510488411649817, alt: 1326.835852997861},
           // orientation: {x: -2.1195461630660274e-12, y: 1.0938613239644895e-12, z: 0.873767608945985, w: -0.4863436702135807},
 
@@ -85,16 +87,16 @@
       var gui = new dat.GUI({autoplace: false, width: 500})
       function addUIForProjector (projector) {
         if (!projector) return
-        gui.add(projector, 'fov', 10, 100, 1).onChange((v) => {
+        gui.add(projector, 'fov', 10, 100, 1).onChange(function(v) {
           projector.fov = v
         })
-        gui.add(projector, 'aspect', 0.1, 8, 0.1).onChange((v) => {
+        gui.add(projector, 'aspect', 0.1, 8, 0.1).onChange(function(v) {
           projector.aspect = v
         })
-        gui.add(projector, 'nearInMeter', 0.1, 400, 0.1).onChange((v) => {
+        gui.add(projector, 'nearInMeter', 0.1, 400, 0.1).onChange(function(v) {
           projector.nearInMeters = v
         })
-        gui.add(projector, 'farInMeter', 0.1, 400, 0.1).onChange((v) => {
+        gui.add(projector, 'farInMeter', 0.1, 400, 0.1).onChange(function(v) {
           projector.farInMeters = v
         })
 

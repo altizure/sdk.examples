@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure Add Zone </title>
+    <title> Altizure 2.11 Add Zone </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body style="margin: 0px; padding: 0px;">
@@ -15,8 +15,8 @@
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { lng:113.94255600866971, lat:22.538388886344876, alt:100000},
-          flyTo: {lng: 114.20918760138036, lat: 22.424215498081942, alt: 1457.6769007647472, north: 350.5930327038691, tilt: 15.732665028748109}
+          center: { lng:113.94255600866971, lat:22.538388886344876, alt:100000},
+          flyToCenter: {lng: 114.20918760138036, lat: 22.424215498081942, alt: 1457.6769007647472, north: 350.5930327038691, tilt: 15.732665028748109}
         },
         renderItems: {
           earth: true,
@@ -31,7 +31,7 @@
       let altmarker
       sandbox.add('AltizureProjectMarker', {pid: pid})
       .then(function(m) {
-        sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
+        sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 1500, north: 0, tilt: 0})
         console.log(m)
         altmarker = m
       })
@@ -80,7 +80,7 @@
       let index = 0
       let poses = [pose1, pose2, pose3, pose4]
       let flying = function() {
-        sandbox.camera.flyTo(poses[index])
+        sandbox.camera.flyToCenter(poses[index])
         index = (index+1) % poses.length
         setTimeout(flying, 8000)
       }

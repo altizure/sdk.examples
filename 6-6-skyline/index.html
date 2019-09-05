@@ -1,20 +1,20 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure Skyline </title>
+    <title> Altizure 6.6 Skyline </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
     <script>
       let options = {
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: {lng: 116.35618449911304, lat: 42.576162395152416, alt: 2416.778675196671, north: 165.20491408981275, tilt: 70.86642190403151},
-          flyTo: {lng: 116.35618449911304, lat: 42.576162395152416, alt: 2416.778675196671, north: 165.20491408981275, tilt: 70.86642190403151}
+          center: {lng: 116.35618449911304, lat: 42.576162395152416, alt: 2416.778675196671, north: 165.20491408981275, tilt: 70.86642190403151},
+          flyToCenter: {lng: 116.35618449911304, lat: 42.576162395152416, alt: 2416.778675196671, north: 165.20491408981275, tilt: 70.86642190403151}
         },
         renderItems: {
           earth: true,
@@ -74,6 +74,9 @@
       })
       .then(function(m) {
         altmarker = m
+        return m.initialized
+      })
+      .then(function(m) {
         setUpUI()
       })
 
@@ -96,12 +99,12 @@
 
       let cameraMarker = null
       function updateCameraMarker () {
-        // todo
-        let camera = calculator._perspectiveCamera
+        let camera = calculator.camera
         if (cameraMarker === null) {
           cameraMarker = new altizure.CameraMarker({
             sandbox: sandbox,
-            camToEarth: camera.projectionMatrix.clone().elements,
+            // randomly assign a position as it will be updated later
+            position: {lng: 114, lat: 22, alt: 0.1},
             showNear: true,
             showFar: true
           })

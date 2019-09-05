@@ -6,15 +6,15 @@
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
     <script>
       let options = {
         // camera 
         camera: {
-          poseTo: {
+          center: {
             lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           },
-          flyTo: {
+          flyToCenter: {
             lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           }
         },
@@ -40,15 +40,15 @@
           position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         return m.initialized
       })
-      .then((m) => {
+      .then(function(m) {
         sandbox.render(m, 'video')
         altmarker = m
         return queryForPose()
       })
-      .then((camToEarth) => {
+      .then(function(camToEarth) {
         queryPose = camToEarth
         manuallyAlignedPose = altmarker.composeCamToEarth(
           // position, target, up in object space, manually aligned
@@ -57,10 +57,6 @@
         projectVideo(altmarker, queryPose, queryInfo)
       })
 
-      if (Stats) {
-        sandbox.earthView._stats = new Stats()
-        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
-      }
 
       function projectVideo (m, pose, queryInfo) {
         videoProjectorMarker = new altizure.VideoProjectorMarker({

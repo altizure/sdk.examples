@@ -2,26 +2,27 @@
 
 <head>
   <meta charset="utf-8">
-  <title> Altizure 2.1 Add project </title>
+  <title> Altizure 2.1.3 Add Project Viewer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 
 <body style="margin: 0px; padding: 0px;">
   <div id="page-content"></div>
-  <script type="text/javascript" src="https://unpkg.com/altizure@1.2.22/release/altizure-sdk.min.js"></script>
+  <!-- <script type="text/javascript" src="https://unpkg.com/altizure@1.2.22/release/altizure-sdk.min.js"></script> -->
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
   <script>
     let options = {
       altizureApi: {
         key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
       },
       camera: {
-        poseTo: {
+        center: {
           lat: 22.5,
           lng: 114,
           alt: 1000,
           tilt: 45
         },
-        flyTo: {
+        flyToCenter: {
           lat: 22.5,
           lng: 114,
           alt: 1000,
@@ -40,17 +41,19 @@
 
     let marker
     sandbox.add('AltizureProjectMarker', {
-      pid: '5b94a402fdcbb879b3bd8df1',
+      // pid: '5b94a402fdcbb879b3bd8df1',
       // pid: '5b963f71d1e2037bf80738bd',
       // pid: '5b97a561c1ac675fae3caa7e',
       // pid: '5b97cdd8c1ac675fae3dc76d',
       // pid: '5b974573d1e2037bf8094dd2',
       // pid: '5b96ab4fd1e2037bf808322b',
+      pid: '5d3971be2f8fff4899940faf',
       autoScale: 500,
       pose: {
         // always fix the position because the viewr care nothing about earth
         position: { lng: 114, lat: 22.5, alt: 0 }
-      }
+      },
+      showBBox: true
     })
       .then(projectMarker => {
         marker = projectMarker
@@ -70,7 +73,7 @@
       })
       .then(() => { // handle tilt details
         // tilt up the project if the looking direction is too horizontal
-        let {tilt} = sandbox.camera.pose
+        let {tilt} = sandbox.camera.center
         if (tilt >= 70) {
           const up = Math.max(10, Math.min(tilt - 70, 20))
           // wait for the rendering
@@ -81,8 +84,8 @@
         }
       })
     function addAnnotations() {
-      if (marker._apiInfo.annotations) {
-        let nodes = marker._apiInfo.annotations.edges
+      if (marker.spec.render.annotations) {
+        let nodes = marker.spec.render.annotations.edges
         nodes.map((n) => {
           let node = n.node
           let pos = marker.LngLatAltFromXYZ(node.modelx, node.modely, node.modelz)

@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 2.5.1 Add Promoted obj model </title>
+    <title> Altizure 2.5.1 Add Promoted Obj Model </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body  style="margin: 0px; padding: 0px;">
@@ -15,13 +15,13 @@
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { alt: 800,
+          center: { alt: 800,
             lat:22.5361,
             lng: 113.9438,
             north: 100,
             tilt: 60
           },
-          flyTo: { alt: 800,
+          flyToCenter: { alt: 800,
             lat:22.5361,
             lng: 113.9438,
             north: 100,
@@ -66,7 +66,7 @@
         m.dim() // hide the blue square around the marker
         sandbox.render(m, 'phong') // [essential] choose rendering mode for the marker
         sandbox.lights.ambient.intensity = 0.01 // ambient light intensity
-        return sandbox.camera.flyTo({north: 0, alt: 400}, 5000) // fly animation after the model is initialized
+        return sandbox.camera.flyToCenter({north: 0, alt: 400}, 5000) // fly animation after the model is initialized
       })
       .then(function() {
         buildGui(sandbox, m) // create the GUI

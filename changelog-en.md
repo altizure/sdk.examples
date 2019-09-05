@@ -1,4 +1,4 @@
-# Changelog of Altizure Sandbox 3D SDK
+# Changelog of Altizure Javascript 3D SDK
 
 ### 2.8.8
 __Release date:__

@@ -6,14 +6,14 @@
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
     <script>
       let options = {
         altizureApi: {
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          flyTo: { alt:1020.0739295752213,
+          flyToCenter: { alt:1020.0739295752213,
             lat:22.538388886344876,
             lng:113.94255600866971,
             north:-27.271585092584015,
@@ -73,6 +73,7 @@
           if (selectedCamera !== cameraMarker) cameraMarker.color = 0xff0000
         })
         cameraMarker.on('click', function(event)  {
+          if (selectedCamera === cameraMarker) return
           if (selectedCamera) {
             selectedCamera.showFar = false
             selectedCamera.color = 0xff0000

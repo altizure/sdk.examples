@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure 5.4 Camera control </title>
+    <title> Altizure 5.4 Camera Control </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
     .button {
@@ -26,19 +26,19 @@
       <button class="button" onClick="adjustCamera('tilt', 1)">tilt</button>    
     </div>
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
     <script>
       let options = {
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { alt:1020.0739295752213,
+          center: { alt:1020.0739295752213,
             lat:22.53672047469201,
             lng:113.93920875334851,
             north:-27.271585092584015,
             tilt:74.7023627906978 },
-          flyTo: { alt:1020.0739295752213,
+          flyToCenter: { alt:1020.0739295752213,
             lat:22.53672047469201,
             lng:113.93920875334851,
             north:-27.271585092584015,
@@ -60,10 +60,10 @@
 
       function adjustCamera (property, value) {
         let extra = plusmode ? 1.0 : -1.0
-        let originpose = sandbox.camera.pose
+        let originpose = sandbox.camera.center
         let adjustedpose = Object.assign({}, originpose)
         adjustedpose[property] = originpose[property] + value * extra
-        sandbox.camera.pose = adjustedpose
+        sandbox.camera.center = adjustedpose
       }
 
       function changemode () {

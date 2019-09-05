@@ -6,19 +6,19 @@
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
     <script>
       let options = {
         altizureApi:{
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: { alt: 1800,
+          center: { alt: 1800,
             lat: 35.65218777804628,
             lng: 107.30425719131709,
             north: 56.82289356559219,
             tilt: 56.19205822511624 },
-          flyTo: { alt: 1800,
+          flyToCenter: { alt: 1800,
             lat: 35.65218777804628,
             lng: 107.30425719131709,
             north: 56.82289356559219,
@@ -87,11 +87,11 @@
       }
 
       function init () {
-        let geoInfo = altmarker._apiInfo.geoInfo
+        let geoInfo = altmarker.spec.model.gis
         maxlat = geoInfo.maxLat
-        maxlng = geoInfo.maxLong
+        maxlng = geoInfo.maxLng
         minlat = geoInfo.minLat
-        minlng = geoInfo.minLong
+        minlng = geoInfo.minLng
         generateLngLatArray()
         initMarkers()
       }

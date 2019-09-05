@@ -6,17 +6,18 @@
   </head>
   <body style="margin: 0px; padding: 0px;">
     <div id="page-content"></div>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
     <script>
       let options = {
         // camera 
         camera: {
-          poseTo: {
+          center: {
             alt: 319.02169601663104,
             lat: 22.5364271949327,
             lng: 113.93977612840078
           },
-          flyTo: {
+          flyToCenter: {
             alt: 319.02169601663104,
             lat: 22.5364271949327,
             lng: 113.93977612840078,
@@ -134,9 +135,6 @@
         interactable: true
       }
 
-    </script>
-    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
-    <script>
       function setUpUI (altmarker) {
         var PolyMeasureText = function(altmarker, polygonOptions) {
           var scope = this

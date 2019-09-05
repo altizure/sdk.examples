@@ -1,0 +1,51 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 1.8.1 Project Sync Comparison </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0;padding: 0;display:flex;flex-direction: row">
+    <div id="page-content1" style="width: 50%;height: 100vh;border: solid 1px white"></div>
+    <div id="page-content2" style="width: 50%;height: 100vh;border: solid 1px white"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          center: {
+            alt: 632.3638155861797,
+            lat: 30.9606861645347,
+            lng: 121.43563126339929
+          }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let pose
+
+      let sandbox1 = new altizure.Sandbox('page-content1', options)
+      let sandbox2 = new altizure.Sandbox('page-content2', options)
+
+      // bind sandbox2 camera with sandbox1, so changing the pose of sandbox1 will affect sandbox2
+      sandbox1.on('cameraChange', function () {
+        sandbox2.camera.center = sandbox1.camera.center
+      })
+
+      // add two demo projects
+      sandbox1.add('AltizureProjectMarker', {pid: '59226d12b8cfc91d91c6e3c4'})
+        .then(function(m) {
+          pose = sandbox1.camera.center
+
+          sandbox2.add('AltizureProjectMarker', {pid: '5a1b75ba3330b52b3cffdf28', pose: { position: m.position }})
+          .then(function(m) {sandbox2.camera.center = pose})
+        })
+    </script>
+  </body>
+</html>

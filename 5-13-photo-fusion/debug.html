@@ -6,7 +6,7 @@
   </head>
   <body>
     <div id="page-content"></div>
-    <!-- <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script> -->
+    <!-- <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script> -->
     <script src="../../sdk.examples/public/js/stats.min.js"></script>
     <script type="text/javascript" src="../../build/three.js"></script>
     <script type="text/javascript" src="../../build/altizure-core.js"></script>
@@ -18,13 +18,13 @@
           key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
         },
         camera: {
-          poseTo: {
+          center: {
             alt: 1200,
             lat: clat,
             lng: clng,
             north: 60,
             tilt: 45 },
-          flyTo: { lng: 114.29996564885415, lat: 22.669966869078426, alt: 46.884881680137944, north: 16.299628789272617, tilt: 12.681020878399314 },
+          flyToCenter: { lng: 114.29996564885415, lat: 22.669966869078426, alt: 46.884881680137944, north: 16.299628789272617, tilt: 12.681020878399314 },
         },
         renderItems: {
           earth: false,
@@ -42,7 +42,7 @@
           position: {lng: clng, lat: clat, alt: 0},
           scale: 1
         }})
-      .then((marker) => {
+      .then(function(marker) {
         marker.focus()
         console.log('marker', marker)
         model = marker
@@ -68,7 +68,7 @@
 
       let photoControl = new altizure.FusionPhotoControl({sandbox: sandbox})
 
-      sandbox.domElement.addEventListener('mousedown', (e) => {
+      sandbox.domElement.addEventListener('mousedown', function(e) {
         if (!enableFusion) return
         // console.log(e)
         if (e.button === 0) {
@@ -81,7 +81,7 @@
         }
       })
 
-      sandbox.domElement.addEventListener('mousemove', (e) => {
+      sandbox.domElement.addEventListener('mousemove', function(e) {
         if (!enableFusion) return
         if (isSnapped && e.button === 0) {
           // console.log(sandbox.viewerCamera.view)
@@ -89,7 +89,7 @@
         }
       })
 
-      sandbox.domElement.addEventListener('mouseup', (e) => {
+      sandbox.domElement.addEventListener('mouseup', function(e) {
         if (!enableFusion) return
         if (e.button === 0) {
           if (isSnapped) {
@@ -116,13 +116,13 @@
                   dist: 10, // distance ratio
                   alpha: 0.5 // weighting
                 }, 3000) // fly time
-                .then(res => {
+                .then(function(res) {
                   turnOnPhotoMode(res)
                   if(sandbox.viewerCamera.fov > 35){
                     sandbox.viewerCamera.fov = 35;
                   }
                 })
-                .catch(err => {
+                .catch(function(err) {
                   turnOffPhotoMode()
                   if (err.message === 'No nearby photo.') {
                     console.warn('nope')

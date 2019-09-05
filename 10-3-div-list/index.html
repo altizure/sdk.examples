@@ -2,7 +2,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title> Div List </title>
+  <title>  Altizure 10.3 Div List </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
   <script src="https://unpkg.com/jquery@2.1.1/dist/jquery.min.js"></script>
@@ -15,7 +15,7 @@
 <body style="margin: 0px; padding: 0px; overflow: hidden;">
   <div id="page-content"></div>
   <canvas id='ui' style="position: absolute; left: 0; top: 0; pointer-events: none"></canvas>
-  <script type="text/javascript" src="https://beta.altizure.cn/sdk"></script>
+  <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
   <script>
     let options = {
       altizureApi: {
@@ -34,7 +34,7 @@
       pid: '58428f1d97b73e0b090675cd'
     })
       .then(function(m) {
-        sandbox.camera.flyTo({
+        sandbox.camera.flyToCenter({
           lng: m.position.lng,
           lat: m.position.lat,
           alt: 4000

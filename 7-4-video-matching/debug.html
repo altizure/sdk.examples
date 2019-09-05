@@ -13,10 +13,10 @@
       let options = {
         // camera 
         camera: {
-          poseTo: {
+          center: {
             lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           },
-          flyTo: {
+          flyToCenter: {
             lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
           }
         },
@@ -42,15 +42,15 @@
           position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         return m.initialized
       })
-      .then((m) => {
+      .then(function(m) {
         sandbox.render(m, 'video')
         altmarker = m
         return queryForPose()
       })
-      .then((camToEarth) => {
+      .then(function(camToEarth) {
         queryPose = camToEarth
         manuallyAlignedPose = altmarker.composeCamToEarth(
           // position, target, up in object space, manually aligned
@@ -75,7 +75,9 @@
           farInMeter: queryInfo.farInMeter,
 
           camToEarth: pose,
-          // camToEarth:  [0.6033466881308296, -0.7398925025545825, 0.2975430365259394, 0, -0.12898863652192616, -0.4587333516108402, -0.8791618984965737, 0, 0.7869782116232786, 0.49205974920064577, -0.3722129735068672, 0, 0.7843725797837694, 0.5074214080907662, -0.3530742566080696, 1],
+          // [upgrade_v3] the inner coordinate of earth has changed, previous matrix value is not consistent with current value, change to new one. sandbox.camera.mat consistent with current camToEarth
+          // camToEarth: [0.3383846824548788, 0.5764767516481082, -0.7437542346025037, 0, -0.9316341332542779, 0.09395253639818596, -0.3510423943911879, 0, -0.1324901824116094, 0.8116942008623648, 0.5688575180578574, 0, -2257992.613219608, 5016272.432584905, 3220052.2042679177, 1],
+          // [upgrade_v3_end]
           // position: {lng: 114.23473224705329, lat: 30.510488411649817, alt: 1326.835852997861},
           // orientation: {x: -2.1195461630660274e-12, y: 1.0938613239644895e-12, z: 0.873767608945985, w: -0.4863436702135807},
 

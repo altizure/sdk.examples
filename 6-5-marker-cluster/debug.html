@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title> Altizure Markercluster</title>
+    <title> Altizure 6.5 Markercluster</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   </head>
   <body>
@@ -9,7 +9,8 @@
     <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
     <script type="text/javascript" src="../../build/three.js"></script>
     <script type="text/javascript" src="../../build/altizure-core.js"></script>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
+    <script type="text/javascript" src="https://beta.altizure.com/sdk-plugin-geojson"></script>
+    <script type="text/javascript" src="../public/json/markerCluster.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -31,6 +32,16 @@
       var tagMarkers = []
       var cluster = new altizure.MarkerCluster({
         sandbox: sandbox,
+        // text style
+        textStyle: {
+            fillStyle: 'rgb(255, 45, 45)',
+            font: 'normal 500 40px Arial',
+            margin:5,
+            outlineWidth: 2,
+            outlineStyle: 'rgb(249, 249, 0)'
+        },
+        pinLength:20,
+        scale:2
       })
       sandbox.add('AltizureProjectMarker', {
         pid: projectMarkerID,
@@ -42,18 +53,14 @@
         return m.initialized
       })
       .then(function(m){
-        sandbox.camera.flyTo({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
+        sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
-        altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(projectMarker)
-        .then(function(result) {
-          visualizeGeoJSONData(result.geojson)
-          sandbox.positionsAltitude(positions).map(function(alt, i) {
-            tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
-            tagMarkers[i].depthTest = true
-          })
-
-          setTimeout(start(500), 2000)
+        visualizeGeoJSONData(jsonData)
+        sandbox.positionsAltitude(positions).map(function(alt, i) {
+          tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
+          tagMarkers[i].depthTest = true
         })
+        setTimeout(start(500), 2000)
       })
       function visualizeGeoJSONData (geojson) {
         let features = geojson.features

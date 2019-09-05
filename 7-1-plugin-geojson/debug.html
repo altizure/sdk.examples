@@ -1,7 +1,7 @@
 <html lang="en">
     <head>
       <meta charset="utf-8">
-      <title> Altizure GeoJson Plugin </title>
+      <title> Altizure 7.1 Plugin GeoJson </title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
       <style>
           body {
@@ -53,7 +53,7 @@
         }
   
         let sandbox = new altizure.Sandbox('page-content', options)
-        sandbox.camera.flyTo({lng: 114.26389759274555, lat: 22.3369102228582, alt: 5772.141840522206, north: 0, tilt: 0})
+        sandbox.camera.flyToCenter({lng: 114.26389759274555, lat: 22.3369102228582, alt: 5772.141840522206, north: 0, tilt: 0})
 
         let bboxMarkers = []
         function visualizeBBOX (lngArray, latArray) {
