@@ -4,7 +4,7 @@ __发布时间:__
 2019年9月5日
 
 __新功能:__
-+ [范例 3.4](https://altizure.github.io/sdk.examples/3-4-control-config/)
++ [范例 3.4](https://altizure.github.io/sdk.examples/3-4-control-config/) 对于鼠标左/中/右键的功能进行设置更改。
 
 ### 3.4.5
 __发布时间:__
