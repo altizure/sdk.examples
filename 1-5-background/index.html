@@ -20,11 +20,11 @@
           background: {
             transparent: true,
             opacity: 0.5,
-            image: 'url("../external_imgFile/altizureIcon.jpg")'
+            image: 'url("../public/assets/img/altizureIcon.jpg")'
           }
         }
       }
-
+      
       let sandbox = new altizure.Sandbox('page-content', options)
     </script>
     <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
@@ -54,7 +54,7 @@
         bkgSetting.color = v
         sandbox.background.color = v
       })
-      gui.add(bkgSetting, 'image', {'image1': 'url("../external_imgFile/altizureIcon.jpg")', 'image2': 'url("http://hbimg.b0.upaiyun.com/ef67e3cb04b55dc34aa7f168eab053155598c432c9fa-zoA533_fw658")'}).onChange(function (v) {
+      gui.add(bkgSetting, 'image', {'image1': 'url("../public/assets/img/altizureIcon.jpg")', 'image2': 'url("http://hbimg.b0.upaiyun.com/ef67e3cb04b55dc34aa7f168eab053155598c432c9fa-zoA533_fw658")'}).onChange(function (v) {
         bkgSetting.image = v
         sandbox.background.image = v
       })
