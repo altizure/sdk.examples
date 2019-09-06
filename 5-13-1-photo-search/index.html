@@ -1,0 +1,178 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title> Altizure 5.13.1 Photo Search </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <style>
+    #info {
+      position: absolute;
+      padding: 2px;
+      width: 102;
+      text-align: left;
+      z-index: 10;
+      color: rgb(207, 180, 26);
+      overflow: auto;
+    }
+
+    #fade {
+      display: none;
+      position: absolute;
+      top: 0%;
+      left: 0%;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      z-index: 1001;
+      -moz-opacity: 0.8;
+      opacity: .80;
+      filter: alpha(opacity=80);
+    }
+
+    #InfoPic {
+      display: none;
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      background-color: white;
+      z-index: 1002;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="info"></div>
+  <div id="InfoPic"></div>
+  <div id="fade" onClick={closeWindow()}></div>
+  <div id="page-content"></div>
+
+  <!-- <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script> -->
+  <script type="text/javascript" src=" https://unpkg.com/altizure@3/release/altizure.min.js"></script>
+
+  <script>
+    let clat = 22.67
+    let clng = 114.3
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        center: {
+          alt: 1200,
+          lat: clat,
+          lng: clng,
+          north: 60,
+          tilt: 45
+        },
+        flyToCenter: { lng: 114.29996564885415, lat: 22.669966869078426, alt: 46.884881680137944, north: 16.299628789272617, tilt: 12.681020878399314 },
+      },
+      renderItems: {
+        earth: false,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: false
+      }
+    }
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    let model = null
+    let imgList = []
+    let fromerimglist = []
+    let tag = null
+    let ul = document.getElementById('info')
+    let picture = document.getElementById('InfoPic')
+
+    let imgUrl = 'https://data.altizure.com/tiling/5cad46e17a56c31162183f7a/'
+    sandbox.add('AltizureProjectMarker', {
+      pid: '5cad46e17a56c31162183f7a',
+      pose: {
+        position: { lng: clng, lat: clat, alt: 0 },
+        scale: 1
+      }
+    })
+      .then(function (marker) {
+        marker.focus()
+        model = marker
+        marker.importPhotos({
+          url: {
+            cameraFile: './converted.json',
+            photoBase: imgUrl,
+          },
+          showCameras: false
+        })
+      })
+
+
+    sandbox.domElement.addEventListener('mouseup', function (e) {
+
+      if (e.button === 0) {
+        while (ul.hasChildNodes()) {
+          ul.removeChild(ul.firstChild);
+        }
+        if (tag) {
+          tag.destruct()
+          tag = null
+        }
+      }
+      else {
+        imgList = []
+        try {
+          if (tag) {
+            tag.destruct()
+            tag = null
+          }
+          let pt = sandbox.pickOnProjects(e)
+          imgList = model.imgPickerByPosition(e, { dist: 300, orient: 30 }, 6)
+          tag = new altizure.TagMarker({
+            imgUrl: '../public/assets/img/logo-1024.png',
+            position: pt,
+            sandbox: sandbox,
+            scale: 0.5
+          })
+          if (imgList.length == 0) {
+            while (ul.hasChildNodes()) {
+              ul.removeChild(ul.firstChild);
+            }
+          }
+          else {
+            while (ul.hasChildNodes()) {
+              ul.removeChild(ul.firstChild);
+            }
+            imgList.map(imgurl => {
+              let img = document.createElement("img")
+              img.height = "102"
+              img.width = "102"
+              img.src = imgUrl + imgurl.name + '/0/0/0.jpg'
+              img.onclick = function () {
+                let img2 = document.createElement("img")
+                img2.height = "512"
+                img2.width = "512"
+                img2.src = imgUrl + imgurl.name + '/0/0/0.jpg'
+                picture.style.left = ((document.body.clientWidth - Number(img2.width)) / 2).toString() + 'px'
+                picture.style.top = ((document.body.clientHeight - Number(img2.height)) / 2).toString() + 'px'
+                document.getElementById('InfoPic').style.display = 'block'
+                document.getElementById('fade').style.display = 'block'
+                picture.appendChild(img2)
+                img2.onload = function () {
+                }
+              }
+              ul.appendChild(img)
+            })
+            ul.appendChild(li)
+          }
+        }
+        catch{ }
+      }
+    })
+    function closeWindow() {
+      document.getElementById('InfoPic').style.display = 'none'
+      document.getElementById('fade').style.display = 'none'
+      while (picture.hasChildNodes()) {
+        picture.removeChild(picture.firstChild);
+      }
+    }
+  </script>
+</body>
+
+</html>
