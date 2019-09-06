@@ -1,4 +1,12 @@
 # Altizure Javascript 3D SDK 更新日志
+### 3.5.2
+__发布时间:__
+2019年9月6日
+
+__改进:__
++ [范例 3.4](https://altizure.github.io/sdk.examples/3-4-control-config/) 滚轮永远绑定 dolly 操作。鼠标中键拖拽，允许进行操作平移（orbit）, 旋转（swirl）。
+
+
 ### 3.5.1
 __发布时间:__
 2019年9月5日
