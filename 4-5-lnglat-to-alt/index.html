@@ -88,10 +88,10 @@
 
       function init () {
         let geoInfo = altmarker.spec.model.gis
-        maxlat = geoInfo.maxLat
-        maxlng = geoInfo.maxLng
-        minlat = geoInfo.minLat
-        minlng = geoInfo.minLng
+        maxlat = geoInfo.max.lat
+        maxlng = geoInfo.max.lng
+        minlat = geoInfo.min.lat
+        minlng = geoInfo.min.lng
         generateLngLatArray()
         initMarkers()
       }
