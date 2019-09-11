@@ -80,6 +80,8 @@
     let imgList = []
     let fromerimglist = []
     let tag = null
+    let modelControl = 0
+    let temCameraMarker = null
     let ul = document.getElementById('info')
     let picture = document.getElementById('InfoPic')
 
@@ -110,18 +112,12 @@
         while (ul.hasChildNodes()) {
           ul.removeChild(ul.firstChild);
         }
-        if (tag) {
-          tag.destruct()
-          tag = null
-        }
+        clean()
       }
       else {
         imgList = []
         try {
-          if (tag) {
-            tag.destruct()
-            tag = null
-          }
+          clean()
           let pt = sandbox.pickOnProjects(e)
           imgList = model.imgPickerByPosition(e, { dist: 300, orient: 30 }, 6)
           tag = new altizure.TagMarker({
@@ -145,26 +141,45 @@
               img.width = "102"
               img.src = imgUrl + imgurl.name + '/0/0/0.jpg'
               img.onclick = function () {
-                let img2 = document.createElement("img")
-                img2.height = "512"
-                img2.width = "512"
-                img2.src = imgUrl + imgurl.name + '/0/0/0.jpg'
-                picture.style.left = ((document.body.clientWidth - Number(img2.width)) / 2).toString() + 'px'
-                picture.style.top = ((document.body.clientHeight - Number(img2.height)) / 2).toString() + 'px'
-                document.getElementById('InfoPic').style.display = 'block'
-                document.getElementById('fade').style.display = 'block'
-                picture.appendChild(img2)
-                img2.onload = function () {
+                if (modelControl === 0) {
+                  let img2 = document.createElement("img")
+                  img2.height = "512"
+                  img2.width = "512"
+                  img2.src = imgUrl + imgurl.name + '/0/0/0.jpg'
+                  picture.style.left = ((document.body.clientWidth - Number(img2.width)) / 2).toString() + 'px'
+                  picture.style.top = ((document.body.clientHeight - Number(img2.height)) / 2).toString() + 'px'
+                  document.getElementById('InfoPic').style.display = 'block'
+                  document.getElementById('fade').style.display = 'block'
+                  picture.appendChild(img2)
+                  img2.onload = function () {
+                  }
+                }
+                else {
+                  temCameraMarker = visualizePhotoCamera(imgurl)
                 }
               }
               ul.appendChild(img)
             })
-            ul.appendChild(li)
           }
         }
         catch{ }
       }
     })
+
+    function visualizePhotoCamera(photoCamera) {
+      let camToEarth = model.objToEarth().clone().multiply(
+        photoCamera.camToObj.clone()
+      ).elements
+      let cameraMarker = new altizure.CameraMarker({
+        sandbox,
+        camToEarth,
+        fov: photoCamera.fov,
+        aspect: photoCamera.aspect,
+        nearInMeter: photoCamera.near
+      })
+      return cameraMarker
+    }
+
     function closeWindow() {
       document.getElementById('InfoPic').style.display = 'none'
       document.getElementById('fade').style.display = 'none'
@@ -172,6 +187,37 @@
         picture.removeChild(picture.firstChild);
       }
     }
+
+    function clean() {
+      imgList = []
+      if (tag) {
+        tag.destruct()
+        tag = null
+      }
+      if (temCameraMarker) {
+        temCameraMarker.destruct()
+        temCameraMarker = null
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+    let Setting = function (params) {
+      for (key in params) {
+        this[key] = params[key]
+      }
+    }
+    let setting = new Setting({
+      displayModel: 'detailImage',
+    })
+    var gui = new dat.GUI({ autoplace: false, width: 300 })
+    gui.add(setting, 'displayModel', { detailImage: 'detailImage', cameraPosition: 'cameraPosition' }).name('displayModel').onChange(function (value) {
+      if (value === 'detailImage') {
+        modelControl = 0
+      } else if (value === 'cameraPosition') {
+        modelControl = 1
+      }
+    })
   </script>
 </body>
 
