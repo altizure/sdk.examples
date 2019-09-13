@@ -15,7 +15,7 @@ __发布时间:__
 2019年9月11日
 
 __新功能:__
-+ [范例 4.8](https://altizure.github.io/sdk.examples/4-8-pick-bypose/) 计算射线与模型交点。
++ [范例 4.8](https://altizure.github.io/sdk.examples/4-8-ray-cast/) 计算射线与模型交点。
 + [范例 5.13.1](https://altizure.github.io/sdk.examples/5-13-1-photo-search/) 返回附近的照片。
 
 __改进:__
