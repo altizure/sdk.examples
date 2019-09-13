@@ -1,4 +1,26 @@
 # Altizure Javascript 3D SDK 更新日志
+
+### 3.6.2
+__发布时间:__
+2019年9月13日
+
+__新功能:__
++ [範例 8.2](https://altizure.github.io/sdk.examples/8-2-custom-terrain/) 自定义高程数据来源(EPSG 900913)，目前支持`terrain-rgb`格式。
+
+__改进:__
++ [范例 8.1](https://altizure.github.io/sdk.examples/8-1-terrain/) 用户注意不到地形变化，增加贴近飞行动画。
+
+### 3.6.1
+__发布时间:__
+2019年9月11日
+
+__新功能:__
++ [范例 4.8](https://altizure.github.io/sdk.examples/4-8-pick-bypose/) 计算射线与模型交点。
++ [范例 5.13.1](https://altizure.github.io/sdk.examples/5-13-1-photo-search/) 返回附近的照片。
+
+__改进:__
++ [范例 6.5, 6.5.1](https://altizure.github.io/sdk.examples/6-5-marker-cluster/) 支持多组标签聚类。
+
 ### 3.5.2
 __发布时间:__
 2019年9月6日
@@ -29,8 +51,6 @@ __发布时间:__
 
 __新功能:__
 + [范例 8.1](https://altizure.github.io/sdk.examples/8-1-terrain/) 全球地形，初始化 `Sandbox` 时选择 `renderItems::planet::showDem = true` 开启。
-
-+ [範例 8.2](https://altizure.github.io/sdk.examples/8-2-rtk-project/) 导入 Altizure 第三代数据 （version 3），使用 `RTK` 生成的高精度GIS实景模型。
 
 __缺陷修复:__
 * `GeoSystem::align` 后，场景没有及时更新导致的 `crop` 位置不准确。
