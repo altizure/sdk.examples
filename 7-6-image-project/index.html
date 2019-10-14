@@ -1,0 +1,98 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 7.6 Image Projector </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script>
+      let options = {
+        // camera 
+        camera: {
+          center: {
+            lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
+          },
+          flyToCenter: {
+            lng: 114.23883444192273, lat: 30.508466421119703, alt: 1580.3792717481438, north: 240.21895629391105, tilt: 17.962095824486227
+          }
+        },
+        // render items
+        renderItems: { featureInView: false, earth: true },
+        // show mouse tip
+        develop: true,
+        // altizure api: contact altizure to get your developer key
+        altizureApi: {
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+      }
+
+      let sandbox = new altizure.Solution('page-content', options)
+
+      let imageProjectorMarker, projector
+      sandbox.add('AltizureProjectMarker', {
+        pid: '5bd187838690672169fc3761',
+        pose: {
+          position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
+        }
+      })
+      .then(function(m) {
+        return m.initialized
+      })
+      .then(function(m) {
+        return m.loadCropMask() // [optional] download crop mask configured in Altizure
+      })
+      .then(function(m) {
+        sandbox.render(m, 'video')
+        imageProjectorMarker = new altizure.ImageProjectorMarker({
+          sandbox: sandbox,
+          projectMarker: m,
+
+          fov: 73.7,
+          aspect: 1.0,
+          nearInMeter: 12,
+          farInMeter: 100,
+
+          position: {lng: 114.23473224705329, lat: 30.510488411649817, alt: 1326.835852997861},
+          orientation: {x: -2.1195461630660274e-12, y: 1.0938613239644895e-12, z: 0.873767608945985, w: -0.4863436702135807},
+
+          imgUrl: '../public/assets/img/logo-1024.png',
+
+          showNear: true,
+          showFar: true
+        })
+        setTimeout(function () {imageProjectorMarker.updateDepthTexture()}, 2000)
+        addUIForProjector(imageProjectorMarker)
+      })
+
+      if (Stats) {
+        sandbox.earthView._stats = new Stats()
+        sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+      }
+
+    </script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      var gui = new dat.GUI({autoplace: false, width: 500})
+      function addUIForProjector (projector) {
+        if (!projector) return
+        gui.add(projector, 'fov', 10, 100, 1).onChange(function(v) {
+          projector.fov = v
+        })
+        gui.add(projector, 'aspect', 0.1, 8, 0.1).onChange(function(v) {
+          projector.aspect = v
+        })
+        gui.add(projector, 'nearInMeter', 0.1, 400, 0.1).onChange(function(v) {
+          projector.nearInMeters = v
+        })
+        gui.add(projector, 'farInMeter', 0.1, 400, 0.1).onChange(function(v) {
+          projector.farInMeters = v
+        })
+
+        gui.add(projector, 'updateDepthTexture')
+      }
+
+    </script>
+  </body>
+</html>
