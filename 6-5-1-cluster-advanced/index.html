@@ -51,7 +51,7 @@
         return m.initialized
       })
       .then(function(m){
-        sandbox.camera.flyToCenter({ lng: m.position.lng, lat: m.position.lat, alt: 4000 }, 1)
+        sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
         visualizeGeoJSONData(jsonData, cluster, TagMarker)
       })

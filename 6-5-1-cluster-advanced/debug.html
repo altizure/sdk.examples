@@ -25,11 +25,11 @@
       }
 
       let defalutTextStyle = {
-      fillStyle: 'rgb(155, 155, 255)',
-      font: 'normal 500 40px Arial',
-      margin: 5,
-      outlineWidth: 2,
-      outlineStyle: 'rgb(0, 0, 0)'
+        fillStyle: 'rgb(155, 155, 255)',
+        font: 'normal 500 40px Arial',
+        margin: 5,
+        outlineWidth: 2,
+        outlineStyle: 'rgb(0, 0, 0)'
       }
 
       let sandbox = new altizure.Sandbox('page-content', options)
@@ -53,7 +53,7 @@
         return m.initialized
       })
       .then(function(m){
-        sandbox.camera.flyToCenter({ lng: m.position.lng, lat: m.position.lat, alt: 4000 }, 1)
+        sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
         visualizeGeoJSONData(jsonData, cluster, TagMarker)
       })
