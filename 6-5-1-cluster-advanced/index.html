@@ -1,109 +1,103 @@
 <html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <title> Altizure 6.5.1 Advanced Cluster </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-</head>
-
-<body>
-  <div id="page-content"></div>
-  <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
-  <script type="text/javascript" src="https://unpkg.com/altizure-plugin-markercluster"></script>
-  <script type="text/javascript" src="../public/json/markerCluster.js"></script>
-  <script>
-    let options = {
-      altizureApi: {
-        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
-      },
-      renderItems: {
-        earth: true,
-        earthUseTexture: false,
-        featureInView: false,
-        orbitRing: false
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 6.5.1 Advanced Cluster </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body>
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script type="text/javascript" src="https://unpkg.com/altizure-plugin-markercluster"></script>
+    <script type="text/javascript" src="../public/json/markerCluster.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: false,
+          featureInView: false,
+          orbitRing: false
+        }
       }
-    }
 
-    let sandbox = new altizure.Sandbox('page-content', options)
-    let projectMarkerID = '58428f1d97b73e0b090675cd'
-    let projectMarker
-    let TagMarker = []
-    let MarkerClasterNeed = true
-
-    let defalutTextStyle = {
+      let defalutTextStyle = {
       fillStyle: 'rgb(155, 155, 255)',
       font: 'normal 500 40px Arial',
       margin: 5,
       outlineWidth: 2,
       outlineStyle: 'rgb(0, 0, 0)'
-    }
-
-    var cluster = new altizure.MarkerClusterPlus({
-      sandbox: sandbox,
-      visualizeProperty: 'visualizeWeight',
-      textStyle: defalutTextStyle,
-    })
-
-
-    sandbox.add('AltizureProjectMarker', {
-      pid: projectMarkerID,
-      pose: {
-        position: { lng: 114.26335, lat: 22.3344, alt: 0 } // to align with the vector data
       }
-    })
-      .then(function (m) {
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+      let projectMarkerID = '58428f1d97b73e0b090675cd'
+      let projectMarker
+      let TagMarker = []
+      let MarkerClasterNeed = true
+
+      var cluster = new altizure.MarkerClusterPlus({
+        sandbox: sandbox,
+        visualizeProperty: 'visualizeWeight',
+        textStyle: defalutTextStyle,
+      })
+      sandbox.add('AltizureProjectMarker', {
+        pid: projectMarkerID,
+        pose: {
+          position: {lng:114.26335, lat:22.3344,alt:0} // to align with the vector data
+        } 
+      })
+      .then(function(m){
         return m.initialized
       })
-      .then(function (m) {
+      .then(function(m){
         sandbox.camera.flyToCenter({ lng: m.position.lng, lat: m.position.lat, alt: 4000 }, 1)
         projectMarker = m
         visualizeGeoJSONData(jsonData, cluster, TagMarker)
       })
 
-    function visualizeGeoJSONData(geojson, MarkerCluster, TagMarker) {
-      let features = geojson.features
-      let position = []
-      for (let i = 0; i < features.length; ++i) {
-        let feature = features[i]
-        if (feature.geometry.type === 'Polygon') {
-          let pt = [0, 0]
-          let ptarray = feature.geometry.coordinates[0]
-          ptarray.map(function (v) {
-            pt[0] += v[0]
-            pt[1] += v[1]
-          })
-          pt[0] /= ptarray.length
-          pt[1] /= ptarray.length
-          visualizeAsTagMarker(pt, MarkerCluster, TagMarker, position)
+      function visualizeGeoJSONData (geojson, MarkerCluster, TagMarker) {
+        let features = geojson.features
+        let position = []
+        for (let i = 0; i < features.length; ++i) {
+          let feature = features[i]
+          if (feature.geometry.type === 'Polygon') {
+            let pt = [0, 0]
+            let ptarray = feature.geometry.coordinates[0]
+            ptarray.map(function(v) {
+              pt[0] += v[0]
+              pt[1] += v[1]
+            })
+            pt[0] /= ptarray.length
+            pt[1] /= ptarray.length
+            visualizeAsTagMarker(pt, MarkerCluster, TagMarker, position)
+          }
         }
+
+        sandbox.positionsAltitude(position).map(function (alt, i) {
+          TagMarker[i].position = Object.assign({}, TagMarker[i].position, { alt: alt })
+          TagMarker[i].depthTest = true
+        })
+        setTimeout(MarkerCluster.start(), 2000)
       }
 
-      sandbox.positionsAltitude(position).map(function (alt, i) {
-        TagMarker[i].position = Object.assign({}, TagMarker[i].position, { alt: alt })
-        TagMarker[i].depthTest = true
-      })
-      setTimeout(MarkerCluster.start(), 2000)
-    }
+      function visualizeAsTagMarker (point, MarkerCluster, TagMarker, position) {
+        let pos = new altizure.LngLatAlt(point[0],point[1],0.1)
+        position.push(pos)
+        const value = Math.round(Math.random() * 100)
+        let tag = new altizure.TextTagMarker({
+          sandbox: sandbox,
+          text: value.toString(),
+          textStyle: defalutTextStyle,
+          position: pos,
+          scale: 1
+        })
+        tag.pinLength = 15
+        tag.visualizeWeight = value
+        TagMarker.push(tag)
+        MarkerCluster.add(tag)
+      }
 
-
-    function visualizeAsTagMarker(point, MarkerCluster, TagMarker, position) {
-      let pos = new altizure.LngLatAlt(point[0], point[1], 0.1)
-      position.push(pos)
-      const value = Math.round(Math.random() * 100)
-      let tag = new altizure.TextTagMarker({
-        sandbox: sandbox,
-        text: value.toString(),
-        textStyle: defalutTextStyle,
-        position: pos,
-        scale: 1
-      })
-      tag.pinLength = 15
-      tag.visualizeWeight = value
-      TagMarker.push(tag)
-      MarkerCluster.add(tag)
-    }
-
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
