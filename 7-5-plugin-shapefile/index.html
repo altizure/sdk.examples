@@ -44,10 +44,10 @@
         opacity: 0.2
       }).then(function(res) {
         polygons = res
-        polygons.map(polygon=>{
+        polygons.map(function(polygon) {
           polygon.top = polygon.attributes.height
         })
-        console.log(polygons.map((p)=>{return p.attributes}))
+        console.log(polygons.map(function(p) {return p.attributes}))
       })
 
       let polylineOptions = {
@@ -62,7 +62,7 @@
       })
       .then(function(res) {
         polylines = res
-        console.log(polylines.map((p)=>{return p.attributes}))
+        console.log(polylines.map(function(p) {return p.attributes}))
       })
 
       let pointOptions = {
@@ -77,7 +77,7 @@
       })
       .then(function(res) {
         points = res
-        console.log(points.map((p)=>{return p.attributes}))
+        console.log(points.map(function(p) {return p.attributes}))
       })
     </script>
   </body>

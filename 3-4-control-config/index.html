@@ -1,0 +1,41 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> 3.4 Control Config </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let gui = new dat.GUI()
+      gui.add(sandbox.control.buttonConfig, 'ORBIT', { LEFT: altizure.MOUSE.LEFT, MIDDLE: altizure.MOUSE.MIDDLE, RIGHT: altizure.MOUSE.RIGHT}).onChange(function (v) {
+        sandbox.control.buttonConfig = {ORBIT: Number(v)}
+      })
+      gui.add(sandbox.control.buttonConfig, 'SWIRL', { LEFT: altizure.MOUSE.LEFT, MIDDLE: altizure.MOUSE.MIDDLE, RIGHT: altizure.MOUSE.RIGHT}).onChange(function (v) {
+        sandbox.control.buttonConfig = {SWIRL: Number(v)}
+      })
+      gui.add(sandbox.control.buttonConfig, 'ORBITLEFTREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'ORBITUPREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'DOLLYREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'SWIRLLEFTREVERSE')
+      gui.add(sandbox.control.buttonConfig, 'SWIRLUPREVERSE')
+
+    </script>
+  </body>
+</html>

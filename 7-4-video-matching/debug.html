@@ -42,15 +42,15 @@
           position: {lng: 114.236334, lat: 30.5093902, alt: 0.1}
         }
       })
-      .then((m) => {
+      .then(function(m) {
         return m.initialized
       })
-      .then((m) => {
+      .then(function(m) {
         sandbox.render(m, 'video')
         altmarker = m
         return queryForPose()
       })
-      .then((camToEarth) => {
+      .then(function(camToEarth) {
         queryPose = camToEarth
         manuallyAlignedPose = altmarker.composeCamToEarth(
           // position, target, up in object space, manually aligned

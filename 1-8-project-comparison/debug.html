@@ -35,11 +35,11 @@
 
       // add two demo projects
       sandbox1.add('AltizureProjectMarker', {pid: '59226d12b8cfc91d91c6e3c4'})
-        .then(m => {
-          pose = sandbox1.camera.pose
+        .then(function(m) {
+          pose = sandbox1.camera.center
 
           sandbox2.add('AltizureProjectMarker', {pid: '5a1b75ba3330b52b3cffdf28', pose: { position: m.position }})
-            .then(m => sandbox2.camera.pose = pose)
+          .then(function(m) {sandbox2.camera.center = pose})
         })
     </script>
   </body>

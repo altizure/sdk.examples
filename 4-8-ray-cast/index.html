@@ -1,0 +1,195 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Altizure 4.8 Pickpoint by pose </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        camera: {
+          center: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 },
+          flyToCenter: { alt: 319.02169601663104,
+            lat: 22.5364271949327,
+            lng: 113.93977612840078,
+            north: 56.82289356559219,
+            tilt: 56.19205822511624 }
+        },
+        renderItems: {
+          earth: true,
+          earthUseTexture: true,
+          featureInView: false,
+          orbitRing: true
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      sandbox.add('AltizureProjectMarker', {pid: '5849104597b73e0b090c01e8'})
+
+      let correspondingPose = {
+        lng: 113.94040163458857, lat: 22.536027854546255, alt: 118.64399236751794, north: 0, tilt: 0
+      }
+      let cameraMarker = new altizure.CameraMarker({
+        pose: {
+          position: {lng: 113.94040163458857, lat: 22.536027854546255, alt: 118.64399236751794}
+        },
+        sandbox: sandbox,
+        showFar: false,
+        showNear: true,
+        color: 0xff0000
+      })
+      let tagMarker = null
+      let textTagMarker = null
+      let settings = { pickProjects: true }
+
+      function updateCameraMarker () {
+        cameraMarker.position = {
+          lng: correspondingPose.lng, lat: correspondingPose.lat, alt: correspondingPose.alt
+        }
+        let northRad = correspondingPose.north / 180 * Math.PI
+        let tiltRad = correspondingPose.tilt / 180 * Math.PI
+        let orientation = new altizure.Quaternion().setFromAxisAngle({x: 0, y: 0, z: 1}, northRad)
+        let rotate = new altizure.Quaternion().setFromAxisAngle({x: 1, y: 0, z: 0}, tiltRad)
+        cameraMarker.orientation = orientation.multiply(rotate)
+      }
+      function rayCast () {
+        let pt
+        if (settings.pickProjects) {
+          pt = sandbox.pickOnProjectsByPose(correspondingPose)
+        }
+        if (!pt) {
+          pt = sandbox.pickByPose(correspondingPose)
+        }
+        return pt
+      }
+      function updateTag () {
+        let position = rayCast()
+        if (tagMarker === null) {
+          tagMarker = new altizure.TagMarker({imgUrl: '../public/assets/img/tag/normal/tagDemo.png', sandbox: sandbox, position: position, scale: 1})
+          textTagMarker = new altizure.TextTagMarker({
+            // text string
+            text: position.lng.toPrecision(9) + ',' + position.lat.toPrecision(9) + ',' + position.alt.toPrecision(7),
+            // text style
+            textStyle: {
+              fillStyle: 'rgb(255, 255, 255)',
+              font: 'normal 500 24px Arial',
+              outlineWidth: 2,
+              outlineStyle: 'rgb(0, 0, 0)'
+            },
+
+            // icon position
+            position: {
+              "lng": position.lng,
+              "lat": position.lat,
+              "alt": position.alt
+            },
+            // scene
+            sandbox: sandbox,
+            scale: 1 // icon size
+          })
+          setUpUIFolder(tagMarker, textTagMarker, '../public/assets/img/tag/normal/tagDemo.png', 'Interaction Tag', true)
+        } else {
+          tagMarker.position = position
+          textTagMarker.text = position.lng.toPrecision(9) + ',' + position.lat.toPrecision(9) + ',' + position.alt.toPrecision(7)
+          textTagMarker.position = position
+        }
+      }
+
+    </script>
+    <script>
+      dat.GUI.prototype.removeFolder = function(name) {
+        var folder = this.__folders[name];
+        if (!folder) {
+          return;
+        }
+        folder.close();
+        this.__ul.removeChild(folder.domElement.parentNode);
+        delete this.__folders[name];
+        this.onResize();
+      }
+    </script>
+    <script>
+      var gui = new dat.GUI()
+      gui.add(settings, 'pickProjects')
+      gui.add(correspondingPose, 'north', 0, 360, 0.1).onChange(function(v) {
+        correspondingPose.north = v
+        updateCameraMarker()
+        updateTag()
+      })
+      gui.add(correspondingPose, 'tilt', 0, 70, 0.1).onChange(function(v) {
+        correspondingPose.tilt = v
+        updateCameraMarker()
+        updateTag()
+      })
+      function setUpUIFolder (tag, ttag, url, folderName, open) {
+        let folder = gui.addFolder(folderName)
+        /**
+        let isSprite = tag.isSprite
+        let pivotx = tag.pivot.x
+        let pivoty = tag.pivot.y
+        let eulerx = Math.PI / 2
+        let eulery = 0
+        let eulerz = 0
+        let pinLength = tag.pinLength
+        let texture = url
+        let settings = {isSprite, pivotx, pivoty, eulerx, eulery, eulerz, pinLength, texture}
+        */
+       
+        let settings = {
+          isSprite :tag.isSprite,
+          pivotx : tag.pivot.x,
+          pivoty : tag.pivot.y,
+          eulerx : Math.PI / 2,
+          eulery : 0,
+          eulerz : 0,
+          pinLength : tag.pinLength,
+          texture : url
+        }
+        folder.add(settings, 'isSprite').onChange(function(v) {
+          tag.isSprite = v
+          settings.isSprite = v
+        })
+        folder.add(settings, 'pivotx', 0, 1, 0.05).onChange(function(v) {
+          tag.pivot = {x: v}
+          settings.pivotx = v
+        })
+        folder.add(settings, 'pivoty', 0, 1, 0.05).onChange(function(v) {
+          tag.pivot = {y: v}
+          settings.pivoty = v
+        })
+        folder.add(settings, 'eulerx', -Math.PI / 2, Math.PI / 2, 0.05).onChange(function(v) {
+          tag.tagQuaternion = {x: v, y: settings.eulery, z: settings.eulerz, order: 'XYZ', isEuler: true}
+          settings.eulerx = v
+        })
+        folder.add(settings, 'eulery', -Math.PI / 2, Math.PI / 2, 0.05).onChange(function(v) {
+          tag.tagQuaternion = {x: settings.eulerx, y: v, z: settings.eulerz, order: 'XYZ', isEuler: true}
+          settings.eulery = v
+        })
+        folder.add(settings, 'eulerz', -Math.PI / 2, Math.PI / 2, 0.05).onChange(function(v) {
+          tag.tagQuaternion = {x: settings.eulerx, y: settings.eulery, z: v, order: 'XYZ', isEuler: true}
+          settings.eulerz = v
+        })
+        folder.add(settings, 'pinLength', 0, 20, 1).onChange(function(v) {
+          tag.pinLength = v
+          settings.pinLength = v
+        })
+        folder.add(settings, 'texture').onFinishChange(function(v) {
+          tag.texture = v
+          settings.texture = v
+        })
+        if (open) folder.open()
+      }
+    </script>
+  </body>
+</html>

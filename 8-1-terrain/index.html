@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title> Terrain </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  </head>
+  <body style="margin: 0px; padding: 0px;">
+    <div id="page-content"></div>
+    <script type="text/javascript" src="https://unpkg.com/altizure@beta/release/altizure.min.js"></script>
+    <script type="text/javascript" src="../public/data/8_1terrainTagData.js"></script>
+    <script>
+      let options = {
+        altizureApi:{
+          key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+        },
+        // render items
+        renderItems: {
+          planet: {
+            showDem: true, // set showDem before creating sandbox
+            showPlanetWireframe: true // can be changed later
+          }
+        }
+      }
+
+      let sandbox = new altizure.Sandbox('page-content', options)
+
+      let mountainTagList=[]
+      mountainData.map((data, i) => {
+        let no = i + 1
+        let textTag = new altizure.TextTagMarker({
+          text: "NO." + no + " " + data.nameCN,
+          textStyle: {
+            fillStyle: 'rgb(255, 255, 255)',
+            font: '500 30px Arial',
+            margin: 5,
+            outlineWidth: 0.1,
+            outlineStyle: 'rgb(0, 0, 0)'
+          },
+          position: { lng: data.position.lng, lat: data.position.lat, alt: 0 },
+          sandbox: sandbox,
+          pinLength: 10000,
+          fixedSize: 100
+        })
+        mountainTagList.push(textTag)
+      })
+      mountainTagList[0].fixedSize=130
+      mountainTagList[0].pinLength=12000
+
+      setTimeout(cameraLoop, 500)
+
+      let cnt = 0
+      let fly = true
+      function cameraLoop() {
+        if (fly === true) {
+          sandbox.camera.flyToCenter(flyRoute[cnt % flyRoute.length], 6000)
+          cnt++
+          setTimeout(cameraLoop, 8000)
+        }
+      }
+      document.addEventListener('click', handler)
+      function handler(event) {
+        fly = false
+      }
+    </script>
+    <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+    <script src="./gui.js"></script>
+  </body>
+</html>

@@ -7,7 +7,8 @@
   <body>
     <div id="page-content"></div>
     <script type="text/javascript" src="https://beta.altizure.cn/sdk3"></script>
-    <script type="text/javascript" src="https://beta.altizure.cn/sdk-plugin-geojson"></script>
+    <script type="text/javascript" src="https://unpkg.com/altizure-plugin-markercluster"></script>
+    <script type="text/javascript" src="../public/json/markerCluster.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -23,13 +24,25 @@
 
       let sandbox = new altizure.Sandbox('page-content', options)
       let projectMarkerID = '58428f1d97b73e0b090675cd'
-      // let projectMarkerID = '5723553732f7a5ee26ff526b'
-      // let projectMarkerID = '5a58de8c93ac3d233f7980c5'
       let projectMarker
-      var tagMarkers = []
-      var cluster = new altizure.MarkerCluster({
+      let TagMarker = []
+      let MarkerClasterNeed = true
+
+      var cluster = new altizure.MarkerClusterPlus({
         sandbox: sandbox,
+        // text style
+        textStyle: {
+            fillStyle: 'rgb(255, 45, 45)',
+            font: 'normal 500 40px Arial',
+            margin:5,
+            outlineWidth: 2,
+            outlineStyle: 'rgb(249, 249, 0)'
+        },
+        pinLength:20,
+        scale:2,
+        // clustersRange:30
       })
+
       sandbox.add('AltizureProjectMarker', {
         pid: projectMarkerID,
         pose: {
@@ -42,19 +55,21 @@
       .then(function(m){
         sandbox.camera.flyToCenter({lng: m.position.lng, lat: m.position.lat, alt: 4000}, 1)
         projectMarker = m
-        altizure.GeoJson.queryGeoJsonForAltizureProjectMarker(projectMarker)
-        .then(function(result) {
-          visualizeGeoJSONData(result.geojson)
-          sandbox.positionsAltitude(positions).map(function(alt, i) {
-            tagMarkers[i].position = Object.assign({}, tagMarkers[i].position, {alt: alt})
-            tagMarkers[i].depthTest = true
-          })
-
-          setTimeout(start(500), 2000)
-        })
+        visualizeGeoJSONData(jsonData, cluster, TagMarker)
       })
-      function visualizeGeoJSONData (geojson) {
+      .then(() => {
+        setTimeout(() => {
+          cluster.pause()
+          TagMarker.map((m, i) => {
+            if (i < TagMarker.length / 2) { cluster.remove(m) }
+          })
+          setTimeout(cluster.start(), 2000)
+        }, 10000)
+      })
+
+      function visualizeGeoJSONData (geojson, MarkerCluster, TagMarker) {
         let features = geojson.features
+        let position = []
         for (let i = 0; i < features.length; ++i) {
           let feature = features[i]
           if (feature.geometry.type === 'Polygon') {
@@ -66,15 +81,19 @@
             })
             pt[0] /= ptarray.length
             pt[1] /= ptarray.length
-            visualizeAsTagMarker(pt)
+            visualizeAsTagMarker(pt, MarkerCluster, TagMarker, position)
           }
         }
+        sandbox.positionsAltitude(position).map(function (alt, i) {
+        TagMarker[i].position = Object.assign({}, TagMarker[i].position, { alt: alt })
+        TagMarker[i].depthTest = true
+        })
+        setTimeout(MarkerCluster.start(), 2000)
       }
 
-      let positions = []
-      function visualizeAsTagMarker (point) {
+      function visualizeAsTagMarker (point, MarkerCluster, TagMarker, position) {
         let pos = new altizure.LngLatAlt(point[0],point[1],0.1)
-        positions.push(pos)
+        position.push(pos)
         let tag = new altizure.TagMarker({
           sandbox: sandbox,
           position: pos,
@@ -83,30 +102,10 @@
         })
         tag.sprite.material.color.set(0xff0000)
         tag.pinLength = 15
-        tagMarkers.push(tag)
-        cluster.add(tag)
+        TagMarker.push(tag)
+        MarkerCluster.add(tag)
       }
 
-      const debounce = function(func, delay) {
-        let inDebounce
-        return function() {
-          const context = this
-          const args = arguments
-          clearTimeout(inDebounce)
-          inDebounce = setTimeout(function() {func.apply(context, args), delay})
-        }
-      }
-
-      function start(debounce_delay) {
-        sandbox.on('cameraChange', debounce(function () {
-          cluster.clustering().then(function(clusters){
-            cluster.enable({})
-          })
-        }, debounce_delay))
-        cluster.clustering().then(function(clusters) {
-          cluster.enable({})
-        })
-      }
     </script>
   </body>
 </html>
