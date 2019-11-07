@@ -2,20 +2,27 @@
 
 ### 3.6.2
 __发布时间:__
+2019年9月20日
+
+__新功能:__
++ `RenderItems.PlanetItems::showGroundCloud {boolean}` 是否显示云层（大气层外视角）
+
+### 3.6.2
+__发布时间:__
 2019年9月13日
 
 __新功能:__
-+ [範例 8.2](https://altizure.github.io/sdk.examples/8-2-custom-terrain/) 自定义高程数据来源(EPSG 900913)，目前支持`terrain-rgb`格式。
++ [範例 Sandbox::8.2](https://altizure.github.io/sdk.examples/8-2-custom-terrain/) 自定义高程数据来源(EPSG 900913)，目前支持`terrain-rgb`格式。
 
 __改进:__
-+ [范例 8.1](https://altizure.github.io/sdk.examples/8-1-terrain/) 用户注意不到地形变化，增加贴近飞行动画。
++ [范例 Sandbox::8.1](https://altizure.github.io/sdk.examples/8-1-terrain/) 用户注意不到地形变化，增加贴近飞行动画。
 
 ### 3.6.1
 __发布时间:__
 2019年9月11日
 
 __新功能:__
-+ [范例 4.8](https://altizure.github.io/sdk.examples/4-8-ray-cast/) 计算射线与模型交点。
++ [范例 Position::4.8](https://altizure.github.io/sdk.examples/4-8-ray-cast/) 计算射线与模型交点。
 + [范例 5.13.1](https://altizure.github.io/sdk.examples/5-13-1-photo-search/) 返回附近的照片。
 
 __改进:__
