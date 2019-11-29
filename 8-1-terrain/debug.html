@@ -9,6 +9,7 @@
     <script src="../public/js/stats.min.js"></script>
     <script type="text/javascript" src="../../build/three.js"></script>
     <script type="text/javascript" src="../../build/altizure-core.js"></script>
+    <script type="text/javascript" src="../public/data/8_1terrainTagData.js"></script>
     <script>
       let options = {
         altizureApi:{
@@ -34,6 +35,43 @@
 
       let sandbox = new altizure.Sandbox('page-content', options)
 
+      let mountainTagList = []
+      mountainData.map((data, i) => {
+        let no = i + 1
+        let textTag = new altizure.TextTagMarker({
+          text: "NO." + no + " " + data.nameCN,
+          textStyle: {
+            fillStyle: 'rgb(255, 255, 255)',
+            font: '500 30px Arial',
+            margin: 5,
+            outlineWidth: 0.1,
+            outlineStyle: 'rgb(0, 0, 0)'
+          },
+          position: { lng: data.position.lng, lat: data.position.lat, alt: 0 },
+          sandbox: sandbox,
+          pinLength: 10000,
+          fixedSize: 100
+        })
+        mountainTagList.push(textTag)
+      })
+      mountainTagList[0].fixedSize = 130
+      mountainTagList[0].pinLength = 12000
+
+      setTimeout(cameraLoop, 500)
+
+      let cnt = 0
+      let fly = true
+      function cameraLoop() {
+        if (fly === true) {
+          sandbox.camera.flyToCenter(flyRoute[cnt % flyRoute.length], 6000)
+          cnt++
+          setTimeout(cameraLoop, 8000)
+        }
+      }
+      document.addEventListener('click', handler)
+      function handler(event) {
+        fly = false
+      }
       if (Stats) {
         sandbox.earthView._stats = new Stats()
         sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
