@@ -1,5 +1,17 @@
 # Altizure Javascript 3D SDK 更新日志
 
+### 3.7.1
+__发布时间:__
+2019年11月29日
+
+__改进:__
++ 支持带文件夹路径的瓦片数据。
+
+__缺陷修复:__
+* crop 部分模型区域错误问题。
+* pickDepthMap 在部分模型未返回正确高度。
+* [范例 5.13](https://altizure.github.io/sdk.examples/5-13-photo-fusion/) 初始化视角问题。
+
 ### 3.6.10
 __发布时间:__
 2019年11月7日
