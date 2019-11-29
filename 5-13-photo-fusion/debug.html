@@ -43,6 +43,9 @@
           scale: 1
         }})
       .then(function(marker) {
+        return marker.initialized
+      })
+      .then(function(marker) {
         marker.focus()
         console.log('marker', marker)
         model = marker
