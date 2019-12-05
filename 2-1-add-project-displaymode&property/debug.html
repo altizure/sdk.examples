@@ -1,0 +1,90 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Altizure 2.1.3 Project Display Mode and Property</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+</head>
+
+<body style="margin: 0px; padding: 0px;">
+  <div id="page-content"></div>
+  <script type="text/javascript" src="../../node_modules/three/examples/js/libs/stats.min.js"></script>
+  <script type="text/javascript" src="../../build/three.js"></script>
+  <script type="text/javascript" src="../../build/altizure-core.js"></script>
+  <script src="https://unpkg.com/dat.gui@0.7.2/build/dat.gui.min.js"></script>
+  <script>
+    let options = {
+      altizureApi: {
+        key: '7MkQf8UggsPaadvrlKALspJWZejZAJOLHn3cnIy'
+      },
+      camera: {
+        flyToCenter: { "lng": 113.93996418720731, "lat": 22.537915235924434, "alt": 530.820697468223, "north": 333.34434005623467, "tilt": 72.42230739155441, "up": 0 }
+      },
+      renderItems: {
+        earth: true,
+        earthUseTexture: false,
+        featureInView: false,
+        orbitRing: true
+      }
+    }
+
+    let sandbox = new altizure.Sandbox('page-content', options)
+
+    let marker = null
+
+    sandbox.add('AltizureProjectMarker', { pid: '5849104597b73e0b090c01e8' })
+      .then(function (m) {
+        marker = m
+        return m.initialized
+      })
+
+
+    if (Stats) {
+      sandbox.earthView._stats = new Stats()
+      sandbox.earthView.threeContainer.appendChild(sandbox.earthView._stats.dom)
+    }
+
+
+    gui = new dat.GUI();
+
+    let settings = {
+      'displayMode': 1,
+      hsbc: [0, 0.5, 0.5, 0.5],
+      hue: 0,
+      saturation: 0.5,
+      brightness: 0.5,
+      contrast: 0.5,
+      opacity: 1.0,
+    }
+
+    gui.add(settings, 'displayMode', { basic: 1, phong: 2, pbr: "pbr", wireframe: 40, flat: "FLAT" }).onChange((v) => {
+      marker.displayMode = v
+    })
+    gui.add(settings, 'hue', 0, 1, 0.01).onChange((v) => {
+      settings.hue = v
+      settings.hsbc[0] = v
+      marker.hsbc = settings.hsbc
+    })
+    gui.add(settings, 'saturation', 0, 1, 0.01).onChange((v) => {
+      settings.saturation = v
+      settings.hsbc[1] = v
+      marker.hsbc = settings.hsbc
+    })
+    gui.add(settings, 'brightness', 0, 1, 0.01).onChange((v) => {
+      settings.brightness = v
+      settings.hsbc[2] = v
+      marker.hsbc = settings.hsbc
+    })
+    gui.add(settings, 'contrast', 0, 1, 0.01).onChange((v) => {
+      settings.contrast = v
+      settings.hsbc[3] = v
+      marker.hsbc = settings.hsbc
+    })
+    gui.add(settings, 'opacity', 0, 1, 0.01).onChange((v) => {
+      marker.opacity = settings.opacity
+    })
+
+  </script>
+</body>
+
+</html>
